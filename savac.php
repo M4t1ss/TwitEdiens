@@ -1,4 +1,5 @@
 ﻿<?php
+	//Lai strādā 20h no vietas...
 	set_time_limit(72000);
 
 	include_once('config.php');
