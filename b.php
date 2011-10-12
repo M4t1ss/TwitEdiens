@@ -1,10 +1,12 @@
 ﻿<?php
-set_time_limit(72000);
+	set_time_limit(72000);
+
+	include_once('config.php');
 
 	$opts = array(
 		'http'=>array(
 			'method'	=>	"POST",
-			'content'	=>	'track=garšo,ēdu,apēdu,garšoja,garšīgs,garšīga,gardums,kārums,ņam,ņamma,apetīte,apriju,izriju,noriju,ēdiens,brokastis,pusdienas,vakariņas,launags,brokastīs,pusdienās,vakariņās,brokastoju,pusdienoju,vakariņoju,launagā,uzkoda,uzkodas,ieēdu,noēdu,ēst,ēdis,ēdusi,notiesāju,notiesāšu,notiesāt,saēdos,pārēdos,pieēdos',
+			'content'	=>	'track='.WORDS_TO_TRACK,
 		)
 	);
 	//SQL pieslēgšanās informācija
@@ -20,7 +22,7 @@ set_time_limit(72000);
 
 	$context = stream_context_create($opts);
 	while (1){
-		$instream = fopen('https://m4t1ss:manalielakeda@stream.twitter.com/1/statuses/filter.json','r' ,false, $context);
+		$instream = fopen('https://'.TWITTER_USERNAME.':'.TWITTER_PASSWORD.'@stream.twitter.com/1/statuses/filter.json','r' ,false, $context);
 		while(! feof($instream)) {
 			if(! ($line = stream_get_line($instream, 20000, "\n"))) {
 				continue;
