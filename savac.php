@@ -4,6 +4,7 @@
 
 	include_once('config.php');
 
+	//Filtrējamie vārdi
 	$opts = array(
 		'http'=>array(
 			'method'	=>	"POST",
