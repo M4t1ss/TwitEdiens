@@ -22,19 +22,20 @@
 
 	$context = stream_context_create($opts);
 	while (1){
+		//Pieslēgšanās ar savu twitter kontu
 		$instream = fopen('https://'.TWITTER_USERNAME.':'.TWITTER_PASSWORD.'@stream.twitter.com/1/statuses/filter.json','r' ,false, $context);
 		while(! feof($instream)) {
 			if(! ($line = stream_get_line($instream, 20000, "\n"))) {
 				continue;
 			}else{
 				$tweet = json_decode($line);
-				//Clean the inputs before storing
+				//Attīra no īpašajiem simboliem
 				$id = mysql_real_escape_string($tweet->{'id'});
 				$geo = mysql_real_escape_string($tweet->{'geo'});
 				$text = mysql_real_escape_string($tweet->{'text'});
 				$screen_name = mysql_real_escape_string($tweet->{'user'}->{'screen_name'});
 				$followers_count = mysql_real_escape_string($tweet->{'user'}->{'followers_count'});
-				//We store the new post in the database, to be able to read it later
+				//Izdrukā uz ekrāna un saglabā datubāzē
 				if ($text!="") {
 				echo $text."<br/>";
 				$ok = mysql_query("INSERT INTO tweets (id ,text ,screen_name ,followers_count, created_at, geo) VALUES ('$id', '$text', '$screen_name', '$followers_count', NOW(), '$geo')");

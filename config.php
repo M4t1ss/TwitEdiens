@@ -1,5 +1,5 @@
 <?php
-	define ('WORDS_TO_TRACK', "garðo,çdu,apçdu,garðoja,garðîgs,garðîga,gardums,kârums,òam,òamma,apetîte,apriju,izriju,noriju,çdiens,brokastis,pusdienas,vakariòas,launags,brokastîs,pusdienâs,vakariòâs,brokastoju,pusdienoju,vakariòoju,launagâ,uzkoda,uzkodas,ieçdu,noçdu,çst,çdis,çdusi,notiesâju,notiesâðu,notiesât,saçdos,pârçdos,pieçdos");
+	define ('WORDS_TO_TRACK', "garÅ¡o,Ä“du,apÄ“du,garÅ¡oja,garÅ¡Ä«gs,garÅ¡Ä«ga,gardums,kÄrums,Å†am,Å†amma,apetÄ«te,apriju,izriju,noriju,Ä“diens,brokastis,pusdienas,vakariÅ†as,launags,brokastÄ«s,pusdienÄs,vakariÅ†Äs,brokastoju,pusdienoju,vakariÅ†oju,launagÄ,uzkoda,uzkodas,ieÄ“du,noÄ“du,Ä“st,Ä“dis,Ä“dusi,notiesÄju,notiesÄÅ¡u,notiesÄt,saÄ“dos,pÄrÄ“dos,pieÄ“dos");
 	define ('TWITTER_USERNAME', "");
 	define ('TWITTER_PASSWORD', "");
 ?>
