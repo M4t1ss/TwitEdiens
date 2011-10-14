@@ -11,18 +11,18 @@ Faili:
 ===============================================================
 Tvītu vākšana:
 
-/config.php		Tur jāieraksta twitter lietotājvārds un parole,
-				kā arī atlasīšanai paredzētie atslēgvārdi.
-				Šobrīd tur ir ar ēšanu saistīti atslēgvārdi.
-/init_sql.php	Informācija par pieslēgšanos pie datubāzes.
-/savac.php		Tvītu vākšanas fails.
-/izdruka.php		Ievākto tvītu izdrukāšanas fails.
+/config.php     Tur jāieraksta twitter lietotājvārds un parole,
+                kā arī atlasīšanai paredzētie atslēgvārdi.
+                Šobrīd tur ir ar ēšanu saistīti atslēgvārdi.
+/init_sql.php   Informācija par pieslēgšanos pie datubāzes.
+/savac.php      Tvītu vākšanas fails.
+/izdruka.php    Ievākto tvītu izdrukāšanas fails.
 ===============================================================
 Draugu tvīti:
 
-/index.php		Ļauj lietotājam pieslēgties ar savu Twitter
-				kontu un paskatīties, kuri no viņa draugiem
-				tvīto par ēšanas tēmu.
-/auth			TwitterOAuth
+/index.php      Ļauj lietotājam pieslēgties ar savu Twitter
+                kontu un paskatīties, kuri no viņa draugiem
+                tvīto par ēšanas tēmu.
+/auth           TwitterOAuth
 
 ****************************************************************
