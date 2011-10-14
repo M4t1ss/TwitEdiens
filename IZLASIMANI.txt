@@ -1,0 +1,28 @@
+***************************************************************
+**     _____          _ _   _____    _ _                	 **
+**    |_   _|_      _(_) |_| ____|__| (_) ___ _ __  ___ 	 **
+**      | | \ \ /\ / / | __|  _| / _` | |/ _ \ '_ \/ __|	 **
+**      | |  \ V  V /| | |_| |__| (_| | |  __/ | | \__ \	 **
+**      |_|   \_/\_/ |_|\__|_____\__,_|_|\___|_| |_|___/	 **
+**															 **
+***************************************************************
+
+Faili:
+===============================================================
+Tvîtu vâkðana:
+
+/config.php		Tur jâieraksta twitter lietotâjvârds un parole,
+				kâ arî atlasîðanai paredzçtie atslçgvârdi.
+				Ðobrîd tur ir ar çðanu saistîti atslçgvârdi.
+/init_sql.php	Informâcija par pieslçgðanos pie datubâzes.
+/savac.php		Tvîtu vâkðanas fails.
+/izdruka.php		Ievâkto tvîtu izdrukâðanas fails.
+===============================================================
+Draugu tvîti:
+
+/index.php		Ïauj lietotâjam pieslçgties ar savu Twitter
+				kontu un paskatîties, kuri no viòa draugiem
+				tvîto par çðanas tçmu.
+/auth			TwitterOAuth
+
+****************************************************************
