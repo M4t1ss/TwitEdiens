@@ -9,20 +9,20 @@
 
 Faili:
 ===============================================================
-Tvîtu vâkğana:
+TvÄ«tu vÄkÅ¡ana:
 
-/config.php		Tur jâieraksta twitter lietotâjvârds un parole,
-				kâ arî atlasîğanai paredzçtie atslçgvârdi.
-				Ğobrîd tur ir ar çğanu saistîti atslçgvârdi.
-/init_sql.php	Informâcija par pieslçgğanos pie datubâzes.
-/savac.php		Tvîtu vâkğanas fails.
-/izdruka.php		Ievâkto tvîtu izdrukâğanas fails.
+/config.php		Tur jÄieraksta twitter lietotÄjvÄrds un parole,
+				kÄ arÄ« atlasÄ«Å¡anai paredzÄ“tie atslÄ“gvÄrdi.
+				Å obrÄ«d tur ir ar Ä“Å¡anu saistÄ«ti atslÄ“gvÄrdi.
+/init_sql.php	InformÄcija par pieslÄ“gÅ¡anos pie datubÄzes.
+/savac.php		TvÄ«tu vÄkÅ¡anas fails.
+/izdruka.php		IevÄkto tvÄ«tu izdrukÄÅ¡anas fails.
 ===============================================================
-Draugu tvîti:
+Draugu tvÄ«ti:
 
-/index.php		Ïauj lietotâjam pieslçgties ar savu Twitter
-				kontu un paskatîties, kuri no viòa draugiem
-				tvîto par çğanas tçmu.
+/index.php		Ä»auj lietotÄjam pieslÄ“gties ar savu Twitter
+				kontu un paskatÄ«ties, kuri no viÅ†a draugiem
+				tvÄ«to par Ä“Å¡anas tÄ“mu.
 /auth			TwitterOAuth
 
 ****************************************************************
