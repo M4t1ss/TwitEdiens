@@ -1,9 +1,6 @@
 ﻿<?php
-//SQL pieslēgšanās informācija
-$db_server = "localhost";
-$db_database = "twitter_alerts";
-$db_user = "root";
-$db_password = "root";
+//Pieslēgums DB
+include "init_sql.php";
 
 //Pieslēdzamies SQL serverim
 $connection = @mysql_connect($db_server, $db_user, $db_password);
