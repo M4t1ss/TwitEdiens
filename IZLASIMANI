@@ -24,5 +24,10 @@ Draugu tvīti:
                 kontu un paskatīties, kuri no viņa draugiem
                 tvīto par ēšanas tēmu.
 /auth           TwitterOAuth
+===============================================================
+Karte:
+
+/map.php      	Atzīmē google kartē visus tvītus, kuros bija
+                pievienota atrašanās vieta.
 
 ****************************************************************
