@@ -1,24 +1,9 @@
+<h1 style='margin:auto auto; text-align:center;'>Twitter gardēžu karte</h1>
+
 <?php
-//Pieslēgums DB
-include "init_sql.php";
-
-//Pieslēdzamies SQL serverim
-$connection = @mysql_connect($db_server, $db_user, $db_password);
-mysql_set_charset("utf8", $connection);
-mysql_select_db($db_database);
-
 //Paņem dažādās vietas
 $q = mysql_query("SELECT distinct geo, count( * ) skaits FROM `tweets` WHERE geo!='' GROUP BY geo ORDER BY count( * ) DESC");
-
-
-
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html>
-	<head>
-		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 		<script type="text/javascript">
 			function initialize() {
@@ -39,12 +24,15 @@ $q = mysql_query("SELECT distinct geo, count( * ) skaits FROM `tweets` WHERE geo
 					$json=json_decode($string, true);
 					$lat = $json["results"][0]["geometry"]["location"]["lat"];
 					$lng = $json["results"][0]["geometry"]["location"]["lng"];
+					if ($lat & $lng){
 					?>
-					//Atzīmē vietu uz kartes
-					var contentString<?php echo $i;?> = '<?php echo $vieta." - ".$skaits.$tviti;?>';
+					//Apraksts
+					var contentString<?php echo $i;?> = '<?php echo $vieta." - ".$skaits.$tviti." par ēšanas tēmām";?>';
 					var infowindow<?php echo $i;?> = new google.maps.InfoWindow({
 						content: contentString<?php echo $i;?>
 					});
+						
+					//Atzīmē vietu kartē
 					var parkingPos = new google.maps.LatLng(<?php echo $lat;?>, <?php echo $lng;?>);
 					var marker<?php echo $i;?> = new google.maps.Marker({
 						position: parkingPos,
@@ -56,12 +44,10 @@ $q = mysql_query("SELECT distinct geo, count( * ) skaits FROM `tweets` WHERE geo
 					});
 					<?php
 					$i=$i+1;
+					}
 				}
 ?>
 			}
 		</script>
-	</head>
-	<body onload="initialize()">
-		<div id="map_canvas" style="width:1000px; height:600px"></div>
-	</body>
-</html>
+		<div id="map_canvas" style="margin:auto auto; width:950px; height:520px"></div>
+	<img onload="initialize()" src="x.png" style="visibility:hidden;"/>

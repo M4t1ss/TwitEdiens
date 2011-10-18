@@ -1,0 +1,26 @@
+<h1 style='margin:auto auto; text-align:center;'>Twitter gardēžu statistika</h1>
+<br/>
+<div style='margin:auto auto; width:260px;'>
+<?php
+//Pieslēgums DB
+include "init_sql.php";
+//Tvītu kopskaits
+$kopa = mysql_query("SELECT count( * ) skaits FROM tweets");
+//Tvītu skaits, kuros norādīta atrašānās vieta
+$geo = mysql_query("SELECT count( geo ) skaits FROM tweets where geo!=''");
+//Dažādās atrašanās vietas
+$geod = mysql_query("SELECT count( distinct geo ) skaits FROM tweets where geo!=''");
+//Twitter lietotāju kopskaits
+$scrnme = mysql_query("SELECT count( distinct screen_name ) skaits FROM tweets");
+
+$r=mysql_fetch_array($kopa);
+echo "Kopā par ēšanas tēmām ir <b>".$r["skaits"]."</b> tvītu.<br/>";
+$r=mysql_fetch_array($scrnme);
+echo "Tos rakstījuši <b>".$r["skaits"]."</b> dažādi lietotāji.<br/>";
+$r=mysql_fetch_array($geo);
+echo "<b>".$r["skaits"]."</b> no tiem norādīta atrašanās vieta.<br/>";
+$r=mysql_fetch_array($geod);
+echo "Kopā ir <b>".$r["skaits"]."</b> dažādas atrašanās vietas.<br/>";
+
+?>
+</div>
