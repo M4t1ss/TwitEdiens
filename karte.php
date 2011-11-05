@@ -19,11 +19,23 @@ $q = mysql_query("SELECT distinct geo, count( * ) skaits FROM `tweets` WHERE geo
 				   $vieta=$r["geo"];
 				   $skaits=$r["skaits"];
 				   if ($skaits==1) {$tviti=" tvīts";} else {$tviti=" tvīti";}
-				   //Dabū vietas koordinātas
-					$string = file_get_contents("http://maps.googleapis.com/maps/api/geocode/json?address=".str_replace(" ", "%20",$vieta)."&sensor=true");
-					$json=json_decode($string, true);
-					$lat = $json["results"][0]["geometry"]["location"]["lat"];
-					$lng = $json["results"][0]["geometry"]["location"]["lng"];
+					$irvieta = mysql_query("SELECT * FROM vietas where nosaukums='$vieta'");
+					if(mysql_num_rows($irvieta)==0){
+						//ja nav tādas vietas datu bāzē,
+						//dabū vietas koordinātas
+						$string = file_get_contents("http://maps.googleapis.com/maps/api/geocode/json?address=".str_replace(" ", "%20",$vieta)."&sensor=true");
+						$json=json_decode($string, true);
+						$lat = $json["results"][0]["geometry"]["location"]["lat"];
+						$lng = $json["results"][0]["geometry"]["location"]["lng"];
+						if ($lat!=0 && $lng!=0){
+							$ok = mysql_query("INSERT INTO vietas (nosaukums, lng, lat) VALUES ('$vieta', '$lng', '$lat')");
+						}
+						}else{
+							$arr=mysql_fetch_array($irvieta);
+							//ja ir
+							$lat = $arr['lat'];
+							$lng = $arr['lng'];
+						}
 					if ($lat & $lng){
 					?>
 					//Apraksts
