@@ -1,9 +1,7 @@
-<h1 style='margin:auto auto; text-align:center;'>Ko ēst?</h1>
+<h2 style='margin:auto auto; text-align:center;'>Ko ēst?</h2>
 <br/>
 <div style="font-size:20px;text-align:center;">
 <?php
-//Pieslēgums DB
-include "init_sql.php";
 $vardi = mysql_query("SELECT distinct nominativs FROM words WHERE nominativs != '' AND nominativs != '0' ORDER BY RAND( ) LIMIT 3 ");
 
 echo "Šajā ēdienreizē Tev būs jāēd ";

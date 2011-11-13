@@ -1,5 +1,5 @@
 <?php
-$vards=urldecode($_GET['vards']);
+$vards=urldecode($_GET['vieta']);
 ?>
 <h2 style='margin:auto auto; text-align:center;'><?php echo $vards; ?></h2>
 <br/>
@@ -34,7 +34,7 @@ $vards=urldecode($_GET['vards']);
 <div >
 <?php
 //Pieslēgums DB
-$vardi = mysql_query("SELECT tvits FROM words where nominativs = '$vards'");
+$tviti = mysql_query("SELECT screen_name, text FROM tweets where geo = '$vards'");
 
 $krasa=TRUE;
 echo "<table id='results' style='margin:auto auto;'>";
@@ -42,10 +42,7 @@ echo "<tr>
 <th>Lietotājs</th>
 <th>Tvīts</th>
 </tr>";
-while($r=mysql_fetch_array($vardi)){
-	$tvits = $r["tvits"];
-	$tviti = mysql_query("SELECT screen_name, text FROM tweets where id = '$tvits'");
-	$p=mysql_fetch_array($tviti);
+while($p=mysql_fetch_array($tviti)){
 	$niks = $p["screen_name"];
 	$teksts = $p["text"];
 	if ($krasa==TRUE) {$kr=" class='even'";}else{$kr="";}

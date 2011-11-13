@@ -1,0 +1,94 @@
+a{text-decoration:none;color:#000;}
+
+table {
+background:#fff;
+	margin:20px;
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	border-radius:10px}
+	
+table th {padding:4px 10px}
+
+table td {
+	background:#fff;
+	padding:2px 10px 4px 10px}
+	
+table tr.even td {background:#F6E9F6}
+
+input{
+font-size:12px;
+border:none;
+-moz-border-radius:10px;
+-webkit-border-radius:10px;
+padding-left:2px;
+padding-right:2px;
+background:#F6E9F6;
+background-color:rgba(246, 233, 246, 0.45);
+-webkit-box-shadow: rgba(64, 64, 64, 0.5) 2px 2px 9px;
+-moz-box-shadow: rgba(64, 64, 64, 0.5) 2px 2px 9px;
+}
+
+table tr:last-child td:first-child {
+	-moz-border-radius-bottomleft:10px;
+	-webkit-border-bottom-left-radius:10px;
+	border-bottom-left-radius:10px}
+	
+table tr:last-child td:last-child {
+	-moz-border-radius-bottomright:10px;
+	-webkit-border-bottom-right-radius:10px;
+	border-bottom-right-radius:10px}
+
+#progressbar{ font: 30% "Trebuchet MS", sans-serif; margin-left:30px;}
+.sk{ margin-top:-20px;margin-left:-100px;}
+img {border-width: 0}
+* {font-family:'Lucida Grande', sans-serif;}
+#nav a {text-decoration:none;font-weight:bold;color:grey;}
+#nav a:hover {border-bottom:1px dotted red;}
+td{padding:2px;}
+		.pg-normal {
+			color: black;
+			font-weight: normal;
+			text-decoration: none;    
+			cursor: pointer;    
+		}
+		.pg-selected {
+			color: black;
+			font-weight: bold;        
+			text-decoration: underline;
+			cursor: pointer;
+		}
+body{background-image:url('../img/bg.png');}
+h1{
+margin-top:-10px;
+margin-bottom:-8px;
+font-family: 'Reenie Beanie', serif;
+text-align:center;
+font-size:3.5em;
+-webkit-text-fill-color: #000;
+-webkit-text-stroke-color: #FFF;
+-webkit-text-stroke-width: 1px;
+text-shadow: rgba(64, 64, 64, 0.5) 3px 3px 9px;
+}
+h3{
+text-align:center;
+}
+.clear {clear: both;}
+#contents{
+min-height:500px;
+}
+#bottom{
+font-size:12px;
+}
+#top, #bottom, #contents{
+background-color:rgba(229, 255, 255, 0.65);
+border-radius: 8px;
+-moz-border-radius: 8px;
+-webkit-box-shadow: rgba(64, 64, 64, 0.5) 2px 2px 9px;
+-moz-box-shadow: rgba(64, 64, 64, 0.5) 2px 2px 9px;
+}
+@font-face {
+  font-family: 'Reenie Beanie';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Reenie Beanie'), local('ReenieBeanie'), url('ReenieBeanie.woff') format('woff');
+}

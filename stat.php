@@ -1,9 +1,7 @@
-<h1 style='margin:auto auto; text-align:center;'>Twitter gardēžu statistika</h1>
+<h2 style='margin:auto auto; text-align:center;'>Twitter gardēžu statistika</h2>
 <br/>
 <div style='margin:auto auto; width:350px;text-align:center;'>
 <?php
-//Pieslēgums DB
-include "init_sql.php";
 //Tvītu kopskaits
 $kopa = mysql_query("SELECT count( * ) skaits FROM tweets");
 //Tvītu skaits, kuros norādīta atrašānās vieta
