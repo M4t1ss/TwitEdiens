@@ -25,7 +25,6 @@ if($_POST['submit']) //ja piespiests parādīt
 	$no=date("Y-m-d", $no);
 	$lidz=strtotime($lidz);
 	$lidz=date("Y-m-d", $lidz);
-
 }else{//ja ne, lai parādās pēdējā mēneša dati...
 	//dabū šodienas datumu
 	$menesiss = $menesis = date("m");
@@ -96,7 +95,7 @@ while($r=mysql_fetch_array($q)){
 if ($krasa==TRUE) {$kr=" class='even'";}else{$kr="";}
 $vards=$r["screen_name"];
 $skaits=$r["skaits"];
-echo "<tr".$kr."><td>".$i.".</td><td><b><a style='text-decoration:none;color:#808080;' href='?id=draugs&dra=".$vards."'>".$vards."</a></b></td><td>".$skaits." tvīti</td></tr>";
+echo "<tr".$kr."><td>".$i.".</td><td><b><a style='text-decoration:none;color:#808080;' href='/TwitEdiens/draugs/".$vards."'>".$vards."</a></b></td><td>".$skaits." tvīti</td></tr>";
 $krasa=!$krasa;
 $i++;
 }

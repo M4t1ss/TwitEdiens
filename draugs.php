@@ -4,7 +4,7 @@ require_once('auth/twitteroauth/twitteroauth.php');
 require_once('auth/config.php');
 include 'includes/tag/classes/wordcloud.class.php';
 //ja nav norādīts draugs, ej prom...
-if (!isset($_GET['dra']))   echo "<script type=\"text/javascript\">setTimeout(\"window.location = 'index.php'\",5);</script>";
+//if (!isset($_GET['dra']))   echo "<script type=\"text/javascript\">setTimeout(\"window.location = './..'\",5);</script>";
 $draugs = $_GET['dra'];
 
 //Ja nav pieslēdzies, pārsūta uz pieslēgšanās lapu
@@ -19,8 +19,7 @@ $vaards = $usr->{'name'};
 ?>
 <script>
 $(function() {
-$("#tabs").tabs({            
-                        //event: 'mouseover'
+$("#tabs").tabs({
                 fx: { height: 'toggle', opacity: 'toggle'},
                 show: function(event, ui) {
                           if (ui.panel.id == "tabs-4") {
@@ -29,10 +28,11 @@ $("#tabs").tabs({
                                 }}
                 });
 });
-
 </script>
-<h2 style='margin:auto auto; text-align:center;'>@<?php echo $draugs;?></h2>
-<h4 style='margin:auto auto; text-align:center;'><?php echo $vaards;?></h4>
+<h2 style='margin:auto auto; text-align:center;'><a href="https://twitter.com/#!/<?php echo $draugs;?>">@<?php echo $draugs;?></a></h2>
+<h4 style='margin:auto auto; text-align:center;'><?php echo $vaards;?>
+<br/>
+<img style="max-height:128px;" src="https://api.twitter.com/1/users/profile_image?screen_name=<?php echo $draugs;?>&size=original"/></h4>
 <br/>
 <div id="tabs">
 <ul>
@@ -40,12 +40,12 @@ $("#tabs").tabs({
 	<li><a href="#tabs-2">Kalendārs</a></li>
 	<li><a href="#tabs-3">Vārdi</a></li>
 	<li><a href="#tabs-4">Karte</a></li>
+	<li><a href="#tabs-5">Statistika</a></li>
 </ul>
 <div id="tabs-1">
 <?php
 $q = mysql_query("SELECT id, text, created_at FROM tweets where screen_name='$draugs' order by created_at desc");
 if (mysql_num_rows($q)){
-
 //visi savāktie konkrētā lietotāja tvīti
 $krasa=TRUE;
 echo "<table id='results' class='sortable' style='margin:auto auto;border-spacing:0px;border:1px solid white;'>";
@@ -80,7 +80,6 @@ echo $draugs." vēl nav tvītojis par ēšanu.";
 	pager.showPage(1);
 //--></script>
 </div>
-
 <div id="tabs-2">
 <?php
 //cikos un kādās dienās tvītots
@@ -94,7 +93,6 @@ if (mysql_num_rows($q)){
 ?>
 <h3>Cikos tvīto visbiežāk</h3>
 <?php
-
 //jādabū visas dienas Mon-Sun...
 //šitā ir pirmdiena...sāksim ar to
 $theDate = '2011-10-31';
@@ -104,7 +102,6 @@ $ddd = date('D', $timeStamp);
 $timeStamp = StrToTime('+1 days', $timeStamp);
 $dienas[$ddd][skaits]=0;
 }
-
 //dabū šodienas datumu
 $menesiss = $menesis = date("m");
 $dienasz = $diena = date("d");
@@ -129,7 +126,6 @@ while($r=mysql_fetch_array($q)){
 	if($stundas[$laiks][skaits]>$max) $max=$stundas[$laiks][skaits];
 	if($dienas[$diena][skaits]>$maxd) $maxd=$dienas[$diena][skaits];
 }
-
 //izdrukā populārākās stundas
 for($zb=0;$zb<24;$zb++) {
 $percent = round($stundas[$zb][skaits]/$max*100);
@@ -207,16 +203,16 @@ echo $draugs." vēl nav tvītojis par ēšanu.";
 </div>
 </div>
 <div id="tabs-3">
-<h2 style='margin:auto auto; text-align:center;'>pieminētie ēdieni / dzērieni</h2>
+<h2 style='margin:auto auto; text-align:center;'>Pieminētie ēdieni / dzērieni</h2>
 <br/>
 <?php
-$vardi = mysql_query("select id, nominativs from tweets, words where tweets.screen_name = '$draugs' and words.tvits = tweets.id and nominativs != '0'");
+$vardi = mysql_query("select nominativs from tweets, words where tweets.screen_name = '$draugs' and words.tvits = tweets.id and nominativs != '0'");
 if (mysql_num_rows($vardi)){
 $cloud = new wordCloud();
 //jāuztaisa vēl, lai, uzklikojot uz kādu ēdienu, atvērtu visus tvītus, kas to pieminējuši...
 while($r=mysql_fetch_array($vardi)){
 	$nom = $r["nominativs"];
-	$cloud->addWord(array('word' => $nom, 'url' => '?id=vards&vards='.urlencode($nom)));
+	$cloud->addWord(array('word' => $nom, 'url' => '/TwitEdiens/vards/'.urlencode($nom)));
 }
 $cloud->orderBy('size', 'desc');
 $myCloud = $cloud->showCloud('array');
@@ -292,5 +288,123 @@ echo $draugs." vēl nav pieminējis nevienu ēdienu vai dzērienu.";
 			}
 		</script>
 		<div id="map_canvas" style="margin:auto auto; width:900px; height:520px"></div>
+</div>
+<div id="tabs-5">
+<h2 style='margin:auto auto; text-align:center;'>pieminētie ēdieni / dzērieni</h2>
+<br/>
+<?php
+//pozitīvie
+$kopa = mysql_query("SELECT count( * ) skaits FROM tweets where emo = 1 and screen_name = '$draugs'");
+$r=mysql_fetch_array($kopa);
+$poz = $r["skaits"];
+//negatīvie
+$kopa = mysql_query("SELECT count( * ) skaits FROM tweets where emo = 2 and screen_name = '$draugs'");
+$r=mysql_fetch_array($kopa);
+$neg = $r["skaits"];
+//neitrālie
+$kopa = mysql_query("SELECT count( * ) skaits FROM tweets where emo = 3 and screen_name = '$draugs'");
+$r=mysql_fetch_array($kopa);
+$nei = $r["skaits"];
+//Tauki, saldumi
+$g1 = mysql_query("SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 1");
+$r1=mysql_fetch_array($g1);
+$g11 = $r1["skaits"];
+//Gaļa, olas, zivis
+$g2 = mysql_query("SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 2");
+$r2=mysql_fetch_array($g2);
+$g21 = $r2["skaits"];
+//Piena produkti
+$g3 = mysql_query("SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 3");
+$r3=mysql_fetch_array($g3);
+$g31 = $r3["skaits"];
+//Dārzeņi
+$g4 = mysql_query("SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 4");
+$r4=mysql_fetch_array($g4);
+$g41 = $r4["skaits"];
+//Augļi, ogas
+$g5 = mysql_query("SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 5");
+$r5=mysql_fetch_array($g5);
+$g51 = $r5["skaits"];
+//Maize, graudaugu produkti, makaroni, rīsi, biezputras, kartupeļi
+$g6 = mysql_query("SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 6");
+$r6=mysql_fetch_array($g6);
+$g61 = $r6["skaits"];
+//Alkoholisks dzēriens
+$g7 = mysql_query("SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 7");
+$r7=mysql_fetch_array($g7);
+$g71 = $r7["skaits"];
+//Bezalkoholisks dzēriens
+$g8 = mysql_query("SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 8");
+$r8=mysql_fetch_array($g8);
+$g81 = $r8["skaits"];
+?>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load('visualization', '1.0', {'packages':['corechart']});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Topping');
+      data.addColumn('number', 'Slices');
+      data.addRows([
+        ['Pozitīvi', <?php echo $poz ?>],
+        ['Negatīvi', <?php echo $neg ?>],
+        ['Neitrāli', <?php echo $nei ?>]]);
+      var options = {'title':'Tvītu noskaņojums',
+                     'width':485,
+                     'height':300,
+                     'backgroundColor':'transparent',
+                     'is3D':'true'};
+      var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+      chart.draw(data, options);}
+</script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load('visualization', '1.0', {'packages':['corechart']});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Topping');
+      data.addColumn('number', 'Slices');
+      data.addRows([
+        ['Alkoholisks dzēriens', <?php echo $g71; ?>],
+        ['Bezalkoholisks dzēriens', <?php echo $g81; ?>]]);
+      var options = {'title':'Dzērieni',
+                     'width':450,
+                     'height':300,
+                     'backgroundColor':'transparent',
+                     'is3D':'true'};
+      var chart = new google.visualization.PieChart(document.getElementById('chart_div1'));
+      chart.draw(data, options);}
+</script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load('visualization', '1.0', {'packages':['corechart']});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Topping');
+      data.addColumn('number', 'Slices');
+      data.addRows([
+        ['Tauki, saldumi', <?php echo $g11; ?>],
+        ['Gaļa, olas, zivis', <?php echo $g21; ?>],
+        ['Piena produkti', <?php echo $g31; ?>],
+        ['Dārzeņi', <?php echo $g41; ?>],
+        ['Augļi, ogas', <?php echo $g51; ?>],
+        ['Maize, graudaugu produkti, makaroni, rīsi, biezputras, kartupeļi', <?php echo $g61; ?>]]);
+      var options = {'title':'Twitter uztura piramīda',
+                     'width':450,
+                     'height':300,
+                     'backgroundColor':'transparent',
+                     'is3D':'true'};
+      var chart = new google.visualization.PieChart(document.getElementById('chart_div2'));
+      chart.draw(data, options);}
+</script>
+<div style="text-align:center;">
+	<div id="chart_div"></div>
+	<div style="float:left;" id="chart_div2"></div>
+	<div style="float:right;" id="chart_div1"></div>
+</div>
+<br style="clear:both;"/>
 </div>
 </div>

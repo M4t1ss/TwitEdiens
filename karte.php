@@ -104,10 +104,14 @@ $q = mysql_query("SELECT distinct geo, count( * ) skaits FROM `tweets` WHERE geo
 						//dabū vietas koordinātas
 						$string = file_get_contents("http://maps.googleapis.com/maps/api/geocode/json?address=".str_replace(" ", "%20",$vieta)."&sensor=true");
 						$json=json_decode($string, true);
+						$gar = sizeof($json["results"][0]["address_components"]);
+						for ($z = 0; $z < $gar; $z++){
+							if($json["results"][0]["address_components"][$z]['types'][0] == 'country') $valsts = $json["results"][0]["address_components"][$z]['long_name'];
+						}
 						$lat = $json["results"][0]["geometry"]["location"]["lat"];
 						$lng = $json["results"][0]["geometry"]["location"]["lng"];
 						if ($lat!=0 && $lng!=0){
-							$ok = mysql_query("INSERT INTO vietas (nosaukums, lng, lat) VALUES ('$vieta', '$lng', '$lat')");
+							$ok = mysql_query("INSERT INTO vietas (nosaukums, lng, lat, valsts) VALUES ('$vieta', '$lng', '$lat', '$valsts')");
 						}
 						}else{
 							$arr=mysql_fetch_array($irvieta);
@@ -118,7 +122,7 @@ $q = mysql_query("SELECT distinct geo, count( * ) skaits FROM `tweets` WHERE geo
 					if ($lat & $lng){
 					?>
 					//Apraksts
-					var contentString<?php echo $i;?> = '<a href="?id=vieta&vieta=<?php echo $vieta;?>"><?php echo $vieta." - ".$skaits.$tviti." par ēšanas tēmām";?>';
+					var contentString<?php echo $i;?> = '<a href="/TwitEdiens/vieta/<?php echo $vieta;?>"><?php echo $vieta." - ".$skaits.$tviti." par ēšanas tēmām";?>';
 					var infowindow<?php echo $i;?> = new google.maps.InfoWindow({
 						content: contentString<?php echo $i;?>
 					});

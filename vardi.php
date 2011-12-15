@@ -90,7 +90,7 @@ $cloud = new wordCloud();
 //jāuztaisa vēl, lai, uzklikojot uz kādu ēdienu, atvērtu visus tvītus, kas to pieminējuši...
 while($r=mysql_fetch_array($vardi)){
 	$nom = $r["nominativs"];
-	$cloud->addWord(array('word' => $nom, 'url' => '?id=vards&vards='.urlencode($nom)));
+	$cloud->addWord(array('word' => $nom, 'url' => 'vards/'.urlencode($nom)));
 }
 $cloud->orderBy('size', 'desc');
 $myCloud = $cloud->showCloud('array');

@@ -122,9 +122,10 @@ $percent = round($stundas[$zb][skaits]/$max*100);
 		});		
 	});
 </script>
-<div style=" font: 50% 'Trebuchet MS', sans-serif;" id="progressbar<?php echo $zb;?>"></div>
+<a href="/TwitEdiens/grupa/<?php echo $zb;?>"><div style=" font: 50% 'Trebuchet MS', sans-serif;" id="progressbar<?php echo $zb;?>"></div>
 <div class="sk"><?php echo $zb.":00 - ".($zb+1).":00";?></div>
-</br>
+</a>
+<br/>
 <?php
 }
 ?>
@@ -148,7 +149,7 @@ $percent = round($dienas[$ddd][skaits]/$maxd*100);
 		});		
 	});
 </script>
-<div style=" font: 50% 'Trebuchet MS', sans-serif;" id="progressbar<?php echo $ddd;?>"></div>
+<a href="/TwitEdiens/grupa/<?php echo $ddd;?>"><div style=" font: 50% 'Trebuchet MS', sans-serif;" id="progressbar<?php echo $ddd;?>"></div>
 <div class="sk"><?php
 switch ($ddd) {
     case 'Mon':
@@ -173,8 +174,8 @@ switch ($ddd) {
         echo "Svētdien";
         break;
 }
-?></div>
-</br>
+?></div></a>
+<br/>
 <?php
 }
 ?>
