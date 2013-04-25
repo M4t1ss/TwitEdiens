@@ -144,7 +144,7 @@ while($r=mysql_fetch_array($vardi)){
 		$niks = $r["screen_name"];
 		$teksts = $r["text"];
 		if ($krasa==TRUE) {$kr=" class='even'";}else{$kr="";}
-		echo '<tr'.$kr.'><td><b><a style="text-decoration:none;color:#658304;" href="/TwitEdiens/draugs/'.$niks.'">'.$niks.'</a></b></td><td>'.$teksts.'</td></tr>';
+		echo '<tr'.$kr.'><td><b><a style="text-decoration:none;color:#658304;" href="/draugs/'.$niks.'">'.$niks.'</a></b></td><td>'.$teksts.'</td></tr>';
 		$krasa=!$krasa;
 	}else{
 		$tvits = $r["tvits"];
@@ -153,7 +153,7 @@ while($r=mysql_fetch_array($vardi)){
 		$niks = $p["screen_name"];
 		$teksts = $p["text"];
 		if ($krasa==TRUE) {$kr=" class='even'";}else{$kr="";}
-		echo '<tr'.$kr.'><td><b><a style="text-decoration:none;color:#658304;" href="/TwitEdiens/draugs/'.$niks.'">'.$niks.'</a></b></td><td>'.$teksts.'</td></tr>';
+		echo '<tr'.$kr.'><td><b><a style="text-decoration:none;color:#658304;" href="/draugs/'.$niks.'">'.$niks.'</a></b></td><td>'.$teksts.'</td></tr>';
 		$krasa=!$krasa;
 	}
 }

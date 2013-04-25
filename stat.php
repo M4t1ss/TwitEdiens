@@ -1,48 +1,127 @@
 <?php
+if($_POST['submit']) //ja piespiests parādīt
+{
+   //ievācam visus mainīgos
+   $no = strip_tags($_POST['from']);
+   $lidz = strip_tags($_POST['to']);
+	if($no==""){
+	$no=date("y-m-d");
+	}
+	if($lidz==""){
+	$lidz=date("y-m-d");
+	}
+	if($no==$lidz) {
+		$no--;
+		$no = date("y-m-d",strtotime($no."-24 hours"));
+	}
+	$ns=strtotime($no);
+	$ls=strtotime($lidz);
+	if($ns>$ls){
+	$x=$no;
+	$no=$lidz;
+	$lidz=$x;
+	}
+	$no=strtotime($no);
+	$no=date("Y-m-d", $no);
+	$lidz=strtotime($lidz);
+	$lidz=date("Y-m-d", $lidz);
+}else{//ja ne, lai parādās pēdējā mēneša dati...
+	//dabū šodienas datumu
+	$menesiss = $menesis = date("m");
+	$dienasz = $diena = date("d");
+	$gadss = $gads = date("Y");
+	//izrēķina datumu pirms mēneša
+	$menesis--;
+	if($menesis==0){
+		$menesis=12;
+		$gads--;
+	}
+	$no = $gads."-".$menesis."-".$diena;
+	$lidz = $gadss."-".$menesiss."-".$dienasz;
+}
+	$nn=strtotime($no);
+	$nn=date("d-m-Y", $nn);
+	$ll=strtotime($lidz);
+	$ll=date("d-m-Y", $ll);
+//pirms cik dienām bija pirmais tvīts?
+$die = mysql_query("SELECT min( created_at ) diena FROM tweets");
+$mdie=mysql_fetch_array($die);
+$laiks=strtotime($mdie['diena']);
+$laiks=date("U", $laiks);
+$seconds = time() - $laiks;
+$days = ceil($seconds / 60 / 60 / 24);
+?>
+<script type="text/javascript">
+$(function() {
+	$( "#from, #to" ).datepicker({ minDate: -<?php echo $days; ?>, maxDate: "+0D" });
+	var dates = $( "#from, #to" ).datepicker({
+		defaultDate: "+1w",
+		changeMonth: true,
+		onSelect: function( selectedDate ) {
+			var option = this.id == "from" ? "minDate" : "maxDate",
+				instance = $( this ).data( "datepicker" ),
+				date = $.datepicker.parseDate(
+					instance.settings.dateFormat ||
+					$.datepicker._defaults.dateFormat,
+					selectedDate, instance.settings );
+			dates.not( this ).datepicker( "option", option, date );
+		}
+	});
+	$( "#from, #to" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+	$( "#from, #to" ).datepicker($.datepicker.regional['fr']);
+	$( "#to" ).datepicker({ currentText: 'Today' });
+});
+</script>
+<?php
 //pozitīvie
-$kopa = mysql_query("SELECT count( * ) skaits FROM tweets where emo = 1");
-$r=mysql_fetch_array($kopa);
-$poz = $r["skaits"];
-//negatīvie
-$kopa = mysql_query("SELECT count( * ) skaits FROM tweets where emo = 2");
-$r=mysql_fetch_array($kopa);
-$neg = $r["skaits"];
-//neitrālie
-$kopa = mysql_query("SELECT count( * ) skaits FROM tweets where emo = 3");
-$r=mysql_fetch_array($kopa);
-$nei = $r["skaits"];
-//Tauki, saldumi
-$g1 = mysql_query("SELECT count( * ) skaits FROM words where grupa = 1");
-$r1=mysql_fetch_array($g1);
-$g11 = $r1["skaits"];
-//Gaļa, olas, zivis
-$g2 = mysql_query("SELECT count( * ) skaits FROM words where grupa = 2");
-$r2=mysql_fetch_array($g2);
-$g21 = $r2["skaits"];
-//Piena produkti
-$g3 = mysql_query("SELECT count( * ) skaits FROM words where grupa = 3");
-$r3=mysql_fetch_array($g3);
-$g31 = $r3["skaits"];
-//Dārzeņi
-$g4 = mysql_query("SELECT count( * ) skaits FROM words where grupa = 4");
-$r4=mysql_fetch_array($g4);
-$g41 = $r4["skaits"];
-//Augļi, ogas
-$g5 = mysql_query("SELECT count( * ) skaits FROM words where grupa = 5");
-$r5=mysql_fetch_array($g5);
-$g51 = $r5["skaits"];
-//Maize, graudaugu produkti, makaroni, rīsi, biezputras, kartupeļi
-$g6 = mysql_query("SELECT count( * ) skaits FROM words where grupa = 6");
-$r6=mysql_fetch_array($g6);
-$g61 = $r6["skaits"];
-//Alkoholisks dzēriens
-$g7 = mysql_query("SELECT count( * ) skaits FROM words where grupa = 7");
-$r7=mysql_fetch_array($g7);
-$g71 = $r7["skaits"];
-//Bezalkoholisks dzēriens
-$g8 = mysql_query("SELECT count( * ) skaits FROM words where grupa = 8");
-$r8=mysql_fetch_array($g8);
-$g81 = $r8["skaits"];
+$kopa = mysql_query("SELECT distinct emo, count( * ) skaits FROM tweets where created_at between '$no' AND '$lidz' group by emo order by skaits desc");
+while($p=mysql_fetch_array($kopa)){
+	$noskanojums = $p["emo"];
+	$text = $p["skaits"];
+	switch ($noskanojums) {
+		case 3:
+			$nei = $text;
+			break;
+		case 1:
+			$poz = $text;
+			break;
+		case 2:
+			$neg = $text;
+			break;
+	}
+}
+//Ēdienu grupas
+$g1 = mysql_query("SELECT distinct grupa, count( * ) skaits FROM words, tweets  where words.tvits = tweets.id AND tweets.created_at between '$no' AND '$lidz' group by grupa order by skaits desc");
+while($p=mysql_fetch_array($g1)){
+	$noskanojums = $p["grupa"];
+	$text = $p["skaits"];
+	switch ($noskanojums) {
+		case 1:
+			$g11 = $text;
+			break;
+		case 2:
+			$g21 = $text;
+			break;
+		case 3:
+			$g31 = $text;
+			break;
+		case 4:
+			$g41 = $text;
+			break;
+		case 5:
+			$g51 = $text;
+			break;
+		case 6:
+			$g61 = $text;
+			break;
+		case 7:
+			$g71 = $text;
+			break;
+		case 8:
+			$g81 = $text;
+			break;
+	}
+}
 ?>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
@@ -153,51 +232,62 @@ $g81 = $r8["skaits"];
 		}
 </script>
 <h2 style='margin:auto auto; text-align:center;'>Twitter gardēžu statistika</h2>
+<h5 style='margin:auto auto; text-align:center;'>
+<form method="post" action="statistika">
+No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="from"/> līdz <input value="<?php echo $ll;?>" readonly size=9 type="text" id="to" name="to"/>
+<INPUT TYPE="submit" name="submit" value="Parādīt"/>
+</form>
+</h5>
 <br/>
 <div style='margin:auto auto; width:500px;text-align:center;'>
 <?php
 //Tvītu kopskaits
-$kopa = mysql_query("SELECT count( * ) skaits FROM tweets");
-//Tvītu skaits, kuros norādīta atrašānās vieta
-$geo = mysql_query("SELECT count( geo ) skaits FROM tweets where geo!=''");
-//Tvītu skaits no Latvijas
-$geolv = mysql_query("select count(text) skaits from tweets, vietas where vietas.nosaukums = tweets.geo and vietas.valsts = 'Latvia'");
-//Tvītu skaits no ārzemēm
-$geonlv = mysql_query("select count(text) skaits from tweets, vietas where vietas.nosaukums = tweets.geo and vietas.valsts != 'Latvia'");
-//Dažādās atrašanās vietas
-$geod = mysql_query("SELECT count( nosaukums ) skaits FROM vietas");
-//Dažādās atrašanās valstis
-$valst = mysql_query("SELECT count( distinct valsts ) skaits FROM vietas");
-//Twitter lietotāju kopskaits
-$scrnme = mysql_query("SELECT count( distinct screen_name ) skaits FROM tweets");
-//Dažādie ēdieni / dzērieni
-$vardi = mysql_query("SELECT count( distinct nominativs ) skaits FROM words");
-//Tvītu skaits, kuros ir minēti ēdieni / dzērieni
-$edsk = mysql_query("select count(distinct tvits) skaits from words");
-
-$r=mysql_fetch_array($kopa);
-$tvkopa = $r["skaits"];
+$kopa = mysql_query("
+select count(text) skaits from tweets, vietas where created_at between '$no' AND '$lidz' and vietas.nosaukums = tweets.geo and vietas.valsts = 'Latvia' union
+SELECT count( distinct screen_name ) skaits FROM tweets where created_at between '$no' AND '$lidz' union
+SELECT count( distinct nominativs ) skaits FROM words union
+SELECT count( DISTINCT words.tvits ) skaits FROM words, tweets WHERE words.tvits = tweets.id AND tweets.created_at between '$no' AND '$lidz' union
+SELECT count( * ) skaits FROM tweets where created_at between '$no' AND '$lidz' union
+SELECT count( geo ) skaits FROM tweets where created_at between '$no' AND '$lidz' and geo!=''
+");
+$geogr = mysql_query("SELECT count( nosaukums ) vietas,  count( distinct valsts ) valstis FROM vietas");
+	$h=mysql_fetch_array($geogr);
+	$dazvietas = $h["vietas"];
+	$dazvalst = $h["valstis"];
+for($i=1;$i<7;$i++){
+	$p=mysql_fetch_array($kopa);
+	$text = $p["skaits"];
+	switch ($i) {
+		case 1:
+			$lv = $text;
+			break;
+		case 2:
+			$scrnme = $text;
+			break;
+		case 3:
+			$vardi = $text;
+			break;
+		case 4:
+			$tvparedkopa = $text;
+			break;
+		case 5:
+			$tvkopa = $text;
+			break;
+		case 6:
+			$atrviet = $text;
+			break;
+	}
+}
 echo "Kopā par ēšanas tēmām ir <b>".$tvkopa."</b> tvītu.<br/>";
-$r=mysql_fetch_array($edsk);
-$tvparedkopa = $r["skaits"];
 echo "Kopā ir <b>".$tvparedkopa."</b> tvītu, kuros pieminēts kāds ēdiens vai dzēriens.<br/>";
-$r=mysql_fetch_array($scrnme);
-echo "Tos rakstījuši <b>".$r["skaits"]."</b> dažādi lietotāji.<br/>";
-$r=mysql_fetch_array($geo);
-$atrviet = $r["skaits"];
+echo "Tos rakstījuši <b>".$scrnme."</b> dažādi lietotāji.<br/>";
 echo "<b>".$atrviet."</b> no tiem norādīta atrašanās vieta.<br/>";
-$r=mysql_fetch_array($geolv);
-$lv = $r["skaits"];
-echo "<b>".$r["skaits"]."</b> no tiem ir rakstīti Latvijā.<br/>";
-$r=mysql_fetch_array($geonlv);
-$nlv = $r["skaits"];
-echo "<b>".$r["skaits"]."</b> no tiem ir rakstīti ārzemēs.<br/>";
-$r=mysql_fetch_array($geod);
-$q=mysql_fetch_array($valst);
-echo "Kopā ir <b>".$r["skaits"]."</b> dažādas atrašanās vietas <b>".$q["skaits"]."</b> dažādās valstīs.<br/>";
-$r=mysql_fetch_array($vardi);
-echo "Kopā ir pieminēti <b>".$r["skaits"]."</b> dažādi ēdieni un dzērieni.<br/>";
+echo "<b>".$lv."</b> no tiem ir rakstīti Latvijā.<br/>";
+echo "<b>".($atrviet-$lv)."</b> no tiem ir rakstīti ārzemēs.<br/>";
+echo "Kopā ir <b>".$dazvietas."</b> dažādas atrašanās vietas <b>".$dazvalst."</b> dažādās valstīs.<br/>";
+echo "Kopā ir pieminēti <b>".$vardi."</b> dažādi ēdieni un dzērieni.<br/>";
 ?>
+<h4><a href="smaidi">Smaidiņu statistika</a></h4>
 </div>
 <script type="text/javascript">
   function drawVisualization() {

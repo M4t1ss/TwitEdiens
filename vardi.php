@@ -74,10 +74,10 @@ $(function() {
 	$( "#to" ).datepicker({ currentText: 'Today' });
 });
 </script>
-<h2 style='margin:auto auto; text-align:center;'>Populārākie ēdieni / dzērieni</h2>
+<h2 style='margin:auto auto; text-align:center;'>Populārākie produkti</h2>
 <h5 style='margin:auto auto; text-align:center;'>
 <form method="post" action="?id=vardi">
-No <input value="<?php echo $nn;?>" readonly size=7 type="text" id="from" name="from"/> līdz <input value="<?php echo $ll;?>" readonly size=7 type="text" id="to" name="to"/>
+No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="from"/> līdz <input value="<?php echo $ll;?>" readonly size=9 type="text" id="to" name="to"/>
 <INPUT TYPE="submit" name="submit" value="Parādīt"/>
 </form>
 </h5>
@@ -93,9 +93,59 @@ while($r=mysql_fetch_array($vardi)){
 	$cloud->addWord(array('word' => $nom, 'url' => 'vards/'.urlencode($nom)));
 }
 $cloud->orderBy('size', 'desc');
+$cloud->setLimit(100);
 $myCloud = $cloud->showCloud('array');
 foreach ($myCloud as $cloudArray) {
   echo ' &nbsp; <a href="'.$cloudArray['url'].'" class="word size'.$cloudArray['range'].'">'.$cloudArray['word'].'</a> &nbsp;';
 }
+
+
+//sākumā paņem pēdējās dienas piecus vārdus un tad paskatās to vārdu skaitu pa nedēļu...
+$vardi = mysql_query("SELECT *
+FROM `vardiDiena`
+WHERE datums = curdate( ) - interval 24 hour
+ORDER BY `vardiDiena`.`skaits` DESC
+LIMIT 0 , 5");
+$uu = 1;
+while($r=mysql_fetch_array($vardi)){
+	$topvards = $r["vards"];
+	//dabū katra vārda skaitu pēdējās nedēļas laikā
+		$vvv = mysql_query("select skaits, datums from vardiDiena where vards = '$topvards' order by datums desc limit 7");
+		
+	for($i=0; $i<7; $i++){$rvvv=mysql_fetch_array($vvv);
+		$dienas[$i][$uu]['vards'] = $topvards;
+		$dienas[$i][$uu]['skaits'] = $rvvv["skaits"];
+		$dienas[$i][$uu]['datums'] = $rvvv["datums"];
+	}
+	$uu++;
+}
 ?>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+  google.load('visualization', '1', {packages: ['corechart']});
+</script>
+<script type="text/javascript">
+  function drawVisualization() {
+	// Create and populate the data table.
+	var data = google.visualization.arrayToDataTable([
+	  ['x', <?php echo "'".$dienas[1][1]['vards']."'";?>, <?php echo "'".$dienas[1][2]['vards']."'";?>, <?php echo "'".$dienas[1][3]['vards']."'";?>, <?php echo "'".$dienas[1][4]['vards']."'";?>, <?php echo "'".$dienas[1][5]['vards']."'";?>],
+	  ['<?php echo $dienas[6][1]['datums'];?>', <?php echo $dienas[6][1]['skaits'];?>, <?php echo $dienas[6][2]['skaits'];?>, <?php echo $dienas[6][3]['skaits'];?>, <?php echo $dienas[6][4]['skaits'];?>, <?php echo $dienas[6][5]['skaits'];?>],
+	  ['<?php echo $dienas[5][1]['datums'];?>', <?php echo $dienas[5][1]['skaits'];?>, <?php echo $dienas[5][2]['skaits'];?>, <?php echo $dienas[5][3]['skaits'];?>, <?php echo $dienas[5][4]['skaits'];?>, <?php echo $dienas[5][5]['skaits'];?>],
+	  ['<?php echo $dienas[4][1]['datums'];?>', <?php echo $dienas[4][1]['skaits'];?>, <?php echo $dienas[4][2]['skaits'];?>, <?php echo $dienas[4][3]['skaits'];?>, <?php echo $dienas[4][4]['skaits'];?>, <?php echo $dienas[4][5]['skaits'];?>],
+	  ['<?php echo $dienas[3][1]['datums'];?>', <?php echo $dienas[3][1]['skaits'];?>, <?php echo $dienas[3][2]['skaits'];?>, <?php echo $dienas[3][3]['skaits'];?>, <?php echo $dienas[3][4]['skaits'];?>, <?php echo $dienas[3][5]['skaits'];?>],
+	  ['<?php echo $dienas[2][1]['datums'];?>', <?php echo $dienas[2][1]['skaits'];?>, <?php echo $dienas[2][2]['skaits'];?>, <?php echo $dienas[2][3]['skaits'];?>, <?php echo $dienas[2][4]['skaits'];?>, <?php echo $dienas[2][5]['skaits'];?>],
+	  ['<?php echo $dienas[1][1]['datums'];?>', <?php echo $dienas[1][1]['skaits'];?>, <?php echo $dienas[1][2]['skaits'];?>, <?php echo $dienas[1][3]['skaits'];?>, <?php echo $dienas[1][4]['skaits'];?>, <?php echo $dienas[1][5]['skaits'];?>],
+	  ['<?php echo $dienas[0][1]['datums'];?>', <?php echo $dienas[0][1]['skaits'];?>, <?php echo $dienas[0][2]['skaits'];?>, <?php echo $dienas[0][3]['skaits'];?>, <?php echo $dienas[0][4]['skaits'];?>, <?php echo $dienas[0][5]['skaits'];?>]
+	]);
+	new google.visualization.LineChart(document.getElementById('visualization')).
+		draw(data, {curveType: "function",
+					width: 700, height: 400,
+                    'backgroundColor':'transparent',
+					vAxis: {maxValue: 10}}
+			);
+  }
+  google.setOnLoadCallback(drawVisualization);
+</script><br/><br/><br/>
+<div style="text-align:center;font-weight:bold;">Līderi</div>
+<div id="visualization" style="margin: auto auto; width: 700px; height: 400px;"></div>
 </div>

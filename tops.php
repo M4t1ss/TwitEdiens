@@ -75,7 +75,7 @@ $(function() {
 <h2 style='margin:auto auto; text-align:center;'>Twitter gardēžu TOPS</h2>
 <h5 style='margin:auto auto; text-align:center;'>
 <form method="post" action="?id=tops">
-No <input value="<?php echo $nn;?>" readonly size=7 type="text" id="from" name="from"/> līdz <input value="<?php echo $ll;?>" readonly size=7 type="text" id="to" name="to"/>
+No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="from"/> līdz <input value="<?php echo $ll;?>" readonly size=9 type="text" id="to" name="to"/>
 <INPUT TYPE="submit" name="submit" value="Parādīt"/>
 </form>
 </h5>
@@ -95,7 +95,7 @@ while($r=mysql_fetch_array($q)){
 if ($krasa==TRUE) {$kr=" class='even'";}else{$kr="";}
 $vards=$r["screen_name"];
 $skaits=$r["skaits"];
-echo "<tr".$kr."><td>".$i.".</td><td><b><a style='text-decoration:none;color:#808080;' href='/TwitEdiens/draugs/".$vards."'>".$vards."</a></b></td><td>".$skaits." tvīti</td></tr>";
+echo "<tr".$kr."><td>".$i.".</td><td><b><a style='text-decoration:none;color:#808080;' href='/draugs/".$vards."'>".$vards."</a></b></td><td>".$skaits." tvīti</td></tr>";
 $krasa=!$krasa;
 $i++;
 }

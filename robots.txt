@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /draugs/
+Sitemap: http://twitediens.tk/sitemap.xml

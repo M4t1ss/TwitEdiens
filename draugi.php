@@ -31,14 +31,11 @@ if (empty($_SESSION['access_token']) || empty($_SESSION['access_token']['oauth_t
 $access_token = $_SESSION['access_token'];
 $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oauth_token'], $access_token['oauth_token_secret']);
 $usr = $connection->get('account/verify_credentials');
-?>
-<div style='float:right;margin-top:-38px'>Sveiki, <b><a href="/TwitEdiens/draugs/<?php echo $usr->{'screen_name'}?>"><?php echo $usr->{'name'}?></a></b> [<a style='text-decoration:none; color:grey;' href="logout">Iziet</a>]</div><br/>
-<?php
 $krasa=TRUE;
 echo "<table id='results' style='margin:auto auto;border-spacing:0px;border:1px solid white;'>";
 echo "<tr>
-<th><a href='/TwitEdiens/lapa/draugi&sort=liet&ord=".$ord0."'>Lietotājs</a></th>
-<th><a href='/TwitEdiens/lapa/draugi&sort=sk&ord=".$ord0."'>Tvīti</a></th>
+<th><a href='/lapa/draugi&sort=liet&ord=".$ord0."'>Lietotājs</a></th>
+<th><a href='/lapa/draugi&sort=sk&ord=".$ord0."'>Tvīti</a></th>
 <th></th>
 </tr>";
 //dabū draugu Twitter screen name
@@ -74,7 +71,7 @@ for($i=0;$i<sizeof($draugi);$i++){
 	$vaards = $draugi[$i]['vards'];
 	$skaits = $draugi[$i]['skaits'];
 	if ($krasa==TRUE) {$kr=" class='even'";}else{$kr="";}
-	echo '<tr'.$kr.'><td><b><a style="text-decoration:none;color:#808080;" href="/TwitEdiens/draugs/'.$niks.'">'.$vaards.'</a></b> ('.$niks.')</td><td style="text-align:center">'.$skaits.'</td><td><a href="?unfollow='.$niks.'"><img title="Unfollow" alt="Unfollow" src="img/unfollow.png"/></a></td></tr>';
+	echo '<tr'.$kr.'><td><b><a style="text-decoration:none;color:#808080;" href="/draugs/'.$niks.'">'.$vaards.'</a></b> ('.$niks.')</td><td style="text-align:center">'.$skaits.'</td><td><a href="?unfollow='.$niks.'"><img title="Unfollow" alt="Unfollow" src="img/unfollow.png"/></a></td></tr>';
 	$krasa=!$krasa;
 }
 echo "</table>";

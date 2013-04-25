@@ -1,0 +1,12 @@
+#right-container {
+  display: none;
+}
+
+#center-container {
+  width:auto;
+  background: #FFF;
+}
+
+#infovis {
+  width:800px;
+}

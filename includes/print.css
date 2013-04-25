@@ -1,0 +1,17 @@
+html>body #flashcontent {
+	display:none;
+}
+
+body {
+	color : #000000;
+	background : #ffffff;
+	font-family : "Times New Roman", Times, serif;
+	font-size : 12pt;
+	margin: 5px;
+	padding: 5px;
+}
+
+a {	
+	text-decoration : underline;
+	color : #0000ff;
+}

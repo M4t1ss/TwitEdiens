@@ -76,13 +76,12 @@ $(function() {
 <h2 style='margin:auto auto; text-align:center;'>Ēšanas kalendārs</h2>
 <h5 style='margin:auto auto; text-align:center;'>
 <form method="post" action="?id=dienas">
-No <input value="<?php echo $nn;?>" readonly size=7 type="text" id="from" name="from"/> līdz <input value="<?php echo $ll;?>" readonly size=7 type="text" id="to" name="to"/>
+No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="from"/> līdz <input value="<?php echo $ll;?>" readonly size=9 type="text" id="to" name="to"/>
 <INPUT TYPE="submit" name="submit" value="Parādīt"/>
 </form>
 </h5>
 <br/>
 <h3>Cikos tvīto visbiežāk</h3>
-<div style='margin:auto auto;width:500px;'>
 <?php
 
 //jādabū visas dienas Mon-Sun...
@@ -110,73 +109,48 @@ while($r=mysql_fetch_array($q)){
 	if($stundas[$laiks][skaits]>$max) $max=$stundas[$laiks][skaits];
 	if($dienas[$diena][skaits]>$maxd) $maxd=$dienas[$diena][skaits];
 }
-
+?>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+  google.load("visualization", "1", {packages:["corechart"]});
+  google.setOnLoadCallback(drawChart);
+  function drawChart() {	
+	var data2 = new google.visualization.DataTable();
+	data2.addColumn('string', 'Stunda');
+	data2.addColumn('number', 'Tvīti');
+	data2.addRows(24);
+<?php
 //izdrukā populārākās stundas
 for($zb=0;$zb<24;$zb++) {
 $percent = round($stundas[$zb][skaits]/$max*100);
-?>
-<script type="text/javascript">
-	$(function(){
-		$("#progressbar<?php echo $zb;?>").progressbar({
-			value: <?php echo $percent;?>
-		});		
-	});
-</script>
-<a href="/TwitEdiens/grupa/<?php echo $zb;?>"><div style=" font: 50% 'Trebuchet MS', sans-serif;" id="progressbar<?php echo $zb;?>"></div>
-<div class="sk"><?php echo $zb.":00 - ".($zb+1).":00";?></div>
-</a>
-<br/>
-<?php
+echo "data2.setValue(".$zb.", 0, '".$zb.":00 - ".($zb+1).":00');";
+echo "data2.setValue(".$zb.", 1, ".$stundas[$zb][skaits].");";
 }
 ?>
-</div>
+		var chart2 = new google.visualization.ColumnChart(document.getElementById('stats-hours'));
+	chart2.draw(data2, {width: 900, height: 400,'backgroundColor':'transparent'});
+  }
+</script>
+	<div style="width:900px;margin:auto auto;" id="stats-hours"></div>
 <br/>
 <h3>Kurās dienās tvīto visbiežāk</h3>
-<div style='margin:auto auto;width:500px;'>
-<?php
-$theDate = '2011-10-31';
-$timeStamp = StrToTime($theDate);
-//izdrukā populārākās dienas
-for($zb=0;$zb<7;$zb++) {
-$ddd = date('D', $timeStamp); 
-$timeStamp = StrToTime('+1 days', $timeStamp);
-$percent = round($dienas[$ddd][skaits]/$maxd*100);
-?>
 <script type="text/javascript">
-	$(function(){
-		$("#progressbar<?php echo $ddd;?>").progressbar({
-			value: <?php echo $percent;?>
-		});		
-	});
+  google.load("visualization", "1", {packages:["corechart"]});
+  google.setOnLoadCallback(drawChart);
+  function drawChart() {
+	var data = new google.visualization.DataTable();
+	data.addColumn('string', 'Diena');
+	data.addColumn('number', 'Tvīti');
+			 data.addRows(7);			
+			 data.setValue(6, 0, "Svētdiena");data.setValue(6, 1, <?php echo $dienas['Sun'][skaits];?>);
+			 data.setValue(0, 0, "Pirmdiena");data.setValue(0, 1, <?php echo $dienas['Mon'][skaits];?>);
+			 data.setValue(1, 0, "Otradiena");data.setValue(1, 1, <?php echo $dienas['Tue'][skaits];?>);
+			 data.setValue(2, 0, "Trešdiena");data.setValue(2, 1, <?php echo $dienas['Wed'][skaits];?>);
+			 data.setValue(3, 0, "Ceturtdiena");data.setValue(3, 1, <?php echo $dienas['Thu'][skaits];?>);
+			 data.setValue(4, 0, "Piektdiena");data.setValue(4, 1, <?php echo $dienas['Fri'][skaits];?>);
+			 data.setValue(5, 0, "Sestdiena");data.setValue(5, 1, <?php echo $dienas['Sat'][skaits];?>);
+			 var chart = new google.visualization.ColumnChart(document.getElementById('stats-wdays'));
+	chart.draw(data, {width: 900, height: 400,'backgroundColor':'transparent'});
+	}
 </script>
-<a href="/TwitEdiens/grupa/<?php echo $ddd;?>"><div style=" font: 50% 'Trebuchet MS', sans-serif;" id="progressbar<?php echo $ddd;?>"></div>
-<div class="sk"><?php
-switch ($ddd) {
-    case 'Mon':
-        echo "Pirmdien";
-        break;
-    case 'Tue':
-        echo "Otrdien";
-        break;
-    case 'Wed':
-        echo "Trešdien";
-        break;
-    case 'Thu':
-        echo "Ceturtdien";
-        break;
-    case 'Fri':
-        echo "Piektdien";
-        break;
-    case 'Sat':
-        echo "Sestdien";
-        break;
-    case 'Sun':
-        echo "Svētdien";
-        break;
-}
-?></div></a>
-<br/>
-<?php
-}
-?>
-</div>
+	<div style="width:900px;margin:auto auto;" id="stats-wdays"></div>

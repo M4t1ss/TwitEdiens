@@ -30,7 +30,7 @@ foreach($triples as $triple){
 if (isset($apraksts)){
 ?>
 <a style='text-align:center;font-size:30px;font-weight:bold;margin:auto auto; width:50px;'><?php echo $vards; ?></a>
-(<a class="tooltip">?<span class="custom info"><img src="/TwitEdiens/includes/tooltip/Info.png" alt="Information" height="48" width="48" class="png" /><em>Apraksts [eng]</em><?php echo $apraksts; ?></span></a>)<br/>
+(<a class="tooltip">?<span class="custom info"><img src="/includes/tooltip/Info.png" alt="Information" height="48" width="48" class="png" /><em>Apraksts [eng]</em><?php echo $apraksts; ?></span></a>)<br/>
 <div>
 	<div style="padding:5px;" id="content">Ielādē...</div>
 </div>
@@ -81,12 +81,14 @@ echo "<tr>
 while($r=mysql_fetch_array($vardi)){
 	$tvits = $r["tvits"];
 	$tviti = mysql_query("SELECT screen_name, text FROM tweets where id = '$tvits'");
+	if (mysql_num_rows($tviti)>0){
 	$p=mysql_fetch_array($tviti);
 	$niks = $p["screen_name"];
 	$teksts = $p["text"];
 	if ($krasa==TRUE) {$kr=" class='even'";}else{$kr="";}
-	echo '<tr'.$kr.'><td><b><a style="text-decoration:none;color:#658304;" href="/TwitEdiens/draugs/'.$niks.'">'.$niks.'</a></b></td><td>'.$teksts.'</td></tr>';
+	echo '<tr'.$kr.'><td><b><a style="text-decoration:none;color:#658304;" href="/draugs/'.$niks.'">'.$niks.'</a></b></td><td>'.$teksts.'</td></tr>';
 	$krasa=!$krasa;
+	}
 }
 echo "</table>";
 ?>
