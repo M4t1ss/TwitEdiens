@@ -12,11 +12,12 @@ Faili:
 ===============================================================
 Tvītu vākšana:
 
-/config.php     Tur jāieraksta twitter lietotājvārds un parole,
+/config.php     Tur jāieraksta twitter autentificēšanās dati,
                 kā arī atlasīšanai paredzētie atslēgvārdi.
                 Šobrīd tur ir ar ēšanu saistīti atslēgvārdi.
 /init_sql.php   Informācija par pieslēgšanos pie datubāzes.
-/savac.php      Tvītu vākšanas fails.
+/savac.php      Tvītu vākšanas fails. Jāuzstāda, lai tas 
+				tiktu izsaukts ik pēc piecām minūtēm.
 /izdruka.php    Ievākto tvītu izdrukāšanas fails.
 ===============================================================
 Lietotāja saskarne:
