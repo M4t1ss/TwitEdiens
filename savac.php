@@ -16,7 +16,7 @@ class FilterTrackConsumer extends OauthPhirehose
     if (is_array($data) && isset($data['user']['screen_name'])) {
 		//kas notiek ar tvitu
 		//	print $data['user']['screen_name'] . ': ' . urldecode($data['text']) . "<br/>";
-		$remote = @mysql_connect("sql4.nano.lv:3306", "baumuin_bauma", "{GIwlpQ<?3>g");
+		$remote = @mysql_connect("server", "username", "password");
 		mysql_set_charset("utf8", $remote);
 		mysql_select_db("baumuin_food", $remote); 
 		$tweet = json_decode($line);
