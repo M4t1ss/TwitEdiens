@@ -3,6 +3,7 @@
 error_reporting(0);
 if($_POST['submit']) //ja piespiests parādīt
 {
+	header('Content-type: text/HTML; charset=utf-8');
    //ievācam visus mainīgos
    $no = strip_tags($_POST['from']);
    $lidz = strip_tags($_POST['to']);
@@ -47,8 +48,8 @@ if($_POST['submit']) //ja piespiests parādīt
 	$ll=strtotime($lidz);
 	$ll=date("d-m-Y", $ll);
 //pirms cik dienām bija pirmais tvīts?
-$die = mysql_query("SELECT min( created_at ) diena FROM tweets");
-$mdie=mysql_fetch_array($die);
+$die = mysqli_query($connection, "SELECT min( created_at ) diena FROM tweets");
+$mdie=mysqli_fetch_array($die);
 $laiks=strtotime($mdie['diena']);
 $laiks=date("U", $laiks);
 $seconds = time() - $laiks;
@@ -83,7 +84,7 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
 <br/>
 <?php
 //Paņem dažādās vietas
-$q = mysql_query("SELECT distinct geo, count( * ) skaits FROM `tweets` WHERE geo!='' and created_at between '$no' AND '$lidz' GROUP BY geo ORDER BY count( * ) DESC");
+$q = mysqli_query($connection, "SELECT distinct geo, count( * ) skaits FROM `tweets` WHERE geo!='' and created_at between '$no' AND '$lidz' GROUP BY geo ORDER BY count( * ) DESC");
 ?>
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 		<script type="text/javascript">
@@ -96,12 +97,12 @@ $q = mysql_query("SELECT distinct geo, count( * ) skaits FROM `tweets` WHERE geo
 				var map = new google.maps.Map(document.getElementById("map_canvas"), settings);
 <?php
 				$i=0;
-				while($r=mysql_fetch_array($q)){
+				while($r=mysqli_fetch_array($q)){
 				   $vieta=$r["geo"];
 				   $skaits=$r["skaits"];
 				   if ($skaits==1) {$tviti=" tvīts";} else {$tviti=" tvīti";}
-					$irvieta = mysql_query("SELECT * FROM vietas where nosaukums='$vieta'");
-					if(mysql_num_rows($irvieta)==0){
+					$irvieta = mysqli_query($connection, "SELECT * FROM vietas where nosaukums='$vieta'");
+					if(mysqli_num_rows($irvieta)==0){
 						//ja nav tādas vietas datu bāzē,
 						//dabū vietas koordinātas
 						$string = file_get_contents("http://maps.googleapis.com/maps/api/geocode/json?address=".str_replace(" ", "%20",$vieta)."&sensor=true");
@@ -113,16 +114,16 @@ $q = mysql_query("SELECT distinct geo, count( * ) skaits FROM `tweets` WHERE geo
 						$lat = $json["results"][0]["geometry"]["location"]["lat"];
 						$lng = $json["results"][0]["geometry"]["location"]["lng"];
 						if ($lat!=0 && $lng!=0){
-							$ok = mysql_query("INSERT INTO vietas (nosaukums, lng, lat, valsts) VALUES ('$vieta', '$lng', '$lat', '$valsts')");
+							$ok = mysqli_query($connection, "INSERT INTO vietas (nosaukums, lng, lat, valsts) VALUES ('$vieta', '$lng', '$lat', '$valsts')");
 						}
 						}else{
-							$arr=mysql_fetch_array($irvieta);
+							$arr=mysqli_fetch_array($irvieta);
 							//ja ir
 							$lat = $arr['lat'];
 							$lng = $arr['lng'];
 						}
-					$irvieta = mysql_query("SELECT * FROM vietas where nosaukums='$vieta'");
-					if(mysql_num_rows($irvieta)!=0){
+					$irvieta = mysqli_query($connection, "SELECT * FROM vietas where nosaukums='$vieta'");
+					if(mysqli_num_rows($irvieta)!=0){
 					?>
 					//Apraksts
 					var contentString<?php echo $i;?> = '<a href="/vieta/<?php echo $vieta;?>"><?php echo $vieta." - ".$skaits.$tviti." par ēšanas tēmām";?>';
@@ -144,7 +145,138 @@ $q = mysql_query("SELECT distinct geo, count( * ) skaits FROM `tweets` WHERE geo
 					$i=$i+1;
 					}
 				}
+
+
+$qx = mysqli_query($connection, "SELECT distinct geo, count( * ) skaits FROM `tweets` WHERE geo!='' and created_at between '$no' AND '$lidz' GROUP BY geo ORDER BY count( * ) DESC");
+while($rx=mysqli_fetch_array($qx)){
+   $vieta=$rx["geo"];
+   $skaits=$rx["skaits"];
+   if ($skaits==1) {$tviti=" tvīts";} else {$tviti=" tvīti";}
+	$irvieta = mysqli_query($connection, "SELECT * FROM vietas where nosaukums='$vieta'");
+	if(mysqli_num_rows($irvieta)==0){
+		//ja nav tādas vietas datu bāzē,
+		//dabū vietas koordinātas
+		$string = file_get_contents("http://maps.googleapis.com/maps/api/geocode/json?address=".str_replace(" ", "%20",$vieta)."&sensor=true");
+		$json=json_decode($string, true);
+		$gar = sizeof($json["results"][0]["address_components"]);
+		for ($z = 0; $z < $gar; $z++){
+			if($json["results"][0]["address_components"][$z]['types'][0] == 'country') $valsts = $json["results"][0]["address_components"][$z]['long_name'];
+		}
+		$lat = $json["results"][0]["geometry"]["location"]["lat"];
+		$lng = $json["results"][0]["geometry"]["location"]["lng"];
+		if ($lat!=0 && $lng!=0){
+			$ok = mysqli_query($connection, "INSERT INTO vietas (nosaukums, lng, lat, valsts) VALUES ('$vieta', '$lng', '$lat', '$valsts')");
+		}
+	}else{
+		$arr=mysqli_fetch_array($irvieta);
+		//ja ir
+		$lat = $arr['lat'];
+		$lng = $arr['lng'];
+	}
+	$coord_code = mysqli_query($connection, "SELECT * FROM coord_code where lat like $lat AND lng like $lng");
+	if(mysqli_num_rows($coord_code)!=0){
+		//get region code and add it to array
+		$c_code = mysqli_fetch_array($coord_code);
+		//ja ir
+		$code = $c_code['code'];
+		$countryCode = $c_code['countryCode'];
+		$adminName1 = $c_code['adminName1'];
+		$reg_code[$code]['sk'] = $reg_code[$code]['sk']+$skaits;
+		$reg_code[$code]['cc'] = $countryCode;
+		$reg_code[$code]['ad'] = $adminName1;
+		$country_code[$countryCode] = $country_code[$countryCode]+$skaits;
+	}else{
+		//get code from coordinates and insert into db
+		$string = file_get_contents("http://api.geonames.org/countrySubdivisionJSON?formatted=true&lat=".$lat."&lng=".$lng."&username=saifer&style=full");
+		$json=json_decode($string, true);
+		$code = $json["codes"][1]["code"];
+		$countryCode = $json["countryCode"];
+		$adminName1 = $json["adminName1"];
+		mysqli_query($connection, "INSERT INTO coord_code (lng, lat, code, countryCode, adminName1) VALUES ('$lng', '$lat', '$code', '$countryCode', '$adminName1')");
+		$reg_code[$code]['sk'] = $reg_code[$code]['sk']+$skaits;
+		$reg_code[$code]['cc'] = $countryCode;
+		$reg_code[$code]['ad'] = $adminName1;
+		$country_code[$countryCode] = $country_code[$countryCode]+$skaits;
+	}
+}
 ?>
 			}
 		</script>
-		<div id="map_canvas" style="margin:auto auto; width:950px; height:520px"></div>
+	
+		
+<!-- new google map chart -->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+	google.load('visualization', '1', {'packages': ['geochart']});
+	google.setOnLoadCallback(drawVisualization);
+
+	function drawVisualization() {var data = new google.visualization.DataTable();
+
+	 data.addColumn('string', 'Province');
+	 data.addColumn('number', 'Value');  
+	 data.addColumn({type:'string', role:'tooltip'});
+<?php
+foreach ($reg_code as $key => $value){
+   if ($value['sk']==1) {$tviti=" tvīts";} else {$tviti=" tvīti";}
+   if($key != "RIX"){
+	?>
+	data.addRows([[ '<?php echo $value['cc']."-".$key;?>',<?php echo $value['sk'];?>,'<?php echo str_replace("'","",$value['ad'])." - ".$value['sk'].$tviti;?>']]);
+	<?
+	}
+}
+?>
+
+        var options = {
+			resolution: 'provinces',
+			region:'LV'
+		};
+
+        var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+
+        chart.draw(data, options);
+      }
+    </script>
+
+		
+<!-- new google map chart -->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+	google.load('visualization', '1', {'packages': ['geochart']});
+	google.setOnLoadCallback(drawVisualization);
+
+	function drawVisualization() {var data = new google.visualization.DataTable();
+
+	 data.addColumn('string', 'Province');
+	 data.addColumn('number', 'Value');  
+	 data.addColumn({type:'string', role:'tooltip'});
+<?php
+$maxVal = 0;
+foreach ($country_code as $key => $value){
+   if ($value['sk']==1) {$tviti=" tvīts";} else {$tviti=" tvīti";}
+   if($key != "LV"){
+	?>
+	data.addRows([[ '<?php echo $key;?>',<?php echo $value;?>,'<?php echo $value.$tviti;?>']]);
+	<?
+	if ($value > $maxVal) $maxVal = $value;
+	}
+}
+?>
+		data.addRows([[ 'LV',<?php echo $maxVal*1.3;?>,'<?php echo "Daudz tvītu";?>']]);
+
+        var options = {
+		};
+
+        var chart = new google.visualization.GeoChart(document.getElementById('fullregions_div'));
+
+        chart.draw(data, options);
+      }
+    </script>
+	
+	
+	
+	
+<div id="map_canvas" style="margin:auto auto; width:1200px; height:800px"></div>
+<br/>
+<div id="regions_div" style="margin:auto auto; width: 1200px; height: 800px;"></div>
+<br/>
+<div id="fullregions_div" style="margin:auto auto; width: 1200px; height: 800px;"></div>
