@@ -34,7 +34,7 @@ $vards=urldecode($_GET['vieta']);
 <div >
 <?php
 //Pieslēgums DB
-$tviti = mysql_query("SELECT screen_name, text FROM tweets where geo = '$vards'");
+$tviti = mysqli_query($connection, "SELECT screen_name, text FROM tweets where geo = '$vards'");
 
 $krasa=TRUE;
 echo "<table id='results' style='margin:auto auto;'>";
@@ -42,7 +42,7 @@ echo "<tr>
 <th>Lietotājs</th>
 <th>Tvīts</th>
 </tr>";
-while($p=mysql_fetch_array($tviti)){
+while($p=mysqli_fetch_array($tviti)){
 	$niks = $p["screen_name"];
 	$teksts = $p["text"];
 	if ($krasa==TRUE) {$kr=" class='even'";}else{$kr="";}

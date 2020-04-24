@@ -1,6 +1,7 @@
 <?php
 if($_POST['submit']) //ja piespiests parādīt
 {
+	header('Content-type: text/HTML; charset=utf-8');
    //ievācam visus mainīgos
    $no = strip_tags($_POST['from']);
    $lidz = strip_tags($_POST['to']);
@@ -44,8 +45,8 @@ if($_POST['submit']) //ja piespiests parādīt
 	$ll=strtotime($lidz);
 	$ll=date("d-m-Y", $ll);
 //pirms cik dienām bija pirmais tvīts?
-$die = mysql_query("SELECT min( created_at ) diena FROM tweets");
-$mdie=mysql_fetch_array($die);
+$die = mysqli_query($connection, "SELECT min( created_at ) diena FROM tweets");
+$mdie=mysqli_fetch_array($die);
 $laiks=strtotime($mdie['diena']);
 $laiks=date("U", $laiks);
 $seconds = time() - $laiks;
@@ -74,126 +75,126 @@ $(function() {
 </script>
 <?php
 //kopskaits visi
-$kopa = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  created_at between '$no' AND '$lidz'");
-$r=mysql_fetch_array($kopa);
+$kopa = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  created_at between '$no' AND '$lidz'");
+$r=mysqli_fetch_array($kopa);
 $kopskaits = $r["skaits"];
 //pozitīvie
-$kopa = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  (`text` LIKE '%:D%' OR `text` LIKE '%:)%' OR `text` LIKE '%(:%' OR `text` LIKE '%;)%' OR `text` LIKE '%;]%' OR `text` LIKE '%:-)%' OR `text` LIKE '%:]%' OR `text` LIKE '%[:%' OR `text` LIKE '%:D%' OR `text` LIKE '%;D%' OR `text` LIKE '%xD%' OR `text` LIKE '%:^_^%' OR `text` LIKE '%:^^%' OR `text` LIKE '%:8)%' OR `text` LIKE '%:P%' OR `text` LIKE '%:*%' OR `text` LIKE '%;*%') AND tweets.created_at between '$no' AND '$lidz'");
-$r=mysql_fetch_array($kopa);
+$kopa = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  (`text` LIKE '%:D%' OR `text` LIKE '%:)%' OR `text` LIKE '%(:%' OR `text` LIKE '%;)%' OR `text` LIKE '%;]%' OR `text` LIKE '%:-)%' OR `text` LIKE '%:]%' OR `text` LIKE '%[:%' OR `text` LIKE '%:D%' OR `text` LIKE '%;D%' OR `text` LIKE '%xD%' OR `text` LIKE '%:^_^%' OR `text` LIKE '%:^^%' OR `text` LIKE '%:8)%' OR `text` LIKE '%:P%' OR `text` LIKE '%:*%' OR `text` LIKE '%;*%') AND tweets.created_at between '$no' AND '$lidz'");
+$r=mysqli_fetch_array($kopa);
 $poz = $r["skaits"];
 //negatīvie
-$kopa = mysql_query("SELECT count( * ) skaits FROM tweets where (`text` LIKE '%:S%' OR `text` LIKE '%:(%' OR `text` LIKE '%):%' OR `text` LIKE '%:-(%' OR `text` LIKE '%:[%' OR `text` LIKE '%]:%' OR `text` LIKE '%;(%' OR `text` LIKE '%);%' OR `text` LIKE '%];%' OR `text` LIKE '%;[%' OR `text` LIKE '%:@%' OR `text` LIKE '%:/%' OR `text` LIKE '%:|%' OR `text` LIKE '%:?%' OR `text` LIKE '%:-_-%' OR `text` LIKE '%:O%' OR `text` LIKE '%O:%') AND tweets.created_at between '$no' AND '$lidz'");
-$r=mysql_fetch_array($kopa);
+$kopa = mysqli_query($connection, "SELECT count( * ) skaits FROM tweets where (`text` LIKE '%:S%' OR `text` LIKE '%:(%' OR `text` LIKE '%):%' OR `text` LIKE '%:-(%' OR `text` LIKE '%:[%' OR `text` LIKE '%]:%' OR `text` LIKE '%;(%' OR `text` LIKE '%);%' OR `text` LIKE '%];%' OR `text` LIKE '%;[%' OR `text` LIKE '%:@%' OR `text` LIKE '%:/%' OR `text` LIKE '%:|%' OR `text` LIKE '%:?%' OR `text` LIKE '%:-_-%' OR `text` LIKE '%:O%' OR `text` LIKE '%O:%') AND tweets.created_at between '$no' AND '$lidz'");
+$r=mysqli_fetch_array($kopa);
 $neg = $r["skaits"];
 //ar smaidiņiem
 $arsm = $neg+$poz;
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:)%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:)%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s0 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%(:%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%(:%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s1 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%;)%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%;)%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s2 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%;]%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%;]%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s3 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:-%)' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:-%)' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s4 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:]%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:]%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s5 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:D%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:D%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s6 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%;D%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%;D%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s7 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%xD%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%xD%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s8 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:P%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:P%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s9 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:*%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:*%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s10 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%;*%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%;*%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s11 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%^_^%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%^_^%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s12 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%^^%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%^^%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s13 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%8)%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%8)%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s14 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:O%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:O%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s15 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%O:%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%O:%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s16 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:S%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:S%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s17 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:(%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:(%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s18 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%):%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%):%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s19 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%]:%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%]:%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s20 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%;(%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%;(%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s21 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%;[%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%;[%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s22 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:@%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:@%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s23 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:/%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:/%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s24 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:|%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%:|%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s25 = $r1["skaits"];
 //Smaidiņš
-$g1 = mysql_query("SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%-_-%' AND tweets.created_at between '$no' AND '$lidz'");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count(*) skaits FROM `tweets` WHERE  `text` LIKE '%-_-%' AND tweets.created_at between '$no' AND '$lidz'");
+$r1=mysqli_fetch_array($g1);
 $s26 = $r1["skaits"];
 ?>
 <h2 style='margin:auto auto; text-align:center;'>Ēdāju smaidiņu statistika</h2>
@@ -316,6 +317,6 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
 <br/>
 	<div style="float:left;" id="chart_div"></div>
 	<div style="float:right;" id="chart_div1"></div>
-    <div id="visualization"></div>
+	<br style="clear:both;"/>
 	<div style="float:left;" id="chart_div2"></div>
 	<div style="float:right;" id="chart_div3"></div>

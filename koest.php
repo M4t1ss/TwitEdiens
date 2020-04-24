@@ -2,11 +2,11 @@
 <br/>
 <div style="font-size:20px;text-align:center;">
 <?php
-$vardi = mysql_query("SELECT distinct nominativs FROM words WHERE nominativs != '' AND nominativs != '0' ORDER BY RAND( ) LIMIT 3 ");
+$vardi = mysqli_query($connection, "SELECT distinct nominativs FROM words WHERE nominativs != '' AND nominativs != '0' ORDER BY RAND( ) LIMIT 3 ");
 
 echo "Šajā ēdienreizē Tev būs jāēd ";
 $sk=0;
-while($r=mysql_fetch_array($vardi)){
+while($r=mysqli_fetch_array($vardi)){
 	$nominativs = $r["nominativs"];
 	if ($sk==0)	{echo "<b>".$nominativs."</b>, "; $e1=$nominativs;}
 	if ($sk==1)	{echo "<b>".$nominativs."</b> un "; $e2=$nominativs;}
