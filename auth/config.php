@@ -5,6 +5,6 @@
  * A single location to store configuration.
  */
 
-define('CONSUMER_KEY', 'Nnsh0axOixfS4rXXJhH8A');
-define('CONSUMER_SECRET', 'LJtOj29gDiHz4Jn5Xjp3bOPxYBXGoSgljJdcu6zn8Q');
+define('CONSUMER_KEY', '');
+define('CONSUMER_SECRET', '');
 define('OAUTH_CALLBACK', 'http://localhost/TwitEdiens/auth/callback.php');

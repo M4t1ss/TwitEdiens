@@ -1,6 +1,7 @@
 <?php
 if($_POST['submit']) //ja piespiests parādīt
 {
+	header('Content-type: text/HTML; charset=utf-8');
    //ievācam visus mainīgos
    $no = strip_tags($_POST['from']);
    $lidz = strip_tags($_POST['to']);
@@ -44,8 +45,8 @@ if($_POST['submit']) //ja piespiests parādīt
 	$ll=strtotime($lidz);
 	$ll=date("d-m-Y", $ll);
 //pirms cik dienām bija pirmais tvīts?
-$die = mysql_query("SELECT min( created_at ) diena FROM tweets");
-$mdie=mysql_fetch_array($die);
+$die = mysqli_query($connection, "SELECT min( created_at ) diena FROM tweets");
+$mdie=mysqli_fetch_array($die);
 $laiks=strtotime($mdie['diena']);
 $laiks=date("U", $laiks);
 $seconds = time() - $laiks;
@@ -90,8 +91,8 @@ echo "<tr>
 <th>Lietotājs</th>
 <th>Tvītu skaits</th>
 </tr>";
-$q = mysql_query("SELECT screen_name, count( * ) skaits FROM tweets WHERE created_at between '$no' AND '$lidz' GROUP BY screen_name ORDER BY count( * ) DESC LIMIT 0 , 15");
-while($r=mysql_fetch_array($q)){
+$q = mysqli_query($connection, "SELECT screen_name, count( * ) skaits FROM tweets WHERE created_at between '$no' AND '$lidz' GROUP BY screen_name ORDER BY count( * ) DESC LIMIT 0 , 15");
+while($r=mysqli_fetch_array($q)){
 if ($krasa==TRUE) {$kr=" class='even'";}else{$kr="";}
 $vards=$r["screen_name"];
 $skaits=$r["skaits"];

@@ -1,7 +1,7 @@
 <?php if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) ob_start("ob_gzhandler"); else ob_start();
 session_start();
 //Pieslēgums DB
-include "includes/init_sql.php";
+include "includes/init_sql_latest.php";
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="lv" lang="lv">
@@ -20,7 +20,7 @@ TwitĒdiens ievāc datus no Twitter, kur pieminēta ēšana, dzeršana, ēdienre
 <meta name="DC.type" scheme="DCTERMS.DCMIType" content="Text" />
 <meta name="DC.format" content="text/html" />
 <meta name="DC.format" content="7635 bytes" />
-<meta name="DC.identifier" scheme="DCTERMS.URI" content="http://twitediens.tk" />
+<meta name="DC.identifier" scheme="DCTERMS.URI" content="http://twitediens.ml" />
 <meta name="DC.language" scheme="DCTERMS.URI" content="Latvian" />
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="robots" content="index,follow" />
@@ -79,34 +79,24 @@ function showHide(shID) {
 <br class="clear" />
 <br/>
 </div>
-<script type="text/javascript"><!--
-google_ad_client = "ca-pub-4498747545486954";
-/* twitediens */
-google_ad_slot = "5425371499";
-google_ad_width = 728;
-google_ad_height = 90;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
 <div id="bottom" style="padding:8px;">
 <div style="text-align:center;">
 	<div style="padding:5px;font-weight:bold;">
-		<a href="http://www.twitediens.tk/?id=sarunas">Savstarpējie pļāpas</a> | 
-		<a href="http://twitediens.tk/?id=app/app">Mobilā lietotne</a> | 
-		<a href="http://twitediens.tk/blog">Blogs</a> | 
-		<a href="http://twitediens.tk/par">Par TwitĒdienu</a>
+		<a href="http://www.twitediens.ml/?id=pics">Attēli</a> | 
+		<a href="http://www.twitediens.ml/?id=sarunas">Savstarpējie pļāpas</a> | 
+		<a href="http://twitediens.ml/?id=app/app">Mobilā lietotne</a> | 
+		<a href="http://twitediens.ml/blog">Blogs</a> | 
+		<a href="http://twitediens.ml/par">Par TwitĒdienu</a>
 	</div>
-&copy; 2011-2013 Twitēdiens.<br/>
+&copy; 2011-<?php echo date('Y');?> Twitēdiens.<br/>
 </div>
-<div style="text-align:center;"><a href="http://lielakeda.lv">LielaKeda.lv</a>; 
-	<a href="https://twitter.com/#!/LielaKeda">@LielaKeda</a>.<br/>
+<div style="text-align:center;">
+	<a href="http://lielakeda.lv">LielaKeda.lv</a>; 
+	<a href="https://twitter.com/LielaKeda">@LielaKeda</a>; 
 	<div class="vcard" style="display:inline;">
 		<span class="fn" style="display:inline;">
-			<a href="http://lielakeda.lv">Matīss</a><a href="http://mattfoto.info"> Rikters</a>
-		</span>,
-		<span class="role" style="display:inline;">ārštata programmētājs</span>
+			<a href="http://mattfoto.info/me">Matīss</a>
+		</span>
 		<div class="adr">
 			<span class="locality">Tukums</span>, <span class="region">LV</span> 
 			<span class="postal-code">3101</span>
@@ -114,17 +104,6 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 	</div>
 </div>
 </div>
-<script type="text/javascript"><!--
-google_ad_client = "ca-pub-4498747545486954";
-/* first */
-google_ad_slot = "9787419493";
-google_ad_width = 728;
-google_ad_height = 90;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
 <?php
 $OpenInNewWindow = "1";
 $BLKey = "6J6E-27JM-7U51";

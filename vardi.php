@@ -2,6 +2,7 @@
 include 'includes/tag/classes/wordcloud.class.php';
 if($_POST['submit']) //ja piespiests parādīt
 {
+	header('Content-type: text/HTML; charset=utf-8');
    //ievācam visus mainīgos
    $no = strip_tags($_POST['from']);
    $lidz = strip_tags($_POST['to']);
@@ -46,8 +47,8 @@ if($_POST['submit']) //ja piespiests parādīt
 	$ll=strtotime($lidz);
 	$ll=date("d-m-Y", $ll);
 //pirms cik dienām bija pirmais tvīts?
-$die = mysql_query("SELECT min( created_at ) diena FROM tweets");
-$mdie=mysql_fetch_array($die);
+$die = mysqli_query($connection, "SELECT min( created_at ) diena FROM tweets");
+$mdie=mysqli_fetch_array($die);
 $laiks=strtotime($mdie['diena']);
 $laiks=date("U", $laiks);
 $seconds = time() - $laiks;
@@ -84,11 +85,15 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
 <br/>
 <div>
 <?php
-$vardi = mysql_query("SELECT id, tvits, nominativs FROM words, tweets where tweets.id = words.tvits and tweets.created_at between '$no' AND '$lidz' and words.nominativs != '0'");
+$vardi = mysqli_query($connection, "SELECT id, tvits, nominativs 
+FROM words, tweets 
+where tweets.id = words.tvits and tweets.created_at between '$no' AND '$lidz' 
+and words.nominativs != '0'
+group by nominativs, tvits");
 
 $cloud = new wordCloud();
 //jāuztaisa vēl, lai, uzklikojot uz kādu ēdienu, atvērtu visus tvītus, kas to pieminējuši...
-while($r=mysql_fetch_array($vardi)){
+while($r=mysqli_fetch_array($vardi)){
 	$nom = $r["nominativs"];
 	$cloud->addWord(array('word' => $nom, 'url' => 'vards/'.urlencode($nom)));
 }
@@ -99,23 +104,27 @@ foreach ($myCloud as $cloudArray) {
   echo ' &nbsp; <a href="'.$cloudArray['url'].'" class="word size'.$cloudArray['range'].'">'.$cloudArray['word'].'</a> &nbsp;';
 }
 
+//Cik rādīt?
+$showing = 15;
 
 //sākumā paņem pēdējās dienas piecus vārdus un tad paskatās to vārdu skaitu pa nedēļu...
-$vardi = mysql_query("SELECT *
+$vardi = mysqli_query($connection, "SELECT *
 FROM `vardiDiena`
 WHERE datums = curdate( ) - interval 24 hour
 ORDER BY `vardiDiena`.`skaits` DESC
-LIMIT 0 , 5");
+LIMIT 0 , ".$showing);
 $uu = 1;
-while($r=mysql_fetch_array($vardi)){
+$max = 0;
+while($r=mysqli_fetch_array($vardi)){
 	$topvards = $r["vards"];
 	//dabū katra vārda skaitu pēdējās nedēļas laikā
-		$vvv = mysql_query("select skaits, datums from vardiDiena where vards = '$topvards' order by datums desc limit 7");
+		$vvv = mysqli_query($connection, "select skaits, datums from vardiDiena where vards = '$topvards' order by datums desc limit 7");
 		
-	for($i=0; $i<7; $i++){$rvvv=mysql_fetch_array($vvv);
+	for($i=0; $i<7; $i++){$rvvv=mysqli_fetch_array($vvv);
 		$dienas[$i][$uu]['vards'] = $topvards;
-		$dienas[$i][$uu]['skaits'] = $rvvv["skaits"];
+		$dienas[$i][$uu]['skaits'] = ($rvvv["skaits"]==NULL ? 0 : $rvvv["skaits"]);
 		$dienas[$i][$uu]['datums'] = $rvvv["datums"];
+		if($rvvv["skaits"] > $max) $max = $rvvv["skaits"] + 1;
 	}
 	$uu++;
 }
@@ -128,24 +137,31 @@ while($r=mysql_fetch_array($vardi)){
   function drawVisualization() {
 	// Create and populate the data table.
 	var data = google.visualization.arrayToDataTable([
-	  ['x', <?php echo "'".$dienas[1][1]['vards']."'";?>, <?php echo "'".$dienas[1][2]['vards']."'";?>, <?php echo "'".$dienas[1][3]['vards']."'";?>, <?php echo "'".$dienas[1][4]['vards']."'";?>, <?php echo "'".$dienas[1][5]['vards']."'";?>],
-	  ['<?php echo $dienas[6][1]['datums'];?>', <?php echo $dienas[6][1]['skaits'];?>, <?php echo $dienas[6][2]['skaits'];?>, <?php echo $dienas[6][3]['skaits'];?>, <?php echo $dienas[6][4]['skaits'];?>, <?php echo $dienas[6][5]['skaits'];?>],
-	  ['<?php echo $dienas[5][1]['datums'];?>', <?php echo $dienas[5][1]['skaits'];?>, <?php echo $dienas[5][2]['skaits'];?>, <?php echo $dienas[5][3]['skaits'];?>, <?php echo $dienas[5][4]['skaits'];?>, <?php echo $dienas[5][5]['skaits'];?>],
-	  ['<?php echo $dienas[4][1]['datums'];?>', <?php echo $dienas[4][1]['skaits'];?>, <?php echo $dienas[4][2]['skaits'];?>, <?php echo $dienas[4][3]['skaits'];?>, <?php echo $dienas[4][4]['skaits'];?>, <?php echo $dienas[4][5]['skaits'];?>],
-	  ['<?php echo $dienas[3][1]['datums'];?>', <?php echo $dienas[3][1]['skaits'];?>, <?php echo $dienas[3][2]['skaits'];?>, <?php echo $dienas[3][3]['skaits'];?>, <?php echo $dienas[3][4]['skaits'];?>, <?php echo $dienas[3][5]['skaits'];?>],
-	  ['<?php echo $dienas[2][1]['datums'];?>', <?php echo $dienas[2][1]['skaits'];?>, <?php echo $dienas[2][2]['skaits'];?>, <?php echo $dienas[2][3]['skaits'];?>, <?php echo $dienas[2][4]['skaits'];?>, <?php echo $dienas[2][5]['skaits'];?>],
-	  ['<?php echo $dienas[1][1]['datums'];?>', <?php echo $dienas[1][1]['skaits'];?>, <?php echo $dienas[1][2]['skaits'];?>, <?php echo $dienas[1][3]['skaits'];?>, <?php echo $dienas[1][4]['skaits'];?>, <?php echo $dienas[1][5]['skaits'];?>],
-	  ['<?php echo $dienas[0][1]['datums'];?>', <?php echo $dienas[0][1]['skaits'];?>, <?php echo $dienas[0][2]['skaits'];?>, <?php echo $dienas[0][3]['skaits'];?>, <?php echo $dienas[0][4]['skaits'];?>, <?php echo $dienas[0][5]['skaits'];?>]
+	  ['x', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo "'".$dienas[1][$skai]['vards']."'"; if($skai<$showing) echo ", "; }  ?>],
+	  ['<?php echo $dienas[6][1]['datums'];?>', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo $dienas[6][$skai]['skaits']; if($skai<$showing) echo ", "; }  ?>],
+	  ['<?php echo $dienas[5][1]['datums'];?>', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo $dienas[5][$skai]['skaits']; if($skai<$showing) echo ", "; }  ?>],
+	  ['<?php echo $dienas[4][1]['datums'];?>', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo $dienas[4][$skai]['skaits']; if($skai<$showing) echo ", "; }  ?>],
+	  ['<?php echo $dienas[3][1]['datums'];?>', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo $dienas[3][$skai]['skaits']; if($skai<$showing) echo ", "; }  ?>],
+	  ['<?php echo $dienas[2][1]['datums'];?>', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo $dienas[2][$skai]['skaits']; if($skai<$showing) echo ", "; }  ?>],
+	  ['<?php echo $dienas[1][1]['datums'];?>', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo $dienas[1][$skai]['skaits']; if($skai<$showing) echo ", "; }  ?>],
+	  ['<?php echo $dienas[0][1]['datums'];?>', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo $dienas[0][$skai]['skaits']; if($skai<$showing) echo ", "; }  ?>]
 	]);
 	new google.visualization.LineChart(document.getElementById('visualization')).
-		draw(data, {curveType: "function",
-					width: 700, height: 400,
+		draw(data, {curveType: "none",
+					width: 1200, height: 600,
+					'chartArea': {'width': '75%', 'height': '95%'},
                     'backgroundColor':'transparent',
-					vAxis: {maxValue: 10}}
+					vAxis: {
+					  viewWindowMode:'explicit',
+					  viewWindow:{
+						max:<?php echo $max; ?>,
+						min:0
+					  }
+			  }}
 			);
   }
   google.setOnLoadCallback(drawVisualization);
-</script><br/><br/><br/>
+</script><br/>
 <div style="text-align:center;font-weight:bold;">Līderi</div>
-<div id="visualization" style="margin: auto auto; width: 700px; height: 400px;"></div>
+<div id="visualization" style="margin: auto auto; width: 1200px; height: 600px;"></div>
 </div>

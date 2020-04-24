@@ -2,8 +2,13 @@
 include_once("includes/arc2/ARC2.php");
 $vards=urldecode($_GET['vards']);
 //Iz DB
-$vardi = mysql_query("SELECT tvits, eng FROM words where nominativs = '$vards'");
-$ee=mysql_fetch_array($vardi);
+$vardi = mysqli_query($connection, "SELECT tvits, eng, screen_name, text, created_at FROM words
+JOIN tweets on	id = tvits
+where nominativs = '$vards'
+group by tweets.id
+order by created_at desc
+");
+$ee=mysqli_fetch_array($vardi);
 $eng = $ee["eng"];
 
 //Info no DBPedia
@@ -77,18 +82,26 @@ echo "<table id='results' style='margin:auto auto;'>";
 echo "<tr>
 <th>Lietotājs</th>
 <th>Tvīts</th>
+<th>Tvītots</th>
 </tr>";
-while($r=mysql_fetch_array($vardi)){
+while($r=mysqli_fetch_array($vardi)){
 	$tvits = $r["tvits"];
-	$tviti = mysql_query("SELECT screen_name, text FROM tweets where id = '$tvits'");
-	if (mysql_num_rows($tviti)>0){
-	$p=mysql_fetch_array($tviti);
-	$niks = $p["screen_name"];
-	$teksts = $p["text"];
-	if ($krasa==TRUE) {$kr=" class='even'";}else{$kr="";}
-	echo '<tr'.$kr.'><td><b><a style="text-decoration:none;color:#658304;" href="/draugs/'.$niks.'">'.$niks.'</a></b></td><td>'.$teksts.'</td></tr>';
-	$krasa=!$krasa;
+	$niks = $r["screen_name"];
+	$teksts = $r["text"];
+	
+	#Iekrāso un izveido saiti uz katru pieminēto lietotāju tekstā
+	#Šo vajadzētu visur...
+	$matches = array();
+	if (preg_match_all('/@[^[:space:]]+/', $teksts, $matches)) {
+		foreach ($matches[0] as $match){
+			$teksts = str_replace(trim($match), '<a style="text-decoration:none;color:#658304;" href="/draugs/'.str_replace('@','',trim($match)).'">'.trim($match).'</a> ', $teksts);
+		}
 	}
+	
+	$datums = $r["created_at"];
+	if ($krasa==TRUE) {$kr=" class='even'";}else{$kr="";}
+	echo '<tr'.$kr.'><td><b><a style="text-decoration:none;color:#658304;" href="/draugs/'.$niks.'">'.$niks.'</a></b></td><td>'.$teksts.'</td><td>'.$datums.'</td></tr>';
+	$krasa=!$krasa;
 }
 echo "</table>";
 ?>

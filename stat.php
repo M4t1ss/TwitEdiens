@@ -1,6 +1,7 @@
 <?php
 if($_POST['submit']) //ja piespiests parādīt
 {
+	header('Content-type: text/HTML; charset=utf-8');
    //ievācam visus mainīgos
    $no = strip_tags($_POST['from']);
    $lidz = strip_tags($_POST['to']);
@@ -44,8 +45,8 @@ if($_POST['submit']) //ja piespiests parādīt
 	$ll=strtotime($lidz);
 	$ll=date("d-m-Y", $ll);
 //pirms cik dienām bija pirmais tvīts?
-$die = mysql_query("SELECT min( created_at ) diena FROM tweets");
-$mdie=mysql_fetch_array($die);
+$die = mysqli_query($connection, "SELECT min( created_at ) diena FROM tweets");
+$mdie=mysqli_fetch_array($die);
 $laiks=strtotime($mdie['diena']);
 $laiks=date("U", $laiks);
 $seconds = time() - $laiks;
@@ -74,8 +75,8 @@ $(function() {
 </script>
 <?php
 //pozitīvie
-$kopa = mysql_query("SELECT distinct emo, count( * ) skaits FROM tweets where created_at between '$no' AND '$lidz' group by emo order by skaits desc");
-while($p=mysql_fetch_array($kopa)){
+$kopa = mysqli_query($connection, "SELECT distinct emo, count( * ) skaits FROM tweets where created_at between '$no' AND '$lidz' group by emo order by skaits desc");
+while($p=mysqli_fetch_array($kopa)){
 	$noskanojums = $p["emo"];
 	$text = $p["skaits"];
 	switch ($noskanojums) {
@@ -91,8 +92,8 @@ while($p=mysql_fetch_array($kopa)){
 	}
 }
 //Ēdienu grupas
-$g1 = mysql_query("SELECT distinct grupa, count( * ) skaits FROM words, tweets  where words.tvits = tweets.id AND tweets.created_at between '$no' AND '$lidz' group by grupa order by skaits desc");
-while($p=mysql_fetch_array($g1)){
+$g1 = mysqli_query($connection, "SELECT distinct grupa, count( * ) skaits FROM words, tweets  where words.tvits = tweets.id AND tweets.created_at between '$no' AND '$lidz' group by grupa order by skaits desc");
+while($p=mysqli_fetch_array($g1)){
 	$noskanojums = $p["grupa"];
 	$text = $p["skaits"];
 	switch ($noskanojums) {
@@ -242,7 +243,7 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
 <div style='margin:auto auto; width:500px;text-align:center;'>
 <?php
 //Tvītu kopskaits
-$kopa = mysql_query("
+$kopa = mysqli_query($connection, "
 select count(text) skaits from tweets, vietas where created_at between '$no' AND '$lidz' and vietas.nosaukums = tweets.geo and vietas.valsts = 'Latvia' union
 SELECT count( distinct screen_name ) skaits FROM tweets where created_at between '$no' AND '$lidz' union
 SELECT count( distinct nominativs ) skaits FROM words union
@@ -250,12 +251,12 @@ SELECT count( DISTINCT words.tvits ) skaits FROM words, tweets WHERE words.tvits
 SELECT count( * ) skaits FROM tweets where created_at between '$no' AND '$lidz' union
 SELECT count( geo ) skaits FROM tweets where created_at between '$no' AND '$lidz' and geo!=''
 ");
-$geogr = mysql_query("SELECT count( nosaukums ) vietas,  count( distinct valsts ) valstis FROM vietas");
-	$h=mysql_fetch_array($geogr);
+$geogr = mysqli_query($connection, "SELECT count( nosaukums ) vietas,  count( distinct valsts ) valstis FROM vietas");
+	$h=mysqli_fetch_array($geogr);
 	$dazvietas = $h["vietas"];
 	$dazvalst = $h["valstis"];
 for($i=1;$i<7;$i++){
-	$p=mysql_fetch_array($kopa);
+	$p=mysqli_fetch_array($kopa);
 	$text = $p["skaits"];
 	switch ($i) {
 		case 1:
@@ -287,7 +288,7 @@ echo "<b>".($atrviet-$lv)."</b> no tiem ir rakstīti ārzemēs.<br/>";
 echo "Kopā ir <b>".$dazvietas."</b> dažādas atrašanās vietas <b>".$dazvalst."</b> dažādās valstīs.<br/>";
 echo "Kopā ir pieminēti <b>".$vardi."</b> dažādi ēdieni un dzērieni.<br/>";
 ?>
-<h4><a href="smaidi">Smaidiņu statistika</a></h4>
+<h4><a href="smaidi"><button class="classname" type="button">Smaidiņu statistika</button></a></h4>
 </div>
 <script type="text/javascript">
   function drawVisualization() {

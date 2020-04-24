@@ -13,7 +13,7 @@ if($_POST['submit']) //ja piespiests gatavs
 		if(isset($irnav) && $irnav!=''){
 		$vards[$i] = str_replace('1','',$vards[$i]);
 		$vards[$i] = str_replace('2','',$vards[$i]);
-		$result=MYSQL_QUERY("UPDATE words set grupa = '$irnav' where nominativs = '$vards[$i]'"); 
+		$result=mysqli_query($connection, "UPDATE words set grupa = '$irnav' where nominativs = '$vards[$i]'"); 
 		}
 		$i++;
 	}
@@ -21,7 +21,7 @@ if($_POST['submit']) //ja piespiests gatavs
 
 }else{
 
-$q = mysql_query("SELECT DISTINCT nominativs FROM words where nominativs!='0' and grupa='0' order by nominativs LIMIT 0 , 20");
+$q = mysqli_query($connection, "SELECT DISTINCT nominativs FROM words where nominativs!='0' and grupa='0' order by nominativs LIMIT 0 , 20");
 $bg = TRUE;
 ?>
 <form method="post" action="grup.php">
@@ -32,7 +32,7 @@ $bg = TRUE;
 </tr>
 <?php
 
-while($r=mysql_fetch_array($q)){
+while($r=mysqli_fetch_array($q)){
    $vards=$r["nominativs"];   
 ?>
 

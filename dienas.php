@@ -1,6 +1,7 @@
 <?php
 if($_POST['submit']) //ja piespiests parādīt
 {
+	header('Content-type: text/HTML; charset=utf-8');
    //ievācam visus mainīgos
    $no = strip_tags($_POST['from']);
    $lidz = strip_tags($_POST['to']);
@@ -45,8 +46,8 @@ if($_POST['submit']) //ja piespiests parādīt
 	$ll=strtotime($lidz);
 	$ll=date("d-m-Y", $ll);
 //pirms cik dienām bija pirmais tvīts?
-$die = mysql_query("SELECT min( created_at ) diena FROM tweets");
-$mdie=mysql_fetch_array($die);
+$die = mysqli_query($connection, "SELECT min( created_at ) diena FROM tweets");
+$mdie=mysqli_fetch_array($die);
 $laiks=strtotime($mdie['diena']);
 $laiks=date("U", $laiks);
 $seconds = time() - $laiks;
@@ -96,18 +97,23 @@ $dienas[$ddd][skaits]=0;
 
 $max=0;
 $maxd=0;
+$maxdat=0;
 for($zb=0;$zb<24;$zb++) $stundas[$zb][skaits]=0;
+for($zb=1;$zb<32;$zb++) $datumi[$zb][skaits]=0;
 
-$q = mysql_query("SELECT created_at FROM `tweets` WHERE created_at between '$no' AND '$lidz'");
-while($r=mysql_fetch_array($q)){
+$q = mysqli_query($connection, "SELECT created_at FROM `tweets` WHERE created_at between '$no' AND '$lidz'");
+while($r=mysqli_fetch_array($q)){
 	$laiks=$r["created_at"];
 	$laiks=strtotime($laiks);
+	$datums=date("j", $laiks);
 	$diena=date("D", $laiks);
 	$laiks=date("G", $laiks);
 	$dienas[$diena][skaits]++;
 	$stundas[$laiks][skaits]++;
+	$datumi[$datums][skaits]++;
 	if($stundas[$laiks][skaits]>$max) $max=$stundas[$laiks][skaits];
 	if($dienas[$diena][skaits]>$maxd) $maxd=$dienas[$diena][skaits];
+	if($datumi[$laiks][skaits]>$maxdat) $maxdat=$datumi[$laiks][skaits];
 }
 ?>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -122,7 +128,6 @@ while($r=mysql_fetch_array($q)){
 <?php
 //izdrukā populārākās stundas
 for($zb=0;$zb<24;$zb++) {
-$percent = round($stundas[$zb][skaits]/$max*100);
 echo "data2.setValue(".$zb.", 0, '".$zb.":00 - ".($zb+1).":00');";
 echo "data2.setValue(".$zb.", 1, ".$stundas[$zb][skaits].");";
 }
@@ -132,6 +137,29 @@ echo "data2.setValue(".$zb.", 1, ".$stundas[$zb][skaits].");";
   }
 </script>
 	<div style="width:900px;margin:auto auto;" id="stats-hours"></div>
+<br/>
+<h3>Kuros datumos tvīto visbiežāk</h3>
+<!-- datumi -->
+<script type="text/javascript">
+  google.load("visualization", "1", {packages:["corechart"]});
+  google.setOnLoadCallback(drawChart);
+  function drawChart() {	
+	var data3 = new google.visualization.DataTable();
+	data3.addColumn('string', 'Datums');
+	data3.addColumn('number', 'Tvīti');
+	data3.addRows(32);
+<?php
+//izdrukā populārākās stundas
+for($zb=1;$zb<32;$zb++) {
+echo "data3.setValue(".$zb.", 0, '".$zb."');";
+echo "data3.setValue(".$zb.", 1, ".$datumi[$zb][skaits].");";
+}
+?>
+		var chart3 = new google.visualization.ColumnChart(document.getElementById('stats-dates'));
+	chart3.draw(data3, {width: 900, height: 400,'backgroundColor':'transparent'});
+  }
+</script>
+	<div style="width:900px;margin:auto auto;" id="stats-dates"></div>
 <br/>
 <h3>Kurās dienās tvīto visbiežāk</h3>
 <script type="text/javascript">
@@ -144,7 +172,7 @@ echo "data2.setValue(".$zb.", 1, ".$stundas[$zb][skaits].");";
 			 data.addRows(7);			
 			 data.setValue(6, 0, "Svētdiena");data.setValue(6, 1, <?php echo $dienas['Sun'][skaits];?>);
 			 data.setValue(0, 0, "Pirmdiena");data.setValue(0, 1, <?php echo $dienas['Mon'][skaits];?>);
-			 data.setValue(1, 0, "Otradiena");data.setValue(1, 1, <?php echo $dienas['Tue'][skaits];?>);
+			 data.setValue(1, 0, "Otrdiena");data.setValue(1, 1, <?php echo $dienas['Tue'][skaits];?>);
 			 data.setValue(2, 0, "Trešdiena");data.setValue(2, 1, <?php echo $dienas['Wed'][skaits];?>);
 			 data.setValue(3, 0, "Ceturtdiena");data.setValue(3, 1, <?php echo $dienas['Thu'][skaits];?>);
 			 data.setValue(4, 0, "Piektdiena");data.setValue(4, 1, <?php echo $dienas['Fri'][skaits];?>);

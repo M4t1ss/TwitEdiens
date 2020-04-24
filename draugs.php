@@ -12,8 +12,8 @@ if (empty($_SESSION['access_token']) || empty($_SESSION['access_token']['oauth_t
 //Ja ir pieslēdzies
 }else{
 $access_token = $_SESSION['access_token'];
-$connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oauth_token'], $access_token['oauth_token_secret']);
-$usr = $connection->get('users/show', array('screen_name' => $draugs));
+$connectionT = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oauth_token'], $access_token['oauth_token_secret']);
+$usr = $connectionT->get('users/show', array('screen_name' => $draugs));
 $vaards = $usr->{'name'};
 }
 ?>
@@ -44,8 +44,8 @@ $("#tabs").tabs({
 </ul>
 <div id="tabs-1">
 <?php
-$q = mysql_query("SELECT id, text, created_at FROM tweets where screen_name='$draugs' order by created_at desc");
-if (mysql_num_rows($q)){
+$q = mysqli_query($connection, "SELECT id, text, created_at FROM tweets where screen_name='$draugs' order by created_at desc");
+if (mysqli_num_rows($q)){
 //visi savāktie konkrētā lietotāja tvīti
 $krasa=TRUE;
 echo "<table id='results' class='sortable' style='margin:auto auto;border-spacing:0px;border:1px solid white;'>";
@@ -54,16 +54,16 @@ echo "<tr>
 <th style='width:135px;'>Ēdieni / dzērieni</th>
 <th style='width:135px;'>Laiks</th>
 </tr>";
-			while($r=mysql_fetch_array($q)){
+			while($r=mysqli_fetch_array($q)){
 				$tvid = $r["id"];
-				$q2 = mysql_query("SELECT distinct nominativs FROM words where tvits='$tvid' and nominativs!='0'");
+				$q2 = mysqli_query($connection, "SELECT distinct nominativs FROM words where tvits='$tvid' and nominativs!='0'");
 				if ($krasa==TRUE) {$kr=" class='even'";}else{$kr="";}
 				$teksts=$r["text"];
 				$laiks=$r["created_at"];
 				$laiks=strtotime($laiks);
 				$laiks=date("m.d.Y H:i", $laiks);
 				echo "<tr".$kr."><td>".$teksts."</td><td>";
-				while($r2=mysql_fetch_array($q2)){echo $r2["nominativs"].", ";};
+				while($r2=mysqli_fetch_array($q2)){echo $r2["nominativs"].", ";};
 				echo "</td><td>".$laiks."</td></tr>";
 				$krasa=!$krasa;
 			}
@@ -83,13 +83,13 @@ echo $draugs." vēl nav tvītojis par ēšanu.";
 <div id="tabs-2">
 <?php
 //cikos un kādās dienās tvītots
-$q = mysql_query("SELECT created_at FROM `tweets` WHERE screen_name = '$draugs'");
+$q = mysqli_query($connection, "SELECT created_at FROM `tweets` WHERE screen_name = '$draugs'");
 ?>
 <h2 style='margin:auto auto; text-align:center;'>Ēšanas kalendārs</h2>
 <br/>
 <div style='margin:auto auto;width:500px;'>
 <?php
-if (mysql_num_rows($q)){
+if (mysqli_num_rows($q)){
 ?>
 <h3>Cikos tvīto visbiežāk</h3>
 <?php
@@ -116,7 +116,7 @@ $max=0;
 $maxd=0;
 for($zb=0;$zb<24;$zb++) $stundas[$zb][skaits]=0;
 
-while($r=mysql_fetch_array($q)){
+while($r=mysqli_fetch_array($q)){
 	$laiks=$r["created_at"];
 	$laiks=strtotime($laiks);
 	$diena=date("D", $laiks);
@@ -206,11 +206,11 @@ echo $draugs." vēl nav tvītojis par ēšanu.";
 <h2 style='margin:auto auto; text-align:center;'>Pieminētie ēdieni / dzērieni</h2>
 <br/>
 <?php
-$vardi = mysql_query("select nominativs from tweets, words where tweets.screen_name = '$draugs' and words.tvits = tweets.id and nominativs != '0'");
-if (mysql_num_rows($vardi)){
+$vardi = mysqli_query($connection, "select nominativs from tweets, words where tweets.screen_name = '$draugs' and words.tvits = tweets.id and nominativs != '0'");
+if (mysqli_num_rows($vardi)){
 $cloud = new wordCloud();
 //jāuztaisa vēl, lai, uzklikojot uz kādu ēdienu, atvērtu visus tvītus, kas to pieminējuši...
-while($r=mysql_fetch_array($vardi)){
+while($r=mysqli_fetch_array($vardi)){
 	$nom = $r["nominativs"];
 	$cloud->addWord(array('word' => $nom, 'url' => '/vards/'.urlencode($nom)));
 }
@@ -240,13 +240,13 @@ echo $draugs." vēl nav pieminējis nevienu ēdienu vai dzērienu.";
 				var map = new google.maps.Map(document.getElementById("map_canvas"), settings);
 <?php
 				$i=0;
-				$map = mysql_query("SELECT distinct geo, count( * ) skaits FROM `tweets` WHERE geo!='' and screen_name = '$draugs' GROUP BY geo ORDER BY count( * ) DESC");
-				while($r=mysql_fetch_array($map)){
+				$map = mysqli_query($connection, "SELECT distinct geo, count( * ) skaits FROM `tweets` WHERE geo!='' and screen_name = '$draugs' GROUP BY geo ORDER BY count( * ) DESC");
+				while($r=mysqli_fetch_array($map)){
 				   $vieta=$r["geo"];
 				   $skaits=$r["skaits"];
 				   if ($skaits==1) {$tviti=" tvīts";} else {$tviti=" tvīti";}
-					$irvieta = mysql_query("SELECT * FROM vietas where nosaukums='$vieta'");
-					if(mysql_num_rows($irvieta)==0){
+					$irvieta = mysqli_query($connection, "SELECT * FROM vietas where nosaukums='$vieta'");
+					if(mysqli_num_rows($irvieta)==0){
 						//ja nav tādas vietas datu bāzē,
 						//dabū vietas koordinātas
 						$string = file_get_contents("http://maps.googleapis.com/maps/api/geocode/json?address=".str_replace(" ", "%20",$vieta)."&sensor=true");
@@ -254,10 +254,10 @@ echo $draugs." vēl nav pieminējis nevienu ēdienu vai dzērienu.";
 						$lat = $json["results"][0]["geometry"]["location"]["lat"];
 						$lng = $json["results"][0]["geometry"]["location"]["lng"];
 						if ($lat!=0 && $lng!=0){
-							$ok = mysql_query("INSERT INTO vietas (nosaukums, lng, lat) VALUES ('$vieta', '$lng', '$lat')");
+							$ok = mysqli_query($connection, "INSERT INTO vietas (nosaukums, lng, lat) VALUES ('$vieta', '$lng', '$lat')");
 						}
 						}else{
-							$arr=mysql_fetch_array($irvieta);
+							$arr=mysqli_fetch_array($irvieta);
 							//ja ir
 							$lat = $arr['lat'];
 							$lng = $arr['lng'];
@@ -294,48 +294,48 @@ echo $draugs." vēl nav pieminējis nevienu ēdienu vai dzērienu.";
 <br/>
 <?php
 //pozitīvie
-$kopa = mysql_query("SELECT count( * ) skaits FROM tweets where emo = 1 and screen_name = '$draugs'");
-$r=mysql_fetch_array($kopa);
+$kopa = mysqli_query($connection, "SELECT count( * ) skaits FROM tweets where emo = 1 and screen_name = '$draugs'");
+$r=mysqli_fetch_array($kopa);
 $poz = $r["skaits"];
 //negatīvie
-$kopa = mysql_query("SELECT count( * ) skaits FROM tweets where emo = 2 and screen_name = '$draugs'");
-$r=mysql_fetch_array($kopa);
+$kopa = mysqli_query($connection, "SELECT count( * ) skaits FROM tweets where emo = 2 and screen_name = '$draugs'");
+$r=mysqli_fetch_array($kopa);
 $neg = $r["skaits"];
 //neitrālie
-$kopa = mysql_query("SELECT count( * ) skaits FROM tweets where emo = 3 and screen_name = '$draugs'");
-$r=mysql_fetch_array($kopa);
+$kopa = mysqli_query($connection, "SELECT count( * ) skaits FROM tweets where emo = 3 and screen_name = '$draugs'");
+$r=mysqli_fetch_array($kopa);
 $nei = $r["skaits"];
 //Tauki, saldumi
-$g1 = mysql_query("SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 1");
-$r1=mysql_fetch_array($g1);
+$g1 = mysqli_query($connection, "SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 1");
+$r1=mysqli_fetch_array($g1);
 $g11 = $r1["skaits"];
 //Gaļa, olas, zivis
-$g2 = mysql_query("SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 2");
-$r2=mysql_fetch_array($g2);
+$g2 = mysqli_query($connection, "SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 2");
+$r2=mysqli_fetch_array($g2);
 $g21 = $r2["skaits"];
 //Piena produkti
-$g3 = mysql_query("SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 3");
-$r3=mysql_fetch_array($g3);
+$g3 = mysqli_query($connection, "SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 3");
+$r3=mysqli_fetch_array($g3);
 $g31 = $r3["skaits"];
 //Dārzeņi
-$g4 = mysql_query("SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 4");
-$r4=mysql_fetch_array($g4);
+$g4 = mysqli_query($connection, "SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 4");
+$r4=mysqli_fetch_array($g4);
 $g41 = $r4["skaits"];
 //Augļi, ogas
-$g5 = mysql_query("SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 5");
-$r5=mysql_fetch_array($g5);
+$g5 = mysqli_query($connection, "SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 5");
+$r5=mysqli_fetch_array($g5);
 $g51 = $r5["skaits"];
 //Maize, graudaugu produkti, makaroni, rīsi, biezputras, kartupeļi
-$g6 = mysql_query("SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 6");
-$r6=mysql_fetch_array($g6);
+$g6 = mysqli_query($connection, "SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 6");
+$r6=mysqli_fetch_array($g6);
 $g61 = $r6["skaits"];
 //Alkoholisks dzēriens
-$g7 = mysql_query("SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 7");
-$r7=mysql_fetch_array($g7);
+$g7 = mysqli_query($connection, "SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 7");
+$r7=mysqli_fetch_array($g7);
 $g71 = $r7["skaits"];
 //Bezalkoholisks dzēriens
-$g8 = mysql_query("SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 8");
-$r8=mysql_fetch_array($g8);
+$g8 = mysqli_query($connection, "SELECT count( * ) skaits FROM words, tweets where tweets.screen_name = '$draugs' and words.tvits = tweets.id and grupa = 8");
+$r8=mysqli_fetch_array($g8);
 $g81 = $r8["skaits"];
 ?>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>

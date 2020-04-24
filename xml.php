@@ -27,13 +27,13 @@ $i=1;
 //Tvītotāju tops
 if ($lapa == 'tops'){
 	$query = "SELECT screen_name, count( * ) skaits FROM tweets WHERE created_at between '$no' AND '$lidz' GROUP BY screen_name ORDER BY count( * ) DESC LIMIT 0 , 15";
-	$resultID = mysql_query($query, $connection) or die("Dati nav atrasti.");
+	$resultID = mysqli_query($connection, $query, $connection) or die("Dati nav atrasti.");
 
 	$xml_output = "<?xml version=\"1.0\"?>\n";
 	$xml_output .= "<entries>\n";
 
-	for($x = 0 ; $x < mysql_num_rows($resultID) ; $x++){
-		$row = mysql_fetch_assoc($resultID);
+	for($x = 0 ; $x < mysqli_num_rows($resultID) ; $x++){
+		$row = mysqli_fetch_assoc($resultID);
 		$xml_output .= "\t<entry>\n";
 		$xml_output .= "\t\t<skaits>" . $row['skaits'] . "</skaits>\n";
 			//Izvāc nelegālos simbolus
@@ -51,13 +51,13 @@ if ($lapa == 'tops'){
 //Ēdienu tops
 }else if($lapa == 'vardi'){
 	$query = "SELECT distinct nominativs, count(nominativs) skaits FROM words, tweets where tweets.id = words.tvits and tweets.created_at between '$no' AND '$lidz' and words.nominativs != '0' group by nominativs ORDER BY `skaits` DESC LIMIT 0 , 15";
-	$resultID = mysql_query($query, $connection) or die("Dati nav atrasti.");
+	$resultID = mysqli_query($connection, $query, $connection) or die("Dati nav atrasti.");
 
 	$xml_output = "<?xml version=\"1.0\"?>\n";
 	$xml_output .= "<entries>\n";
 
-	for($x = 0 ; $x < mysql_num_rows($resultID) ; $x++){
-		$row = mysql_fetch_array($resultID);
+	for($x = 0 ; $x < mysqli_num_rows($resultID) ; $x++){
+		$row = mysqli_fetch_array($resultID);
 		$xml_output .= "\t<entry>\n";
 		$xml_output .= "\t\t<skaits>" . $row['skaits'] . "</skaits>\n";
 			//Izvāc nelegālos simbolus
@@ -74,12 +74,12 @@ if ($lapa == 'tops'){
 	$i++;
 }else if($lapa == 'laiki'){
 	$query = "SELECT created_at FROM `tweets` WHERE created_at between '$no' AND '$lidz'";
-	$resultID = mysql_query($query, $connection) or die("Dati nav atrasti.");
+	$resultID = mysqli_query($connection, $query, $connection) or die("Dati nav atrasti.");
 
 	$max=0;
 	for($zb=0;$zb<24;$zb++) $stundas[$zb][skaits]=0;
 
-	while($r=mysql_fetch_array($resultID)){
+	while($r=mysqli_fetch_array($resultID)){
 		$laiks=$r["created_at"];
 		$laiks=strtotime($laiks);
 		$laiks=date("G", $laiks);
@@ -103,7 +103,7 @@ if ($lapa == 'tops'){
 	$xml_output .= "</entries>";
 }else if($lapa == 'dienas'){
 	$query = "SELECT created_at FROM `tweets` WHERE created_at between '$no' AND '$lidz'";
-	$resultID = mysql_query($query, $connection) or die("Dati nav atrasti.");
+	$resultID = mysqli_query($connection, $query, $connection) or die("Dati nav atrasti.");
 
 	//jādabū visas dienas Mon-Sun...
 	//šitā ir pirmdiena...sāksim ar to
@@ -118,7 +118,7 @@ if ($lapa == 'tops'){
 	$maxd=0;
 	for($zb=0;$zb<24;$zb++) $stundas[$zb][skaits]=0;
 
-	while($r=mysql_fetch_array($resultID)){
+	while($r=mysqli_fetch_array($resultID)){
 		$laiks=$r["created_at"];
 		$laiks=strtotime($laiks);
 		$diena=date("D", $laiks);
@@ -169,21 +169,21 @@ if ($lapa == 'tops'){
 	$xml_output .= "</entries>";
 }else if($lapa == 'vietas'){
 	$query = "SELECT distinct geo, count( * ) skaits FROM `tweets` WHERE geo!='' and created_at between '$no' AND '$lidz' GROUP BY geo ORDER BY count( * ) DESC LIMIT 0 , 15";
-	$resultID = mysql_query($query, $connection) or die("Dati nav atrasti.");
-	$resultID2 = mysql_query($query, $connection) or die("Dati nav atrasti.");
+	$resultID = mysqli_query($connection, $query, $connection) or die("Dati nav atrasti.");
+	$resultID2 = mysqli_query($connection, $query, $connection) or die("Dati nav atrasti.");
 
 	$max=1;
 
 	$xml_output = "<?xml version=\"1.0\"?>\n";
 	$xml_output .= "<entries>\n";
 	
-	while($r=mysql_fetch_array($resultID2)){
+	while($r=mysqli_fetch_array($resultID2)){
 		$skaits=$r["skaits"];
 		$g=$r["geo"];
 		if($skaits>$max&&$g!="Riga") $max=$skaits;
 	}
 	
-	while($r=mysql_fetch_array($resultID)){
+	while($r=mysqli_fetch_array($resultID)){
 		$sk=$r["skaits"];
 		$geo=$r["geo"];
 		

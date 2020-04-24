@@ -4,8 +4,8 @@ require_once('auth/twitteroauth/twitteroauth.php');
 require_once('auth/config.php');
 if($_GET['unfollow'] && $_GET['unfollow']!=''){
 $access_token = $_SESSION['access_token'];
-$connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oauth_token'], $access_token['oauth_token_secret']);
-$connection->post('friendships/destroy', array('screen_name' => $_GET['unfollow']));
+$connectionT = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oauth_token'], $access_token['oauth_token_secret']);
+$connectionT->post('friendships/destroy', array('screen_name' => $_GET['unfollow']));
 echo "<script type=\"text/javascript\">setTimeout(\"window.location = '?'\",250);</script>";
 }
 
@@ -29,8 +29,8 @@ if (empty($_SESSION['access_token']) || empty($_SESSION['access_token']['oauth_t
 //Ja ir pieslēdzies
 }else{
 $access_token = $_SESSION['access_token'];
-$connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oauth_token'], $access_token['oauth_token_secret']);
-$usr = $connection->get('account/verify_credentials');
+$connectionT = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oauth_token'], $access_token['oauth_token_secret']);
+$usr = $connectionT->get('account/verify_credentials');
 $krasa=TRUE;
 echo "<table id='results' style='margin:auto auto;border-spacing:0px;border:1px solid white;'>";
 echo "<tr>
@@ -41,15 +41,15 @@ echo "<tr>
 //dabū draugu Twitter screen name
 $nextCursor = -1;
 while ($nextCursor!=0){
-	$content = $connection->get('statuses/friends', array('cursor' => $nextCursor));
+	$content = $connectionT->get('friends/list', array('cursor' => $nextCursor));
 	$nextCursor = $content->{'next_cursor_str'};
 		for ($i = 0; $i < sizeof($content->{'users'}); $i++) {
 			$niks =  $content->{'users'}[$i]->{'screen_name'};
 			$vaards =  $content->{'users'}[$i]->{'name'};
 			//Paskatās, vai datubāzē ir tvīti no konkrētā drauga
-			$q = mysql_query("SELECT created_at FROM tweets where screen_name='$niks' order by created_at desc");
+			$q = mysqli_query($connection, "SELECT created_at FROM tweets where screen_name='$niks' order by created_at desc");
 			//Ja kāds tomēr ir
-			$skaits = mysql_num_rows($q);
+			$skaits = mysqli_num_rows($q);
 			if($skaits>0){
 				//sametam masīvā un sakārtojam masīvu
 				if($sort=='sk'){
