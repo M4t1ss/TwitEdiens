@@ -15,31 +15,31 @@
 ### Tvītu vākšana:
 
 - config.php     
- - Tur jāieraksta twitter autentificēšanās dati, kā arī atlasīšanai paredzētie atslēgvārdi. Šobrīd tur ir ar ēšanu saistīti atslēgvārdi. 
+  - Tur jāieraksta twitter autentificēšanās dati, kā arī atlasīšanai paredzētie atslēgvārdi. Šobrīd tur ir ar ēšanu saistīti atslēgvārdi. 
 - init_sql.php
- - Informācija par pieslēgšanos pie datubāzes.
+  - Informācija par pieslēgšanos pie datubāzes.
 - savac.php
- - Tvītu vākšanas fails. Jāuzstāda, lai tas tiktu izsaukts ik pēc piecām minūtēm.
+  - Tvītu vākšanas fails. Jāuzstāda, lai tas tiktu izsaukts ik pēc piecām minūtēm.
 - izdruka.php
- - Ievākto tvītu izdrukāšanas fails.
+  - Ievākto tvītu izdrukāšanas fails.
  
 ****************************************************************
 
 ### Lietotāja saskarne:
 
 - index.php
- - Ļauj lietotājam pieslēgties ar savu Twitter kontu un paskatīties, kuri no viņa draugiem tvīto par ēšanas tēmu.
+  - Ļauj lietotājam pieslēgties ar savu Twitter kontu un paskatīties, kuri no viņa draugiem tvīto par ēšanas tēmu.
 - auth
- - TwitterOAuth
+  - TwitterOAuth
 - karte.php
- - Atzīmē google kartē visus tvītus, kuros bija pievienota atrašanās vieta.
+  - Atzīmē google kartē visus tvītus, kuros bija pievienota atrašanās vieta.
 - draugi.php
- - Ļauj lietotājam pieslēgties ar savu Twitter kontu un paskatīties, kuri no viņa draugiem tvīto par ēšanas tēmu.
+  - Ļauj lietotājam pieslēgties ar savu Twitter kontu un paskatīties, kuri no viņa draugiem tvīto par ēšanas tēmu.
 - sorttable.js
- - Sakārto datus draugu tvītu tabulā.
+  - Sakārto datus draugu tvītu tabulā.
 - tops.php
- - Parāda aktīvāko ēdējtvītotāju sarakstu.
+  - Parāda aktīvāko ēdējtvītotāju sarakstu.
 - stat.php
- - Parāda statistiku par savāktajiem tvītiem.
+  - Parāda statistiku par savāktajiem tvītiem.
 
 ****************************************************************
