@@ -156,14 +156,14 @@ while($rx=mysqli_fetch_array($qx)){
 	if(mysqli_num_rows($irvieta)==0){
 		//ja nav tādas vietas datu bāzē,
 		//dabū vietas koordinātas
-		$string = file_get_contents("http://maps.googleapis.com/maps/api/geocode/json?address=".str_replace(" ", "%20",$vieta)."&sensor=true");
+		$string = file_get_contents("http://api.positionstack.com/v1/forward?access_key=3b174120145eb00b8024eb435c65f8d2&query=".str_replace(" ", "%20",$vieta));
 		$json=json_decode($string, true);
-		$gar = sizeof($json["results"][0]["address_components"]);
-		for ($z = 0; $z < $gar; $z++){
-			if($json["results"][0]["address_components"][$z]['types'][0] == 'country') $valsts = $json["results"][0]["address_components"][$z]['long_name'];
-		}
-		$lat = $json["results"][0]["geometry"]["location"]["lat"];
-		$lng = $json["results"][0]["geometry"]["location"]["lng"];
+		
+		$valsts = $json["data"][0]["country"];
+		$lat = $json["data"][0]["latitude"];
+		$lng = $json["data"][0]["longitude"];
+		
+		
 		if ($lat!=0 && $lng!=0){
 			$ok = mysqli_query($connection, "INSERT INTO vietas (nosaukums, lng, lat, valsts) VALUES ('$vieta', '$lng', '$lat', '$valsts')");
 		}
@@ -173,30 +173,32 @@ while($rx=mysqli_fetch_array($qx)){
 		$lat = $arr['lat'];
 		$lng = $arr['lng'];
 	}
-	$coord_code = mysqli_query($connection, "SELECT * FROM coord_code where lat like $lat AND lng like $lng");
-	if(mysqli_num_rows($coord_code)!=0){
-		//get region code and add it to array
-		$c_code = mysqli_fetch_array($coord_code);
-		//ja ir
-		$code = $c_code['code'];
-		$countryCode = $c_code['countryCode'];
-		$adminName1 = $c_code['adminName1'];
-		$reg_code[$code]['sk'] = $reg_code[$code]['sk']+$skaits;
-		$reg_code[$code]['cc'] = $countryCode;
-		$reg_code[$code]['ad'] = $adminName1;
-		$country_code[$countryCode] = $country_code[$countryCode]+$skaits;
-	}else{
-		//get code from coordinates and insert into db
-		$string = file_get_contents("http://api.geonames.org/countrySubdivisionJSON?formatted=true&lat=".$lat."&lng=".$lng."&username=saifer&style=full");
-		$json=json_decode($string, true);
-		$code = $json["codes"][1]["code"];
-		$countryCode = $json["countryCode"];
-		$adminName1 = $json["adminName1"];
-		mysqli_query($connection, "INSERT INTO coord_code (lng, lat, code, countryCode, adminName1) VALUES ('$lng', '$lat', '$code', '$countryCode', '$adminName1')");
-		$reg_code[$code]['sk'] = $reg_code[$code]['sk']+$skaits;
-		$reg_code[$code]['cc'] = $countryCode;
-		$reg_code[$code]['ad'] = $adminName1;
-		$country_code[$countryCode] = $country_code[$countryCode]+$skaits;
+	if(strlen($lat) > 0 && strlen($lng) > 0){
+		$coord_code = mysqli_query($connection, "SELECT * FROM coord_code where lat like $lat AND lng like $lng");
+		if(mysqli_num_rows($coord_code)!=0){
+			//get region code and add it to array
+			$c_code = mysqli_fetch_array($coord_code);
+			//ja ir
+			$code = $c_code['code'];
+			$countryCode = $c_code['countryCode'];
+			$adminName1 = $c_code['adminName1'];
+			$reg_code[$code]['sk'] = $reg_code[$code]['sk']+$skaits;
+			$reg_code[$code]['cc'] = $countryCode;
+			$reg_code[$code]['ad'] = $adminName1;
+			$country_code[$countryCode] = $country_code[$countryCode]+$skaits;
+		}else{
+			//get code from coordinates and insert into db
+			$string = file_get_contents("http://api.geonames.org/countrySubdivisionJSON?formatted=true&lat=".$lat."&lng=".$lng."&username=saifer&style=full");
+			$json=json_decode($string, true);
+			$code = $json["codes"][1]["code"];
+			$countryCode = $json["countryCode"];
+			$adminName1 = $json["adminName1"];
+			mysqli_query($connection, "INSERT INTO coord_code (lng, lat, code, countryCode, adminName1) VALUES ('$lng', '$lat', '$code', '$countryCode', '$adminName1')");
+			$reg_code[$code]['sk'] = $reg_code[$code]['sk']+$skaits;
+			$reg_code[$code]['cc'] = $countryCode;
+			$reg_code[$code]['ad'] = $adminName1;
+			$country_code[$countryCode] = $country_code[$countryCode]+$skaits;
+		}
 	}
 }
 ?>
@@ -216,15 +218,22 @@ while($rx=mysqli_fetch_array($qx)){
 	 data.addColumn('number', 'Value');  
 	 data.addColumn({type:'string', role:'tooltip'});
 <?php
+$maxVal = 0;
 foreach ($reg_code as $key => $value){
    if ($value['sk']==1) {$tviti=" tvīts";} else {$tviti=" tvīti";}
    if($key != "RIX"){
+	if ($value['sk'] > $maxVal) $maxVal = $value['sk'];
 	?>
-	data.addRows([[ '<?php echo $value['cc']."-".$key;?>',<?php echo $value['sk'];?>,'<?php echo str_replace("'","",$value['ad'])." - ".$value['sk'].$tviti;?>']]);
+		data.addRows([[ '<?php echo $value['cc']."-".$key;?>',<?php echo $value['sk'];?>,'<?php echo str_replace("'","",$value['ad'])." - ".$value['sk'].$tviti;?>']]);
 	<?
+	}else{
+		$rixcc=$value['cc'];
+		$rixad=$value['ad'];
 	}
 }
-?>
+	?>
+		data.addRows([[ '<?php echo $rixcc."-RIX";?>',<?php echo $maxVal*1.3;?>,'<?php echo str_replace("'","",$rixad)." - daudz tvītu";?>']]);
+
 
         var options = {
 			resolution: 'provinces',
@@ -280,3 +289,4 @@ foreach ($country_code as $key => $value){
 <div id="regions_div" style="margin:auto auto; width: 1200px; height: 800px;"></div>
 <br/>
 <div id="fullregions_div" style="margin:auto auto; width: 1200px; height: 800px;"></div>
+
