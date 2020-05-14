@@ -6,7 +6,7 @@ $db_user = "root";
 $db_password = "root";
 //pieslēdzamies SQL serverim
 $connection = mysqli_connect($db_server, $db_user, $db_password, $db_database);
-mysqli_set_charset($connection, "utf8");
+mysqli_set_charset($connection, "utf8mb4");
 
 // Šo tagad dara hourly.php reizi stundā, lai grafiks atjaunotos biežāk...
 // $vardi = mysqli_query($connection, "INSERT INTO baumuin_food.vardiDiena (vards, skaits, datums)

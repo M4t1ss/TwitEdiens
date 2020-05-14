@@ -6,7 +6,7 @@ $db_user = "baumuin_bauma";
 $db_password = "{GIwlpQ<?3>g";
 //pieslēdzamies SQL serverim
 $connection = mysqli_connect($db_server, $db_user, $db_password, $db_database);
-mysqli_set_charset($connection, "utf8");
+mysqli_set_charset($connection, "utf8mb4");
 
 $date = date("Y-m-d");
 $from = $date." 00:00:01";
