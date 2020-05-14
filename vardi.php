@@ -107,24 +107,46 @@ foreach ($myCloud as $cloudArray) {
 //Cik rādīt?
 $showing = 15;
 
-//sākumā paņem pēdējās dienas piecus vārdus un tad paskatās to vārdu skaitu pa nedēļu...
-$vardi = mysqli_query($connection, "SELECT *
+// $date = date("Y-m-d");
+// $from = $date." 00:00:01";
+// $to = $date." 23:59:59";
+
+//sākumā paņem pēdējo 3 dienu X populārākos vārdus un tad paskatās to vārdu skaitu pa nedēļu...
+$vardi = mysqli_query($connection, "SELECT vards, AVG(skaits) as sk
 FROM `vardiDiena`
-WHERE datums = curdate( ) - interval 24 hour
-ORDER BY `vardiDiena`.`skaits` DESC
+WHERE datums BETWEEN curdate( ) - INTERVAL 144 HOUR AND curdate( )
+GROUP BY vards
+ORDER BY sk DESC
 LIMIT 0 , ".$showing);
 $uu = 1;
 $max = 0;
+$sodienasDatums = date("d");
 while($r=mysqli_fetch_array($vardi)){
-	$topvards = $r["vards"];
+	$topvards = trim($r["vards"]);
 	//dabū katra vārda skaitu pēdējās nedēļas laikā
-		$vvv = mysqli_query($connection, "select skaits, datums from vardiDiena where vards = '$topvards' order by datums desc limit 7");
-		
-	for($i=0; $i<7; $i++){$rvvv=mysqli_fetch_array($vvv);
+	$quer = "select skaits, datums from vardiDiena where vards = '$topvards' order by datums desc limit 7";
+	$vvv = mysqli_query($connection, $quer);
+	
+	$pirmaisDatums = true;
+	for($i=0; $i<7; $i++){
+		$rvvv=mysqli_fetch_array($vvv);
+		$dd = substr($rvvv["datums"], -2);
+		if($pirmaisDatums && $dd < $sodienasDatums){
+			//Laikam šim produktam šodien vēl nav tvītu... jāieliek nullīte
+			for($datu = $sodienasDatums; $datu > $dd; $datu--){
+				$dienas[$i][$uu]['vards'] = $topvards;
+				$dienas[$i][$uu]['skaits'] = '0';
+				$dienas[$i][$uu]['datums'] = date("Y-m")."-".($datu<10?"0":"").$datu;
+				$i++;
+			}
+			$pirmaisDatums = false;
+		}
+	
 		$dienas[$i][$uu]['vards'] = $topvards;
-		$dienas[$i][$uu]['skaits'] = ($rvvv["skaits"]==NULL ? 0 : $rvvv["skaits"]);
+		$dienas[$i][$uu]['skaits'] = ($rvvv["skaits"]==NULL ? '0' : $rvvv["skaits"]);
 		$dienas[$i][$uu]['datums'] = $rvvv["datums"];
 		if($rvvv["skaits"] > $max) $max = $rvvv["skaits"] + 1;
+		$pirmaisDatums = false;
 	}
 	$uu++;
 }
@@ -149,7 +171,7 @@ while($r=mysqli_fetch_array($vardi)){
 	new google.visualization.LineChart(document.getElementById('visualization')).
 		draw(data, {curveType: "none",
 					width: 1200, height: 600,
-					'chartArea': {'width': '75%', 'height': '95%'},
+					'chartArea': {'width': '75%', 'height': '90%'},
                     'backgroundColor':'transparent',
 					vAxis: {
 					  viewWindowMode:'explicit',
@@ -161,7 +183,7 @@ while($r=mysqli_fetch_array($vardi)){
 			);
   }
   google.setOnLoadCallback(drawVisualization);
-</script><br/>
+</script><br/><br/>
 <div style="text-align:center;font-weight:bold;">Līderi</div>
 <div id="visualization" style="margin: auto auto; width: 1200px; height: 600px;"></div>
 </div>
