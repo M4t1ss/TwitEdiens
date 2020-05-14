@@ -4,8 +4,11 @@
 - food.php
 - prod.php
 
-Šis apkopo iepriekšējās dienas statistiku
+Šis apkopo iepriekšējās dienas statistiku - jāizsauc katras dienas sākumā 00:01
 - 00.01.php
+
+Šis apkopo aktuālās dienas vārdu statistiku - jāizsauc ...reizi stundā?
+- hourly.php
 
 Tvītu vākšanas nodrošināšanai būtu ik pēc 5 minūtēm jāizsauc šis
 - ../savac.php

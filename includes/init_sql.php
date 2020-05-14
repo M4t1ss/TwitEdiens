@@ -7,6 +7,6 @@ $db_password = "root";
 
 //pieslēdzamies SQL serverim
 $connection = mysqli_connect($db_server, $db_user, $db_password, $db_database);
-mysqli_set_charset($connection, "utf8");
+mysqli_set_charset($connection, "utf8mb4");
 // mysql_select_db($db_database);
 ?>

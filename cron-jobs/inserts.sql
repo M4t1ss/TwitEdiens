@@ -8,11 +8,6 @@ INSERT INTO baumuin_twitediens.words (vards, nominativs, tvits, irediens, grupa,
 	WHERE words.datums
 	BETWEEN now( ) - INTERVAL 24 HOUR
 	AND now( );
-INSERT INTO baumuin_twitediens.vardiDiena (vards,skaits,datums)
-	SELECT vards,skaits,datums FROM baumuin_food.vardiDiena
-	WHERE vardiDiena.datums
-	BETWEEN now( ) - INTERVAL 48 HOUR
-	AND now( );
 INSERT INTO baumuin_twitediens.mentions (tweet_id,screen_name,mention,date)
 	SELECT tweet_id,screen_name,mention,date FROM baumuin_food.mentions
 	WHERE mentions.date
