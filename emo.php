@@ -209,6 +209,7 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
       var chart;
       google.load('visualization', '1.0', {'packages':['corechart']});
       google.setOnLoadCallback(drawChart);
+      $(window).resize(drawChart);
       function drawChart() {
       var data = new google.visualization.DataTable();
       data.addColumn('string', 'Topping');
@@ -218,11 +219,9 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
         ['Bez smaidiņiem', <?php echo $kopskaits - $arsm; ?>]
 		]);
       var options = {'title':'Smaidiņi tvītos',
-                     'width':485,
-                     'height':300,
                      'backgroundColor':'transparent',
                      'is3D':'true'};
-      chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+      chart = new google.visualization.PieChart(document.getElementById('smile1'));
       chart.draw(data, options);
 	  }
 </script>
@@ -230,8 +229,9 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
     <script type="text/javascript">
 	var chart1;
       google.load('visualization', '1.0', {'packages':['corechart']});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
+      google.setOnLoadCallback(drawChart1);
+      $(window).resize(drawChart1);
+      function drawChart1() {
       var data = new google.visualization.DataTable();
       data.addColumn('string', 'Topping');
       data.addColumn('number', 'Slices');
@@ -239,11 +239,9 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
         ['Pozitīvie', <?php echo $poz; ?>],
         ['Negatīvie', <?php echo $neg; ?>]]);
       var options = {'title':'Noskaņojums',
-                     'width':470,
-                     'height':300,
                      'backgroundColor':'transparent',
                      'is3D':'true'};
-      chart1 = new google.visualization.PieChart(document.getElementById('chart_div1'));
+      chart1 = new google.visualization.PieChart(document.getElementById('smile2'));
       chart1.draw(data, options);
 	  }
 </script>
@@ -251,8 +249,9 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
     <script type="text/javascript">
 	var chart2;
       google.load('visualization', '1.0', {'packages':['corechart']});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
+      google.setOnLoadCallback(drawChart2);
+      $(window).resize(drawChart2);
+      function drawChart2() {
       var data = new google.visualization.DataTable();
       data.addColumn('string', 'Topping');
       data.addColumn('number', 'Slices');
@@ -274,11 +273,9 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
         ['8)', <?php echo $s14; ?>]
         ]);
       var options = {'title':'Pozitīvie smaidiņi',
-                     'width':470,
-                     'height':300,
                      'backgroundColor':'transparent',
                      'is3D':'true'};
-      chart2 = new google.visualization.PieChart(document.getElementById('chart_div2'));
+      chart2 = new google.visualization.PieChart(document.getElementById('smile3'));
       chart2.draw(data, options);
 	  }
 </script>
@@ -286,8 +283,9 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
     <script type="text/javascript">
 	var chart3;
       google.load('visualization', '1.0', {'packages':['corechart']});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
+      google.setOnLoadCallback(drawChart3);
+      $(window).resize(drawChart3);
+      function drawChart3() {
       var data = new google.visualization.DataTable();
       data.addColumn('string', 'Topping');
       data.addColumn('number', 'Slices');
@@ -306,17 +304,15 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
         ['-_-', <?php echo $s26; ?>]
         ]);
       var options = {'title':'Negatīvie smaidiņi',
-                     'width':470,
-                     'height':300,
                      'backgroundColor':'transparent',
                      'is3D':'true'};
-      chart3 = new google.visualization.PieChart(document.getElementById('chart_div3'));
+      chart3 = new google.visualization.PieChart(document.getElementById('smile4'));
       chart3.draw(data, options);
 	  }
 </script>
 <br/>
-	<div style="float:left;" id="chart_div"></div>
-	<div style="float:right;" id="chart_div1"></div>
+	<div id="smile1"></div>
+	<div id="smile2"></div>
 	<br style="clear:both;"/>
-	<div style="float:left;" id="chart_div2"></div>
-	<div style="float:right;" id="chart_div3"></div>
+	<div id="smile3"></div>
+	<div id="smile4"></div>

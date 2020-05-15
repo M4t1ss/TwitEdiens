@@ -80,13 +80,13 @@ while($p=mysqli_fetch_array($kopa)){
 	$noskanojums = $p["emo"];
 	$text = $p["skaits"];
 	switch ($noskanojums) {
-		case 3:
+		case 0:
 			$nei = $text;
 			break;
 		case 1:
 			$poz = $text;
 			break;
-		case 2:
+		case -1:
 			$neg = $text;
 			break;
 	}
@@ -128,8 +128,9 @@ while($p=mysqli_fetch_array($g1)){
     <script type="text/javascript">
       var chart;
       google.load('visualization', '1.0', {'packages':['corechart']});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
+      google.setOnLoadCallback(drawChart2);
+      $(window).resize(drawChart2);
+      function drawChart2() {
       var data = new google.visualization.DataTable();
       data.addColumn('string', 'Topping');
       data.addColumn('number', 'Slices');
@@ -138,11 +139,9 @@ while($p=mysqli_fetch_array($g1)){
         ['Negatīvi', <?php echo $neg ?>],
         ['Neitrāli', <?php echo $nei ?>]]);
       var options = {'title':'Tvītu noskaņojums',
-                     'width':485,
-                     'height':300,
                      'backgroundColor':'transparent',
                      'is3D':'true'};
-      chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+      chart = new google.visualization.PieChart(document.getElementById('emo-stat'));
       chart.draw(data, options);
       google.visualization.events.addListener(chart, 'select', selectHandler);
 	  }
@@ -162,8 +161,9 @@ while($p=mysqli_fetch_array($g1)){
     <script type="text/javascript">
 	var chart1;
       google.load('visualization', '1.0', {'packages':['corechart']});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
+      google.setOnLoadCallback(drawChart1);
+      $(window).resize(drawChart1);
+      function drawChart1() {
       var data = new google.visualization.DataTable();
       data.addColumn('string', 'Topping');
       data.addColumn('number', 'Slices');
@@ -171,11 +171,9 @@ while($p=mysqli_fetch_array($g1)){
         ['Alkoholisks dzēriens', <?php echo $g71; ?>],
         ['Bezalkoholisks dzēriens', <?php echo $g81; ?>]]);
       var options = {'title':'Dzērieni',
-                     'width':470,
-                     'height':300,
                      'backgroundColor':'transparent',
                      'is3D':'true'};
-      chart1 = new google.visualization.PieChart(document.getElementById('chart_div1'));
+      chart1 = new google.visualization.PieChart(document.getElementById('dzer-stat'));
       chart1.draw(data, options);
       google.visualization.events.addListener(chart1, 'select', selectHandler2);
 	  }
@@ -194,6 +192,7 @@ while($p=mysqli_fetch_array($g1)){
 	var chart2;
       google.load('visualization', '1.0', {'packages':['corechart']});
       google.setOnLoadCallback(drawChart);
+      $(window).resize(drawChart);
       function drawChart() {
       var data = new google.visualization.DataTable();
       data.addColumn('string', 'Topping');
@@ -206,11 +205,9 @@ while($p=mysqli_fetch_array($g1)){
         ['Augļi, ogas', <?php echo $g51; ?>],
         ['Maize, graudaugu produkti, makaroni, rīsi, biezputras, kartupeļi', <?php echo $g61; ?>]]);
       var options = {'title':'Twitter uztura piramīda',
-                     'width':470,
-                     'height':300,
                      'backgroundColor':'transparent',
                      'is3D':'true'};
-      chart2 = new google.visualization.PieChart(document.getElementById('chart_div2'));
+      chart2 = new google.visualization.PieChart(document.getElementById('grup-stat'));
       chart2.draw(data, options);
       google.visualization.events.addListener(chart2, 'select', selectHandler1);
 	  }
@@ -240,55 +237,55 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
 </form>
 </h5>
 <br/>
-<div style='margin:auto auto; width:500px;text-align:center;'>
-<?php
-//Tvītu kopskaits
-$kopa = mysqli_query($connection, "
-select count(text) skaits from tweets, vietas where created_at between '$no' AND '$lidz' and vietas.nosaukums = tweets.geo and vietas.valsts = 'Latvia' union
-SELECT count( distinct screen_name ) skaits FROM tweets where created_at between '$no' AND '$lidz' union
-SELECT count( distinct nominativs ) skaits FROM words union
-SELECT count( DISTINCT words.tvits ) skaits FROM words, tweets WHERE words.tvits = tweets.id AND tweets.created_at between '$no' AND '$lidz' union
-SELECT count( * ) skaits FROM tweets where created_at between '$no' AND '$lidz' union
-SELECT count( geo ) skaits FROM tweets where created_at between '$no' AND '$lidz' and geo!=''
-");
-$geogr = mysqli_query($connection, "SELECT count( nosaukums ) vietas,  count( distinct valsts ) valstis FROM vietas");
-	$h=mysqli_fetch_array($geogr);
-	$dazvietas = $h["vietas"];
-	$dazvalst = $h["valstis"];
-for($i=1;$i<7;$i++){
-	$p=mysqli_fetch_array($kopa);
-	$text = $p["skaits"];
-	switch ($i) {
-		case 1:
-			$lv = $text;
-			break;
-		case 2:
-			$scrnme = $text;
-			break;
-		case 3:
-			$vardi = $text;
-			break;
-		case 4:
-			$tvparedkopa = $text;
-			break;
-		case 5:
-			$tvkopa = $text;
-			break;
-		case 6:
-			$atrviet = $text;
-			break;
+<div id="statcontent">
+	<?php
+	//Tvītu kopskaits
+	$kopa = mysqli_query($connection, "
+	select count(text) skaits from tweets, vietas where created_at between '$no' AND '$lidz' and vietas.nosaukums = tweets.geo and vietas.valsts = 'Latvia' union
+	SELECT count( distinct screen_name ) skaits FROM tweets where created_at between '$no' AND '$lidz' union
+	SELECT count( distinct nominativs ) skaits FROM words union
+	SELECT count( DISTINCT words.tvits ) skaits FROM words, tweets WHERE words.tvits = tweets.id AND tweets.created_at between '$no' AND '$lidz' union
+	SELECT count( * ) skaits FROM tweets where created_at between '$no' AND '$lidz' union
+	SELECT count( geo ) skaits FROM tweets where created_at between '$no' AND '$lidz' and geo!=''
+	");
+	$geogr = mysqli_query($connection, "SELECT count( nosaukums ) vietas,  count( distinct valsts ) valstis FROM vietas");
+		$h=mysqli_fetch_array($geogr);
+		$dazvietas = $h["vietas"];
+		$dazvalst = $h["valstis"];
+	for($i=1;$i<7;$i++){
+		$p=mysqli_fetch_array($kopa);
+		$text = $p["skaits"];
+		switch ($i) {
+			case 1:
+				$lv = $text;
+				break;
+			case 2:
+				$scrnme = $text;
+				break;
+			case 3:
+				$vardi = $text;
+				break;
+			case 4:
+				$tvparedkopa = $text;
+				break;
+			case 5:
+				$tvkopa = $text;
+				break;
+			case 6:
+				$atrviet = $text;
+				break;
+		}
 	}
-}
-echo "Kopā par ēšanas tēmām ir <b>".$tvkopa."</b> tvītu.<br/>";
-echo "Kopā ir <b>".$tvparedkopa."</b> tvītu, kuros pieminēts kāds ēdiens vai dzēriens.<br/>";
-echo "Tos rakstījuši <b>".$scrnme."</b> dažādi lietotāji.<br/>";
-echo "<b>".$atrviet."</b> no tiem norādīta atrašanās vieta.<br/>";
-echo "<b>".$lv."</b> no tiem ir rakstīti Latvijā.<br/>";
-echo "<b>".($atrviet-$lv)."</b> no tiem ir rakstīti ārzemēs.<br/>";
-echo "Kopā ir <b>".$dazvietas."</b> dažādas atrašanās vietas <b>".$dazvalst."</b> dažādās valstīs.<br/>";
-echo "Kopā ir pieminēti <b>".$vardi."</b> dažādi ēdieni un dzērieni.<br/>";
-?>
-<h4><a href="smaidi"><button class="classname" type="button">Smaidiņu statistika</button></a></h4>
+	echo "Kopā par ēšanas tēmām ir <b>".$tvkopa."</b> tvītu.<br/>";
+	echo "Kopā ir <b>".$tvparedkopa."</b> tvītu, kuros pieminēts kāds ēdiens vai dzēriens.<br/>";
+	echo "Tos rakstījuši <b>".$scrnme."</b> dažādi lietotāji.<br/>";
+	echo "<b>".$atrviet."</b> no tiem norādīta atrašanās vieta.<br/>";
+	echo "<b>".$lv."</b> no tiem ir rakstīti Latvijā.<br/>";
+	echo "<b>".($atrviet-$lv)."</b> no tiem ir rakstīti ārzemēs.<br/>";
+	echo "Kopā ir <b>".$dazvietas."</b> dažādas atrašanās vietas <b>".$dazvalst."</b> dažādās valstīs.<br/>";
+	echo "Kopā ir pieminēti <b>".$vardi."</b> dažādi ēdieni un dzērieni.<br/>";
+	?>
+	<h4><a href="smaidi"><button class="classname" type="button">Smaidiņu statistika</button></a></h4>
 </div>
 <script type="text/javascript">
   function drawVisualization() {
@@ -302,8 +299,6 @@ echo "Kopā ir pieminēti <b>".$vardi."</b> dažādi ēdieni un dzērieni.<br/>"
 					];
 	var years = [''];
 	var options = {'title':'Twitter uztura piramīda',
-				 'width':485,
-				 'height':300,
 				 'backgroundColor':'transparent',
 				 };
 	data.addColumn('string', 'Year');
@@ -319,21 +314,22 @@ echo "Kopā ir pieminēti <b>".$vardi."</b> dažādi ēdieni un dzērieni.<br/>"
 		data.setValue(j-1, i+1, raw_data[i][j]);    
 	  }
 	}
-	new google.visualization.BarChart(document.getElementById('visualization')).
+	new google.visualization.BarChart(document.getElementById('kop-stat')).
 		draw(data,
 			 {	title:"Tvītu statistika",
-				width:800, height:400,
 				hAxis: {title: "Tvīti"},
 				backgroundColor:'transparent'
 			  }
 		);
   }
   google.setOnLoadCallback(drawVisualization);
+  $(window).resize(drawVisualization);
 </script>
 <br/>
 <div style="text-align:center;">
-	<div id="chart_div"></div>
-    <div id="visualization"></div>
-	<div style="float:left;" id="chart_div2"></div>
-	<div style="float:right;" id="chart_div1"></div>
+	<div class="chart" id="emo-stat"></div>
+    <div class="chart" id="kop-stat"></div>
+	<br/ style="clear:both;">
+	<div class="chart" id="grup-stat"></div>
+	<div class="chart" id="dzer-stat"></div>
 </div>

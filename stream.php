@@ -51,7 +51,7 @@ $(function() {
 $latest = mysqli_query($connection, "SELECT * FROM tweets ORDER BY created_at DESC limit 0, 10");
 ?>
 
-<div id="content" style='margin:auto auto;width:50%;float:left;'>
+<div id="content">
 <?php
 while($p=mysqli_fetch_array($latest)){
 	$username = $p["screen_name"];
@@ -88,7 +88,7 @@ while($p=mysqli_fetch_array($latest)){
 $latest = mysqli_query($connection, "SELECT distinct media_url, expanded_url, date FROM media GROUP BY media_url ORDER BY date DESC limit 0, 40");
 ?>
 
-<div id="content2" style='margin:auto auto;width:50%;float:right;padding-top:15px;'>
+<div id="content2">
 <section id="photos">
 <?php
 	while($p=mysqli_fetch_array($latest)){

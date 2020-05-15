@@ -168,9 +168,8 @@ while($r=mysqli_fetch_array($vardi)){
 	  ['<?php echo $dienas[1][1]['datums'];?>', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo $dienas[1][$skai]['skaits']; if($skai<$showing) echo ", "; }  ?>],
 	  ['<?php echo $dienas[0][1]['datums'];?>', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo $dienas[0][$skai]['skaits']; if($skai<$showing) echo ", "; }  ?>]
 	]);
-	new google.visualization.LineChart(document.getElementById('visualization')).
+	new google.visualization.LineChart(document.getElementById('vardi')).
 		draw(data, {curveType: "none",
-					width: 1200, height: 600,
 					'chartArea': {'width': '75%', 'height': '90%'},
                     'backgroundColor':'transparent',
 					vAxis: {
@@ -183,7 +182,8 @@ while($r=mysqli_fetch_array($vardi)){
 			);
   }
   google.setOnLoadCallback(drawVisualization);
+  $(window).resize(drawVisualization);
 </script><br/><br/>
 <div style="text-align:center;font-weight:bold;">Līderi</div>
-<div id="visualization" style="margin: auto auto; width: 1200px; height: 600px;"></div>
+<div id="vardi"></div>
 </div>

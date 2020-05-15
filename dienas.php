@@ -119,8 +119,9 @@ while($r=mysqli_fetch_array($q)){
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
   google.load("visualization", "1", {packages:["corechart"]});
-  google.setOnLoadCallback(drawChart);
-  function drawChart() {	
+  google.setOnLoadCallback(drawChart2);
+  $(window).resize(drawChart2);
+  function drawChart2() {	
 	var data2 = new google.visualization.DataTable();
 	data2.addColumn('string', 'Stunda');
 	data2.addColumn('number', 'Tvīti');
@@ -128,22 +129,23 @@ while($r=mysqli_fetch_array($q)){
 <?php
 //izdrukā populārākās stundas
 for($zb=0;$zb<24;$zb++) {
-echo "data2.setValue(".$zb.", 0, '".$zb.":00 - ".($zb+1).":00');";
+echo "data2.setValue(".$zb.", 0, '".$zb.":00-".($zb+1).":00');";
 echo "data2.setValue(".$zb.", 1, ".$stundas[$zb][skaits].");";
 }
 ?>
 		var chart2 = new google.visualization.ColumnChart(document.getElementById('stats-hours'));
-	chart2.draw(data2, {width: 900, height: 400,'backgroundColor':'transparent'});
+	chart2.draw(data2, {'backgroundColor':'transparent', hAxis: {slantedText:true, slantedTextAngle:45 }});
   }
 </script>
-	<div style="width:900px;margin:auto auto;" id="stats-hours"></div>
+	<div id="stats-hours"></div>
 <br/>
 <h3>Kuros datumos tvīto visbiežāk</h3>
 <!-- datumi -->
 <script type="text/javascript">
   google.load("visualization", "1", {packages:["corechart"]});
-  google.setOnLoadCallback(drawChart);
-  function drawChart() {	
+  google.setOnLoadCallback(drawChart1);
+  $(window).resize(drawChart1);
+  function drawChart1() {	
 	var data3 = new google.visualization.DataTable();
 	data3.addColumn('string', 'Datums');
 	data3.addColumn('number', 'Tvīti');
@@ -156,15 +158,16 @@ echo "data3.setValue(".$zb.", 1, ".$datumi[$zb][skaits].");";
 }
 ?>
 		var chart3 = new google.visualization.ColumnChart(document.getElementById('stats-dates'));
-	chart3.draw(data3, {width: 900, height: 400,'backgroundColor':'transparent'});
+	chart3.draw(data3, {'backgroundColor':'transparent'});
   }
 </script>
-	<div style="width:900px;margin:auto auto;" id="stats-dates"></div>
+	<div id="stats-dates"></div>
 <br/>
 <h3>Kurās dienās tvīto visbiežāk</h3>
 <script type="text/javascript">
   google.load("visualization", "1", {packages:["corechart"]});
   google.setOnLoadCallback(drawChart);
+  $(window).resize(drawChart);
   function drawChart() {
 	var data = new google.visualization.DataTable();
 	data.addColumn('string', 'Diena');
@@ -178,7 +181,7 @@ echo "data3.setValue(".$zb.", 1, ".$datumi[$zb][skaits].");";
 			 data.setValue(4, 0, "Piektdiena");data.setValue(4, 1, <?php echo $dienas['Fri'][skaits];?>);
 			 data.setValue(5, 0, "Sestdiena");data.setValue(5, 1, <?php echo $dienas['Sat'][skaits];?>);
 			 var chart = new google.visualization.ColumnChart(document.getElementById('stats-wdays'));
-	chart.draw(data, {width: 900, height: 400,'backgroundColor':'transparent'});
+	chart.draw(data, {'backgroundColor':'transparent'});
 	}
 </script>
-	<div style="width:900px;margin:auto auto;" id="stats-wdays"></div>
+	<div id="stats-wdays"></div>
