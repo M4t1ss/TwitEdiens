@@ -41,7 +41,7 @@ $(function() {
 	if(!isOpera && !isChrome){
 		setInterval(function() {
 			$("#content2").load(location.href+" #content2>*","");
-		}, 1500);
+		}, 5000);
 	}
 }
 );
@@ -95,13 +95,18 @@ $latest = mysqli_query($connection, "SELECT distinct media_url, expanded_url, da
 		$media_url = $p["media_url"];
 		$expanded_url = $p["expanded_url"];
 		$ttime = $p["date"];
-		?>
-		<div style="<?php if ((time()-StrToTime($ttime))<5){echo"opacity:".((time()-StrToTime($ttime))/5).";";}?> display:inline;" >
-			<a target="_blank" href="<?php echo $expanded_url; ?>">
-				<img  src="<?php echo $media_url; ?>" />
-			</a>
-		</div>
-		<?php
+		
+		if (@getimagesize($media_url)) {
+			?>
+			<div style="<?php if ((time()-StrToTime($ttime))<5){echo"opacity:".((time()-StrToTime($ttime))/5).";";}?> display:inline;" >
+				<a target="_blank" href="<?php echo $expanded_url; ?>">
+					<img  src="<?php echo $media_url; ?>" />
+				</a>
+			</div>
+			<?php
+		}else{
+			//Delete this one - probably doesn't exist anymore...
+		}
 	}
 ?>
 </section>
