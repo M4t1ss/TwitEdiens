@@ -406,6 +406,9 @@ a.showLink:hover, a.hideLink:hover {
 #content{
   margin:auto auto;width:50%;float:left;
 }
+#contentFull{
+  margin:auto auto;width:100%;float:left;
+}
 #content2{
   margin:auto auto;width:50%;float:right;padding-top:15px;
 }
