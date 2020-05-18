@@ -51,7 +51,7 @@ if($_POST['neg']){
 </script>
 </head>
 <body onload="initialize()">
-<h1 style="padding-top:3px;"><img alt="TwitĒdiens Logo" src="/img/te.png" style="height:40px;" /> Sentimenta marķēšana</h1>
+<h1 style="padding-top:3px;"><a href="/"><img alt="TwitĒdiens Logo" src="/img/te.png" style="height:40px;" /></a> Sentimenta marķēšana</h1>
 <div id="contents" style="display: none;margin-top:10px;margin-bottom:10px;padding:6px;text-align:center; min-height:200px;">
 	<?php
 		//Pelēkais saraksts ar ziņu u.c. kontiem, kuriem pārsvarā tvīti ir neitrāli
