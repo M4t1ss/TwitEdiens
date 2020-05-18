@@ -41,7 +41,7 @@ $(function() {
 	if(!isOpera && !isChrome){
 		setInterval(function() {
 			$("#content2").load(location.href+" #content2>*","");
-		}, 1500);
+		}, 5000);
 	}
 }
 );
@@ -51,7 +51,7 @@ $(function() {
 $latest = mysqli_query($connection, "SELECT * FROM tweets ORDER BY created_at DESC limit 0, 10");
 ?>
 
-<div id="content" style='margin:auto auto;width:50%;float:left;'>
+<div id="content">
 <?php
 while($p=mysqli_fetch_array($latest)){
 	$username = $p["screen_name"];
@@ -88,20 +88,25 @@ while($p=mysqli_fetch_array($latest)){
 $latest = mysqli_query($connection, "SELECT distinct media_url, expanded_url, date FROM media GROUP BY media_url ORDER BY date DESC limit 0, 40");
 ?>
 
-<div id="content2" style='margin:auto auto;width:50%;float:right;padding-top:15px;'>
+<div id="content2">
 <section id="photos">
 <?php
 	while($p=mysqli_fetch_array($latest)){
 		$media_url = $p["media_url"];
 		$expanded_url = $p["expanded_url"];
 		$ttime = $p["date"];
-		?>
-		<div style="<?php if ((time()-StrToTime($ttime))<5){echo"opacity:".((time()-StrToTime($ttime))/5).";";}?> display:inline;" >
-			<a target="_blank" href="<?php echo $expanded_url; ?>">
-				<img  src="<?php echo $media_url; ?>" />
-			</a>
-		</div>
-		<?php
+		
+		if (@getimagesize($media_url)) {
+			?>
+			<div style="<?php if ((time()-StrToTime($ttime))<5){echo"opacity:".((time()-StrToTime($ttime))/5).";";}?> display:inline;" >
+				<a target="_blank" href="<?php echo $expanded_url; ?>">
+					<img  src="<?php echo $media_url; ?>" />
+				</a>
+			</div>
+			<?php
+		}else{
+			//Delete this one - probably doesn't exist anymore...
+		}
 	}
 ?>
 </section>

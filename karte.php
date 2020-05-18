@@ -88,6 +88,7 @@ $q = mysqli_query($connection, "SELECT distinct geo, count( * ) skaits FROM `twe
 ?>
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 		<script type="text/javascript">
+			$(window).resize(initialize);
 			function initialize() {
 				var latlng = new google.maps.LatLng(56.9465363, 24.1048503);
 				var settings = {
@@ -210,9 +211,10 @@ while($rx=mysqli_fetch_array($qx)){
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
 	google.load('visualization', '1', {'packages': ['geochart']});
-	google.setOnLoadCallback(drawVisualization);
+	google.setOnLoadCallback(drawVisualization2);
+	$(window).resize(drawVisualization2);
 
-	function drawVisualization() {var data = new google.visualization.DataTable();
+	function drawVisualization2() {var data = new google.visualization.DataTable();
 
 	 data.addColumn('string', 'Province');
 	 data.addColumn('number', 'Value');  
@@ -252,6 +254,7 @@ foreach ($reg_code as $key => $value){
     <script type="text/javascript">
 	google.load('visualization', '1', {'packages': ['geochart']});
 	google.setOnLoadCallback(drawVisualization);
+	$(window).resize(drawVisualization);
 
 	function drawVisualization() {var data = new google.visualization.DataTable();
 
@@ -284,9 +287,8 @@ foreach ($country_code as $key => $value){
 	
 	
 	
-<div id="map_canvas" style="margin:auto auto; width:1200px; height:800px"></div>
+<div id="map_canvas"></div>
 <br/>
-<div id="regions_div" style="margin:auto auto; width: 1200px; height: 800px;"></div>
+<div id="regions_div"></div>
 <br/>
-<div id="fullregions_div" style="margin:auto auto; width: 1200px; height: 800px;"></div>
-
+<div id="fullregions_div"></div>

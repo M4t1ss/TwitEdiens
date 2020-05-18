@@ -29,10 +29,10 @@ if ($emo == 'saldumi'){
 	$vardi = mysqli_query($connection, "SELECT text, screen_name FROM tweets where emo = '1' group by created_at desc limit 0, 500");
 }else if ($emo == 'negativi'){
 	$vards = 'Negatīvie';
-	$vardi = mysqli_query($connection, "SELECT text, screen_name FROM tweets where emo = '2' group by created_at desc limit 0, 500");
+	$vardi = mysqli_query($connection, "SELECT text, screen_name FROM tweets where emo = '-1' group by created_at desc limit 0, 500");
 }else if ($emo == 'neitrali'){
 	$vards = 'Neitrālie';
-	$vardi = mysqli_query($connection, "SELECT text, screen_name FROM tweets where emo = '3' group by created_at desc limit 0, 500");
+	$vardi = mysqli_query($connection, "SELECT text, screen_name FROM tweets where emo = '0' group by created_at desc limit 0, 500");
 }else if ($emo == 'Mon'){
 	$vards = 'Pirmdienas';
 	$vardi = mysqli_query($connection, "SELECT text, screen_name FROM tweets where DAYOFWEEK( created_at ) = 2 group by created_at desc limit 0, 500");

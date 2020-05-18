@@ -7,7 +7,7 @@ include "includes/init_sql_latest.php";
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="lv" lang="lv">
 <head>
 <title>TwitĒdiens - no Twitter par ēšanu</title>
-<meta name="viewport" content="width=480, initial-scale=1.0" />
+<meta name="viewport" content="width=320, initial-scale=1.0" />
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
 <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />
 <meta name="DC.title" lang="Latvian" content="TwitĒdiens - no Twitter par ēšanu" />
@@ -59,19 +59,17 @@ function showHide(shID) {
 </head>
 <body onload="initialize()">
 <?php include_once("includes/analyticstracking.php") ?>
-
-
 <h1 style="padding-top:3px;"><img alt="TwitĒdiens Logo" src="/img/te.png" />TwitĒdiens</h1>
 <div id="top" style="padding:8px;">
 <div id="nav"><a href=""><span style="opacity: 0;">.</span></a>
-<a class="htooltip" href="/"><span>Sākums</span><img alt="Sākums" title="Sākums" src="/img/sakums.png"/></a>
-<a class="htooltip" href="/draugi"><span>Draugi</span><img alt="Draugi" title="Draugi" src="/img/draugi.png"/></a>
-<a class="htooltip" href="/vardi"><span>Ēdieni</span><img alt="Ēdieni" title="Ēdieni" src="/img/edieni.png"/></a>
-<a class="htooltip" href="/kalendars"><span>Kalendārs</span><img alt="Kalendārs" title="Kalendārs" src="/img/kalend.png"/></a>
-<a class="htooltip" href="/karte"><span>Karte</span><img alt="Karte" title="Karte" src="/img/karte.png"/></a>
-<a class="htooltip" href="/tops"><span>Tops</span><img alt="Tops" title="Tops" src="/img/tops.png"/></a>
-<a class="htooltip" href="/koest"><span>Ko ēst?</span><img alt="Ko ēst?" title="Ko ēst?" src="/img/koest.png"/></a>
-<a class="htooltip" href="/statistika"><span>Statistika</span><img alt="Statistika" title="Statistika" src="/img/stat.png"/></a>
+	<a class="htooltip" href="/"><span>Sākums</span><img alt="Sākums" title="Sākums" src="/img/sakums.png"/></a>
+	<a class="htooltip" href="/draugi"><span>Draugi</span><img alt="Draugi" title="Draugi" src="/img/draugi.png"/></a>
+	<a class="htooltip" href="/vardi"><span>Ēdieni</span><img alt="Ēdieni" title="Ēdieni" src="/img/edieni.png"/></a>
+	<a class="htooltip" href="/kalendars"><span>Kalendārs</span><img alt="Kalendārs" title="Kalendārs" src="/img/kalend.png"/></a>
+	<a class="htooltip" href="/karte"><span>Karte</span><img alt="Karte" title="Karte" src="/img/karte.png"/></a>
+	<a class="htooltip" href="/tops"><span>Tops</span><img alt="Tops" title="Tops" src="/img/tops.png"/></a>
+	<a class="htooltip" href="/koest"><span>Ko ēst?</span><img alt="Ko ēst?" title="Ko ēst?" src="/img/koest.png"/></a>
+	<a class="htooltip" href="/statistika"><span>Statistika</span><img alt="Statistika" title="Statistika" src="/img/stat.png"/></a>
 </div>
 </div>
 <div id="contents" style="display: none;margin-top:5px;margin-bottom:5px;padding:6px;">
