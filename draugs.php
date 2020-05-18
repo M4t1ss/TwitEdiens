@@ -20,13 +20,19 @@ $vaards = $usr->{'name'};
 <script>
 $(function() {
 $("#tabs").tabs({
-                fx: { height: 'toggle', opacity: 'toggle'},
-                show: function(event, ui) {
-                          if (ui.panel.id == "tabs-4") {
-                                  $(ui.panel).css("height","100%")
-                                initialize()
-                                }}
-                });
+	fx: { height: 'toggle', opacity: 'toggle'},
+	show: function(event, ui) {
+		if (ui.panel.id == "tabs-4") {
+			$(ui.panel).css("height","100%")
+			initialize()
+		}
+		if (ui.panel.id == "tabs-5") {
+			$(window).resize(drawChart);
+			$(window).resize(drawChart1);
+			$(window).resize(drawChart2);
+		}
+		}
+	});
 });
 </script>
 <h2 style='margin:auto auto; text-align:center;'><a href="https://twitter.com/#!/<?php echo $draugs;?>">@<?php echo $draugs;?></a></h2>
@@ -87,7 +93,7 @@ $q = mysqli_query($connection, "SELECT created_at FROM `tweets` WHERE screen_nam
 ?>
 <h2 style='margin:auto auto; text-align:center;'>Ēšanas kalendārs</h2>
 <br/>
-<div style='margin:auto auto;width:500px;'>
+<div style='margin:auto auto;width:30%;'>
 <?php
 if (mysqli_num_rows($q)){
 ?>
@@ -148,7 +154,7 @@ if ($percent>0){
 </div>
 <br/>
 <h3>Kurās dienās tvīto visbiežāk</h3>
-<div style='margin:auto auto;width:500px;'>
+<div style='margin:auto auto;width:30%;'>
 <?php
 $theDate = '2011-10-31';
 $timeStamp = StrToTime($theDate);
@@ -231,6 +237,7 @@ echo $draugs." vēl nav pieminējis nevienu ēdienu vai dzērienu.";
 ?>
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 		<script type="text/javascript">
+		$(window).resize(initialize);
 			function initialize() {
 				var latlng = new google.maps.LatLng(56.9465363, 24.1048503);
 				var settings = {
@@ -287,7 +294,7 @@ echo $draugs." vēl nav pieminējis nevienu ēdienu vai dzērienu.";
 ?>
 			}
 		</script>
-		<div id="map_canvas" style="margin:auto auto; width:900px; height:520px"></div>
+		<div id="map_canvas"></div>
 </div>
 <div id="tabs-5">
 <h2 style='margin:auto auto; text-align:center;'>pieminētie ēdieni / dzērieni</h2>
@@ -341,8 +348,9 @@ $g81 = $r8["skaits"];
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load('visualization', '1.0', {'packages':['corechart']});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
+      google.setOnLoadCallback(drawChart2);
+      $(window).resize(drawChart2);
+      function drawChart2() {
       var data = new google.visualization.DataTable();
       data.addColumn('string', 'Topping');
       data.addColumn('number', 'Slices');
@@ -351,18 +359,17 @@ $g81 = $r8["skaits"];
         ['Negatīvi', <?php echo $neg ?>],
         ['Neitrāli', <?php echo $nei ?>]]);
       var options = {'title':'Tvītu noskaņojums',
-                     'width':485,
-                     'height':300,
                      'backgroundColor':'transparent',
                      'is3D':'true'};
-      var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+      var chart = new google.visualization.PieChart(document.getElementById('dstat1'));
       chart.draw(data, options);}
 </script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load('visualization', '1.0', {'packages':['corechart']});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
+      google.setOnLoadCallback(drawChart1);
+      $(window).resize(drawChart1);
+      function drawChart1() {
       var data = new google.visualization.DataTable();
       data.addColumn('string', 'Topping');
       data.addColumn('number', 'Slices');
@@ -370,17 +377,16 @@ $g81 = $r8["skaits"];
         ['Alkoholisks dzēriens', <?php echo $g71; ?>],
         ['Bezalkoholisks dzēriens', <?php echo $g81; ?>]]);
       var options = {'title':'Dzērieni',
-                     'width':450,
-                     'height':300,
                      'backgroundColor':'transparent',
                      'is3D':'true'};
-      var chart = new google.visualization.PieChart(document.getElementById('chart_div1'));
+      var chart = new google.visualization.PieChart(document.getElementById('dstat2'));
       chart.draw(data, options);}
 </script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load('visualization', '1.0', {'packages':['corechart']});
       google.setOnLoadCallback(drawChart);
+      $(window).resize(drawChart);
       function drawChart() {
       var data = new google.visualization.DataTable();
       data.addColumn('string', 'Topping');
@@ -393,17 +399,15 @@ $g81 = $r8["skaits"];
         ['Augļi, ogas', <?php echo $g51; ?>],
         ['Maize, graudaugu produkti, makaroni, rīsi, biezputras, kartupeļi', <?php echo $g61; ?>]]);
       var options = {'title':'Twitter uztura piramīda',
-                     'width':450,
-                     'height':300,
                      'backgroundColor':'transparent',
                      'is3D':'true'};
-      var chart = new google.visualization.PieChart(document.getElementById('chart_div2'));
+      var chart = new google.visualization.PieChart(document.getElementById('dstat3'));
       chart.draw(data, options);}
 </script>
 <div style="text-align:center;">
-	<div id="chart_div"></div>
-	<div style="float:left;" id="chart_div2"></div>
-	<div style="float:right;" id="chart_div1"></div>
+	<div id="dstat1"></div>
+	<div id="dstat3"></div>
+	<div id="dstat2"></div>
 </div>
 <br style="clear:both;"/>
 </div>

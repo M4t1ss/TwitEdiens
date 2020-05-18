@@ -10,10 +10,10 @@
 	rezultātus
 	
 	<br/><br/>
-	<div style="margin:auto auto;font-weight:bold;width:280px;"><a href="http://twitediens.tk/p/">Neliela prezentācija par TwitĒdienu</a></div>
+	<div style="margin:auto auto;font-weight:bold;"><a href="http://twitediens.tk/p/">Neliela prezentācija par TwitĒdienu</a></div>
 	<br/>
 	Pāris ekrānuzņēmumi ar TwitĒdienu darbībā:
-	<div style="padding:15px;margin:auto auto;width:670px;"><img style="width:670px;" src="img/par.jpg"/></div><br/>
+	<div style="padding:15px;margin:auto auto;width:80%;"><img style="width:80%;" src="img/par.jpg"/></div><br/>
 	Jebkādus ieteikumus, kļūdu ziņojumus, atsauksmes vai citas lietas sasitītas ar TwitĒdienu
 	sūtīt uz <a style="font-weight:bold;" href="mailto:TwitEdiens@lielakeda.lv">TwitEdiens@lielakeda.lv</a>.
 	<br style="clear:both;"/>

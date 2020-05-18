@@ -37,14 +37,14 @@ if (isset($apraksts)){
 <a style='text-align:center;font-size:30px;font-weight:bold;margin:auto auto; width:50px;'><?php echo $vards; ?></a>
 (<a class="tooltip">?<span class="custom info"><img src="/includes/tooltip/Info.png" alt="Information" height="48" width="48" class="png" /><em>Apraksts [eng]</em><?php echo $apraksts; ?></span></a>)<br/>
 <div>
-	<div style="padding:5px;" id="content">Ielādē...</div>
+	<div style="padding:5px;" id="contentX">Ielādē...</div>
 </div>
 <?php
 }else{
 ?>
 <a style='text-align:center;font-size:30px;font-weight:bold;margin:auto auto; width:50px;'><?php echo $vards; ?></a>
 <div>
-	<div style="padding:5px;" id="content">Ielādē...</div>
+	<div style="padding:5px;" id="contentX">Ielādē...</div>
 </div>
 <?php
 }
@@ -55,7 +55,7 @@ if (isset($apraksts)){
 google.load('search', '1');
 function searchComplete(searcher) {
   if (searcher.results && searcher.results.length > 0) {
-	var contentDiv = document.getElementById('content');
+	var contentDiv = document.getElementById('contentX');
 	contentDiv.innerHTML = '';
 	var results = searcher.results;
 	  var result = results[0];
@@ -100,7 +100,7 @@ while($r=mysqli_fetch_array($vardi)){
 	
 	$datums = $r["created_at"];
 	if ($krasa==TRUE) {$kr=" class='even'";}else{$kr="";}
-	echo '<tr'.$kr.'><td><b><a style="text-decoration:none;color:#658304;" href="/draugs/'.$niks.'">'.$niks.'</a></b></td><td>'.$teksts.'</td><td>'.$datums.'</td></tr>';
+	echo '<tr'.$kr.'><td><b><a style="text-decoration:none;color:#658304;" href="/draugs/'.$niks.'">'.$niks.'</a></b></td><td>'.$teksts.'</td><td class="datu">'.$datums.'</td></tr>';
 	$krasa=!$krasa;
 }
 echo "</table>";

@@ -155,32 +155,36 @@ a{text-decoration:none;color:#000;}
 }
 
 table {
-background:#fff;
+	background:#fff;
 	margin:20px;
 	-moz-border-radius:10px;
 	-webkit-border-radius:10px;
-	border-radius:10px}
+	border-radius:10px;
+	table-layout: auto;
+	width: 100%;
+}
 	
 table th {padding:4px 10px}
 
 table td {
 	background:#fff;
-	padding:2px 10px 4px 10px}
+	padding:2px 10px 4px 10px
+}
 	
 table tr.even td {background:#F6E9F6}
 
 input{
-text-align:center;
-font-size:12px;
-border:none;
--moz-border-radius:10px;
--webkit-border-radius:10px;
-padding-left:2px;
-padding-right:2px;
-background:#F6E9F6;
-background-color:rgba(246, 233, 246, 0.45);
--webkit-box-shadow: rgba(64, 64, 64, 0.5) 2px 2px 9px;
--moz-box-shadow: rgba(64, 64, 64, 0.5) 2px 2px 9px;
+	text-align:center;
+	font-size:12px;
+	border:none;
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	padding-left:2px;
+	padding-right:2px;
+	background:#F6E9F6;
+	background-color:rgba(246, 233, 246, 0.45);
+	-webkit-box-shadow: rgba(64, 64, 64, 0.5) 2px 2px 9px;
+	-moz-box-shadow: rgba(64, 64, 64, 0.5) 2px 2px 9px;
 }
 
 table tr:last-child td:first-child {
@@ -194,7 +198,7 @@ table tr:last-child td:last-child {
 	border-bottom-right-radius:10px}
 
 #progressbar{ font: 30% "Trebuchet MS", sans-serif; margin-left:30px;}
-.sk{ margin-top:-20px;margin-left:-100px;}
+.sk{ margin-top:-20px;margin-left:-90px;}
 img {border-width: 0}
 * {font-family:'Lucida Grande', sans-serif;}
 #nav {margin-top:-10px;}
@@ -402,6 +406,9 @@ a.showLink:hover, a.hideLink:hover {
 #content{
   margin:auto auto;width:50%;float:left;
 }
+#contentFull{
+  margin:auto auto;width:100%;float:left;
+}
 #content2{
   margin:auto auto;width:50%;float:right;padding-top:15px;
 }
@@ -456,22 +463,33 @@ a.showLink:hover, a.hideLink:hover {
 	min-height: 800px;
 	width: 100%;
 }
-	#smile1{
-		width: 50%; 
-		float:left;
-	}
-	#smile2{
-		width: 50%; 
-		float:right;
-	}
-	#smile3{
-		width: 50%; 
-		float:left;
-	}
-	#smile4{
-		width: 50%; 
-		float:right;
-	}
+#smile1{
+	width: 50%; 
+	float:left;
+}
+#smile2{
+	width: 50%; 
+	float:right;
+}
+#smile3{
+	width: 50%; 
+	float:left;
+}
+#smile4{
+	width: 50%; 
+	float:right;
+}
+#dstat1{
+	width: 100%;
+}
+#dstat2{
+	width: 50%; 
+	float:left;
+}
+#dstat3{
+	width: 50%; 
+	float:right;
+}
 
 @media (max-width: 1200px) {
   #photos {
@@ -495,6 +513,19 @@ a.showLink:hover, a.hideLink:hover {
   }
 }
 @media (max-width: 479px) {
+	table {
+		font-size:10px;
+	}
+	table b a {
+		font-size:8px;
+		width:40px;
+		text-overflow: ellipsis;
+		display:inline-block;
+		overflow: hidden;
+	}
+	td.datu {
+		font-size:8px;
+	}
 	#photos {
 		-moz-column-count:    1;
 		-webkit-column-count: 1;
@@ -532,6 +563,12 @@ a.showLink:hover, a.hideLink:hover {
 		width: 100%; 
 	}
 	#smile4{
+		width: 100%; 
+	}
+	#dstat2{
+		width: 100%; 
+	}
+	#dstat3{
 		width: 100%; 
 	}
 	#vardi{
