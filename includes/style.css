@@ -198,7 +198,7 @@ table tr:last-child td:last-child {
 	border-bottom-right-radius:10px}
 
 #progressbar{ font: 30% "Trebuchet MS", sans-serif; margin-left:30px;}
-.sk{ margin-top:-20px;margin-left:-100px;}
+.sk{ margin-top:-20px;margin-left:-90px;}
 img {border-width: 0}
 * {font-family:'Lucida Grande', sans-serif;}
 #nav {margin-top:-10px;}
@@ -460,22 +460,33 @@ a.showLink:hover, a.hideLink:hover {
 	min-height: 800px;
 	width: 100%;
 }
-	#smile1{
-		width: 50%; 
-		float:left;
-	}
-	#smile2{
-		width: 50%; 
-		float:right;
-	}
-	#smile3{
-		width: 50%; 
-		float:left;
-	}
-	#smile4{
-		width: 50%; 
-		float:right;
-	}
+#smile1{
+	width: 50%; 
+	float:left;
+}
+#smile2{
+	width: 50%; 
+	float:right;
+}
+#smile3{
+	width: 50%; 
+	float:left;
+}
+#smile4{
+	width: 50%; 
+	float:right;
+}
+#dstat1{
+	width: 100%;
+}
+#dstat2{
+	width: 50%; 
+	float:left;
+}
+#dstat3{
+	width: 50%; 
+	float:right;
+}
 
 @media (max-width: 1200px) {
   #photos {
@@ -549,6 +560,12 @@ a.showLink:hover, a.hideLink:hover {
 		width: 100%; 
 	}
 	#smile4{
+		width: 100%; 
+	}
+	#dstat2{
+		width: 100%; 
+	}
+	#dstat3{
 		width: 100%; 
 	}
 	#vardi{
