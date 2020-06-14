@@ -20,7 +20,7 @@ TwitĒdiens ievāc datus no Twitter, kur pieminēta ēšana, dzeršana, ēdienre
 <meta name="DC.type" scheme="DCTERMS.DCMIType" content="Text" />
 <meta name="DC.format" content="text/html" />
 <meta name="DC.format" content="7635 bytes" />
-<meta name="DC.identifier" scheme="DCTERMS.URI" content="http://twitediens.ml" />
+<meta name="DC.identifier" scheme="DCTERMS.URI" content="http://twitediens.tk" />
 <meta name="DC.language" scheme="DCTERMS.URI" content="Latvian" />
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="robots" content="index,follow" />
@@ -80,11 +80,11 @@ function showHide(shID) {
 <div id="bottom" style="padding:8px;">
 <div style="text-align:center;">
 	<div style="padding:5px;font-weight:bold;">
-		<a href="http://www.twitediens.ml/?id=pics">Attēli</a> | 
-		<a href="http://www.twitediens.ml/?id=sarunas">Savstarpējie pļāpas</a> | 
-		<a href="http://twitediens.ml/?id=app/app">Mobilā lietotne</a> | 
-		<a href="http://twitediens.ml/blog">Blogs</a> | 
-		<a href="http://twitediens.ml/par">Par TwitĒdienu</a>
+		<a href="index.php?id=pics">Attēli</a> | 
+		<a href="index.php?id=sarunas">Savstarpējie pļāpas</a> | 
+		<a href="index.php?id=app/app">Mobilā lietotne</a> | 
+		<a href="blog">Blogs</a> | 
+		<a href="par">Par TwitĒdienu</a>
 	</div>
 &copy; 2011-<?php echo date('Y');?> Twitēdiens.<br/>
 </div>

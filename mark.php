@@ -1,17 +1,22 @@
 <?php
+ini_set('display_errors', 1); 
+ini_set('display_startup_errors', 1); 
+error_reporting(E_ALL);
+
 //Sentimenta marķēšanas grafiskā saskarne tvītiem
 //Pieslēgums DB
 include "includes/init_sql_latest.php";
+include "classify/evaluate_bayes.php";
 
-if($_POST['nei']){
+if(isset($_POST['nei'])){
 	$id = $_POST['id'];
 	$result= mysqli_query($connection, "UPDATE tweets set emo = 0 where id = '$id'"); 
 }
-if($_POST['poz']){
+if(isset($_POST['poz'])){
 	$id = $_POST['id'];
 	$result= mysqli_query($connection, "UPDATE tweets set emo = 1 where id = '$id'"); 
 }
-if($_POST['neg']){
+if(isset($_POST['neg'])){
 	$id = $_POST['id'];
 	$result= mysqli_query($connection, "UPDATE tweets set emo = -1 where id = '$id'"); 
 }
@@ -58,7 +63,7 @@ if($_POST['neg']){
 		$trashy_acc = array('epadomi', 'laiki', 'brevings', 'Twitediens', 'RIGATV24', 'FOLKKLUBS', 'brooklynpubriga', 'ltvzinas'
 			, 'beerhouseNo1', 'EgilsDambis1', 'Skrundas_novads', 'dievietelv', 'flowsnet_com', 'cafeleningrad', 'gardedis_lv', 'CafeOsiris'
 			, 'portals_santa', 'JaunsLV', 'KJ_Sievietem', 'Kalnciemaiela', '1188', 'budzis', 'LV_portals', 'lsmlv', 'LA_lv', 'nralv'
-			, 'SakuraSushiBars', 'visidarbi', 'LifeHackslv', 'irLV', 'LIIA_LV', 'receptes_eu', 'latvijasbizness');
+			, 'SakuraSushiBars', 'visidarbi', 'LifeHackslv', 'irLV', 'LIIA_LV', 'receptes_eu', 'latvijasbizness', 'shmaramagda');
 			
 		//Paņem jaunāko vēl nemarķēto tvītu, kura autors nav pelēkajā sarakstā
 		$latest = mysqli_query($connection, "SELECT * FROM tweets WHERE emo IS NULL AND screen_name NOT IN ( '" . implode( "', '" , $trashy_acc ) . "' ) ORDER BY created_at DESC limit 0, 1");
@@ -68,6 +73,11 @@ if($_POST['neg']){
 		$username = $p["screen_name"];
 		$text = $p["text"];
 		$ttime = $p["created_at"];
+		
+		$automatic = classify($text);
+		
+		$regex = "@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?).*$)@";
+		$forTTS = preg_replace($regex, ' ', $text);
 		
 		//Marķēšanas statistika
 		$tot = mysqli_query($connection, "SELECT COUNT(*) sk FROM tweets WHERE emo IS NULL");
@@ -87,7 +97,32 @@ if($_POST['neg']){
 		$annotated 	= $negative + $neutral + $positive;
 		$useful		= min($negative, $positive) * 3;
 		
-		$id = $p["id"];
+		# Iekrāsosim pozitīvos un negatīvos vārdus
+		// $pwords = file("/home/baumuin/public_html/twitediens.tk/lv_positive_words_from_pumpurs", FILE_IGNORE_NEW_LINES);
+		// $nwords = file("/home/baumuin/public_html/twitediens.tk/lv_negative_words_from_pumpurs", FILE_IGNORE_NEW_LINES);
+		$filename = "/home/baumuin/public_html/twitediens.tk/lv_positive_words_from_pumpurs";
+		$fp = @fopen($filename, 'r');
+		if ($fp) {
+		   $pwords = explode("\n", fread($fp, filesize($filename)));
+		}
+		$filename = "/home/baumuin/public_html/twitediens.tk/lv_positive_words_from_pumpurs";
+		$fp = @fopen($filename, 'r');
+		if ($fp) {
+		   $nwords = explode("\n", fread($fp, filesize($filename)));
+		}
+		
+		$words = explode(" ", preg_replace("/(?![.=$'€%-])\p{P}/u", "", $text));
+		$color_text = "";
+		foreach($words as $word){
+			if(in_array(strtolower($word), $pwords)){
+				// $word = "<span style='color:green'>".$word."</span>";
+				$text = preg_replace('/'.preg_quote($word, '/').'/', "<span style='color:#00CC00;font-weight:bold;'>".$word."</span>", $text, 1);
+			}else if(in_array(strtolower($word), $nwords)){
+				// $word = "<span style='color:red'>".$word."</span>";
+				$text = preg_replace('/'.preg_quote($word, '/').'/', "<span style='color:#FF0000;font-weight:bold;'>".$word."</span>", $text, 1);
+			}
+			$color_text .= $word." ";
+		}
 		
 		#Iekrāso un izveido saiti uz katru pieminēto lietotāju tekstā
 		#Šo vajadzētu visur...
@@ -95,6 +130,7 @@ if($_POST['neg']){
 		if (preg_match_all('/@[^[:space:]]+/', $text, $matches)) {
 			foreach ($matches[0] as $match){
 				$text = str_replace(trim($match), '<a style="text-decoration:none;color:#658304;" href="/draugs/'.str_replace('@','',trim($match)).'">'.trim($match).'</a> ', $text);
+				$forTTS = str_replace(trim($match), '', $forTTS);
 			}
 		}
 		
@@ -105,15 +141,19 @@ if($_POST['neg']){
 		}
 		
 	?>
+	<audio class="audioPlayer" controls autoplay>
+	  <source src="https://runa.tilde.lv/client/say/?text=<?php echo urlencode($forTTS);?>&voice=e2e" type="audio/mpeg">
+	  Your browser does not support the audio element.
+	</audio>
 	<div style="max-width:750px; margin:auto auto; text-align:center;<?php if ((time()-StrToTime($ttime))<5){echo"opacity:".((time()-StrToTime($ttime))/5).";";}?>" class="tweet">
 	<div class="lietotajs"><?php echo '<a style="text-decoration:none;color:#658304;" href="/draugs/'.trim($username).'">@'.trim($username).'</a> ';?> ( <?php echo $ttime;?> )</div>
 	<div style="padding-top:10px;"><?php echo $text; ?><br/></div>
 	<br/>
 	<form method="post" action="mark.php">
 		<input type="hidden" value="<?php echo $id;?>" name="id"/>
-		<input TYPE="submit" name="neg" class="senti neg" type="button" value="Negatīvs" />
-		<input TYPE="submit" name="nei" class="senti nei" type="button" value="Neitrāls" />
-		<input TYPE="submit" name="poz" class="senti poz" type="button" value="Pozitīvs" />
+		<input TYPE="submit" name="neg" class="senti neg" <?php echo $automatic=="neg"?"style='border:3px dashed #AC00E6'":"style='border:3px solid red'"; ?> type="button" value="Negatīvs" />
+		<input TYPE="submit" name="nei" class="senti nei" <?php echo $automatic=="nei"?"style='border:3px dashed #AC00E6'":"style='border:3px solid gray'"; ?> type="button" value="Neitrāls" />
+		<input TYPE="submit" name="poz" class="senti poz" <?php echo $automatic=="pos"?"style='border:3px dashed #AC00E6'":"style='border:3px solid green'"; ?> type="button" value="Pozitīvs" />
 	</form>
 	</div>
 	<br class="clear" />

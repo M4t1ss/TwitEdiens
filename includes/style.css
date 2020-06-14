@@ -591,3 +591,9 @@ a.showLink:hover, a.hideLink:hover {
 		margin-left:0px;
 	}
 }
+.audioPlayer{
+  display: block;
+  border-radius: 15px;
+  margin:0 auto;
+  padding-bottom:5px;
+}

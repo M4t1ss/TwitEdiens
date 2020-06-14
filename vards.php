@@ -31,50 +31,15 @@ foreach($triples as $triple){
 		$lattels = $triple['http://xmlns.com/foaf/0.1/depiction'][0]['value'];
 	}
 }
-//izdrukā
-if (isset($apraksts)){
+
 ?>
-<a style='text-align:center;font-size:30px;font-weight:bold;margin:auto auto; width:50px;'><?php echo $vards; ?></a>
-(<a class="tooltip">?<span class="custom info"><img src="/includes/tooltip/Info.png" alt="Information" height="48" width="48" class="png" /><em>Apraksts [eng]</em><?php echo $apraksts; ?></span></a>)<br/>
-<div>
-	<div style="padding:5px;" id="contentX">Ielādē...</div>
+<!-- attēls -->
+ <div class="row">
+  <div class="column left"><a style='text-align:center;font-size:30px;font-weight:bold;margin:auto auto; width:50px;'><?php echo $vards; ?></a></div>
+  <div class="column middle"><img style="height:100px;" src="<?php echo $attels;?>"></div>
+  <div class="column right"><b>Apraksts [eng]:</b> <?php echo $apraksts; ?><br/>
 </div>
-<?php
-}else{
-?>
-<a style='text-align:center;font-size:30px;font-weight:bold;margin:auto auto; width:50px;'><?php echo $vards; ?></a>
-<div>
-	<div style="padding:5px;" id="contentX">Ielādē...</div>
-</div>
-<?php
-}
-?>
-<!-- attēls no google image search -->
-<script src="https://www.google.com/jsapi?key=ABQIAAAAwNLfFSirmOLKkKGBImYROhR-aFOkHTCPd8GmiU2WFD4CBmb8xhT4K2zPKmh7e3lAi4XgaludyidIAw" type="text/javascript"></script>
-<script type="text/javascript">
-google.load('search', '1');
-function searchComplete(searcher) {
-  if (searcher.results && searcher.results.length > 0) {
-	var contentDiv = document.getElementById('contentX');
-	contentDiv.innerHTML = '';
-	var results = searcher.results;
-	  var result = results[0];
-	  var imgContainer = document.createElement('div');
-	  var newImg = document.createElement('img');
-	  newImg.src = result.tbUrl;
-	  imgContainer.appendChild(newImg);
-	  contentDiv.appendChild(imgContainer);
-  }
-}
-function OnLoad() {
-  var imageSearch = new google.search.ImageSearch();
-  imageSearch.setRestriction(google.search.ImageSearch.RESTRICT_IMAGESIZE,
-							 google.search.ImageSearch.IMAGESIZE_MEDIUM);
-  imageSearch.setSearchCompleteCallback(this, searchComplete, [imageSearch]);
-  imageSearch.execute("<?php echo $vards;?>");
-}
-google.setOnLoadCallback(OnLoad);
-</script>
+</div> 
 <div>
 <?php
 $krasa=TRUE;
