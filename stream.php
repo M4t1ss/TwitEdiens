@@ -1,5 +1,6 @@
 <?php
 include "includes/init_sql.php";
+include "classify/evaluate_bayes.php";
 ?>
 <div style="margin:30px; background-color:#E7FFFE;background-opacity:0.2;border-radius:15px;padding:15px;border:2px solid #FFF;">
 	TwitĒdiens ievāc datus no <a style="font-weight:bold;" href="http://twitter.com">Twitter</a>
@@ -57,6 +58,21 @@ while($p=mysqli_fetch_array($latest)){
 	$username = $p["screen_name"];
 	$text = $p["text"];
 	$ttime = $p["created_at"];
+		
+	$automatic = classify($text);
+	switch ($automatic){
+		case "pos":
+			$color = "#00FF00";
+			break;
+		case "neg":
+			$color = "#FF3D3D";
+			break;
+		case "nei":
+			$color = "black";
+			break;
+		default:
+			$color = "black";
+	}
 	
 	#Iekrāso un izveido saiti uz katru pieminēto lietotāju tekstā
 	#Šo vajadzētu visur...
@@ -75,7 +91,7 @@ while($p=mysqli_fetch_array($latest)){
 	
 ?>
 <div style="<?php if ((time()-StrToTime($ttime))<5){echo"opacity:".((time()-StrToTime($ttime))/5).";";}?>" class="tweet">
-<div class="lietotajs"><?php echo '<a style="text-decoration:none;color:#658304;" href="/draugs/'.trim($username).'">@'.trim($username).'</a> ';?> ( <?php echo $ttime;?> )</div>
+<div class="lietotajs" style="border-bottom: 0.18em dashed <?php echo $color; ?>;"><?php echo '<a style="text-decoration:none;color:#658304;" href="/draugs/'.trim($username).'">@'.trim($username).'</a> ';?> ( <?php echo $ttime;?> )</div>
 <?php echo $text."<br/>";
 ?><br/>
 </div>
@@ -85,7 +101,7 @@ while($p=mysqli_fetch_array($latest)){
 </div>
 <?php
 //dabū 10 jaunākos tvītus
-$latest = mysqli_query($connection, "SELECT distinct media_url, expanded_url, date FROM media GROUP BY media_url ORDER BY date DESC limit 0, 40");
+$latest = mysqli_query($connection, "SELECT distinct media_url, expanded_url, date, text FROM media JOIN tweets ON tweets.id = media.tweet_id GROUP BY media_url ORDER BY date DESC limit 0, 40");
 ?>
 
 <div id="content2">
@@ -95,12 +111,13 @@ $latest = mysqli_query($connection, "SELECT distinct media_url, expanded_url, da
 		$media_url = $p["media_url"];
 		$expanded_url = $p["expanded_url"];
 		$ttime = $p["date"];
+		$ttext = $p["text"];
 		
 		if (@getimagesize($media_url)) {
 			?>
 			<div style="<?php if ((time()-StrToTime($ttime))<5){echo"opacity:".((time()-StrToTime($ttime))/5).";";}?> display:inline;" >
 				<a target="_blank" href="<?php echo $expanded_url; ?>">
-					<img  src="<?php echo $media_url; ?>" />
+					<img alt="<?php echo $ttext;?>" src="<?php echo $media_url; ?>" />
 				</a>
 			</div>
 			<?php
