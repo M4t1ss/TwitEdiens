@@ -20,6 +20,10 @@ if(isset($_POST['neg'])){
 	$id = $_POST['id'];
 	$result= mysqli_query($connection, "UPDATE tweets set emo = -1 where id = '$id'"); 
 }
+if(isset($_POST["TTS"]) && $_POST["TTS"]=="Izrunāt") 
+	$TTS = true;
+else
+	$TTS = false;
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -141,15 +145,19 @@ if(isset($_POST['neg'])){
 		}
 		
 	?>
+	<form method="post" action="mark.php">
+	<input class="TTS" type="checkbox" id="TTS" name="TTS" value="Izrunāt" <?php if($TTS) echo "checked"; ?>> 
+	<label class="TTS" for="TTS">Izrunāt?</label>
 	<audio class="audioPlayer" controls autoplay>
+		<?php if($TTS){ ?>
 	  <source src="https://runa.tilde.lv/client/say/?text=<?php echo urlencode($forTTS);?>&voice=e2e" type="audio/mpeg">
 	  Your browser does not support the audio element.
+		<?php } ?>
 	</audio>
 	<div style="max-width:750px; margin:auto auto; text-align:center;<?php if ((time()-StrToTime($ttime))<5){echo"opacity:".((time()-StrToTime($ttime))/5).";";}?>" class="tweet">
 	<div class="lietotajs"><?php echo '<a style="text-decoration:none;color:#658304;" href="/draugs/'.trim($username).'">@'.trim($username).'</a> ';?> ( <?php echo $ttime;?> )</div>
 	<div style="padding-top:10px;"><?php echo $text; ?><br/></div>
 	<br/>
-	<form method="post" action="mark.php">
 		<input type="hidden" value="<?php echo $id;?>" name="id"/>
 		<input TYPE="submit" name="neg" class="senti neg" <?php echo $automatic=="neg"?"style='border:3px dashed #AC00E6'":"style='border:3px solid red'"; ?> type="button" value="Negatīvs" />
 		<input TYPE="submit" name="nei" class="senti nei" <?php echo $automatic=="nei"?"style='border:3px dashed #AC00E6'":"style='border:3px solid gray'"; ?> type="button" value="Neitrāls" />

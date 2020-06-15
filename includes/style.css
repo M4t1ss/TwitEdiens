@@ -550,9 +550,22 @@ a.showLink:hover, a.hideLink:hover {
 	clear: both;
 }
 
+.TTS{
+	position: relative;
+	top: -17px;
+}
 
+.audioPlayer{
+	border-radius: 15px;
+	margin:0 auto;
+	padding-bottom:5px;
+}
 
 @media (max-width: 479px) {
+	.TTS{
+		position: relative;
+		top: 0px;
+	}
 	.left{
 		width: 100%;
 		padding-top: 0px;
@@ -646,10 +659,4 @@ a.showLink:hover, a.hideLink:hover {
 		padding: 1px 1px 1px 1px;
 		margin-left:0px;
 	}
-}
-.audioPlayer{
-	display: block;
-	border-radius: 15px;
-	margin:0 auto;
-	padding-bottom:5px;
 }
