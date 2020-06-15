@@ -3,7 +3,7 @@ include_once("includes/arc2/ARC2.php");
 $vards=urldecode($_GET['vards']);
 //Iz DB
 $vardi = mysqli_query($connection, "SELECT tvits, eng, screen_name, text, created_at FROM words
-JOIN tweets on	id = tvits
+JOIN tweets on id = tvits
 where nominativs = '$vards'
 group by tweets.id
 order by created_at desc
@@ -32,11 +32,65 @@ foreach($triples as $triple){
 	}
 }
 
+
+//pozitīvie
+$kopa = mysqli_query($connection, "SELECT distinct emo, count( * ) skaits 
+FROM tweets 
+JOIN words on tvits = id
+WHERE nominativs = '$vards' 
+group by emo order by skaits desc
+");
+while($p=mysqli_fetch_array($kopa)){
+	$noskanojums = $p["emo"];
+	$text = $p["skaits"];
+	switch ($noskanojums) {
+		case 0:
+			$nei = $text;
+			break;
+		case 1:
+			$poz = $text;
+			break;
+		case -1:
+			$neg = $text;
+			break;
+	}
+}
+
 ?>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+  var chart;
+  google.load('visualization', '1.0', {'packages':['corechart']});
+  google.setOnLoadCallback(drawChart2);
+  $(window).resize(drawChart2);
+  function drawChart2() {
+  var data = new google.visualization.DataTable();
+  data.addColumn('string', 'Topping');
+  data.addColumn('number', 'Slices');
+  data.addRows([
+	['Pozitīvi', <?php echo $poz; ?>],
+	['Negatīvi', <?php echo $neg; ?>],
+	['Neitrāli', <?php echo $nei; ?>]]);
+  var options = {'backgroundColor':'transparent',
+				 'is3D':'true',
+				 colors: ['green', 'red', 'gray'],
+				 legend: 'none',
+				 pieSliceText: 'label',
+				 chartArea: {
+				  // leave room for y-axis labels
+				  height: '100%'
+				}
+};
+  chart = new google.visualization.PieChart(document.getElementById('emo-stat-v'));
+  chart.draw(data, options);
+  }
+  $(window).resize(drawVisualization);
+</script>
 <!-- attēls -->
  <div class="row">
   <div class="column left"><a style='text-align:center;font-size:30px;font-weight:bold;margin:auto auto; width:50px;'><?php echo $vards; ?></a></div>
-  <div class="column middle"><img style="height:100px;" src="<?php echo $attels;?>"></div>
+  <div class="column middleleft"><img style="height:100px;" src="<?php echo $attels;?>"></div>
+  <div class="column middleright"><div class="chart" id="emo-stat-v"></div></div>
   <div class="column right"><b>Apraksts [eng]:</b> <?php echo $apraksts; ?><br/>
 </div>
 </div> 
