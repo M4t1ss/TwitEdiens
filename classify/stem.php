@@ -75,7 +75,7 @@ function endsWith($s, $length, $suffix){
 	return endsWithX(substr_unicode(implode($s), 0, $length), $suffix);
 }
 function endsWithX($haystack, $needle){
-    $length = strlen($needle);
+    $length = mb_strlen($needle);
     if ($length == 0) {
         return true;
     }
@@ -83,7 +83,7 @@ function endsWithX($haystack, $needle){
 }
 
 function num_vowels($s){
-    $vowels = preg_split('##u', 'aāeēiouūAĀEĒIĪOUŪ', -1, PREG_SPLIT_NO_EMPTY);
+    $vowels = preg_split('##u', 'aāeēiīouūAĀEĒIĪOUŪ', -1, PREG_SPLIT_NO_EMPTY);
     $count = 0;
 	foreach($s as $char){
 		if(in_array($char, $vowels)){
@@ -96,7 +96,7 @@ function num_vowels($s){
 function stem_length($s){
     $s = preg_split('##u', $s, -1, PREG_SPLIT_NO_EMPTY);
     $numvowels = num_vowels($s);
-    $length = count($s);	
+    $length = count($s);
 
 	$Affixes = array(
 		new Affix("ajiem", 3, False),
@@ -140,8 +140,8 @@ function stem_length($s){
 	);
 
 	foreach($Affixes as $Affix){
-		if($numvowels > $Affix->vc && $length >= strlen($Affix->Affix) + 3 && endsWith($s, $length, $Affix->Affix)){
-			$length -= strlen($Affix->Affix);
+		if($numvowels > $Affix->vc && $length >= mb_strlen($Affix->Affix) + 3 && endsWith($s, $length, $Affix->Affix)){
+			$length -= mb_strlen($Affix->Affix);
 			return $Affix->palatalizes?un_palatalize($s, $length):$length;
 		}
 		
@@ -154,5 +154,6 @@ function substr_unicode($str, $s, $l = null) {
 }
 
 function stem($s){
+	$s = trim($s);
 	return substr_unicode($s, 0, stem_length($s));
 }

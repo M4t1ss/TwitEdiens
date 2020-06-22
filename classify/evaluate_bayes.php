@@ -26,10 +26,12 @@ require("/home/baumuin/public_html/twitediens.tk/classify/Bayes.php");
 function classify($text){
 	//Load model
 	$classifier = new \Niiknow\Bayes();
-	$stateJson = file_get_contents("/home/baumuin/public_html/twitediens.tk/classify/model-nelemm-noni.json");
+	$stateJson = file_get_contents("/home/baumuin/public_html/twitediens.tk/classify/model-nelemm-more-full-nohash.json");
 	$classifier->fromJson($stateJson);
 	
 	$text = strtolower($text);
+	$text = replace_usr($text);
+	$text = replace_url($text);
 	$text = replace_usr($text);
 	$text = replace_url($text);
 	$text = tokenize($text);
@@ -40,7 +42,10 @@ function classify($text){
 		$stemmedLine .= stem($part)." ";
 	}
 	
-	return $classifier->categorize(trim($stemmedLine));
+	if(strlen(trim($stemmedLine)) > 0)
+		return $classifier->categorize(trim($stemmedLine));
+	else
+		return "nei";
 }
 
 function tokenize($str){
@@ -63,17 +68,31 @@ function tokenize($str){
 	
 	$combo = implode(" ", $arr[2]);
 	
+	$combo = str_replace("#", "", $combo);
+	$combo = str_replace("  ", " ", $combo);
 	$combo = str_replace("@ usr", "@usr", $combo);
 	return str_replace("@ url", "@url", $combo);
 }
 
 function replace_usr($str){
-	$pattern = '/(^|\W)(@([0-9a-zA-Z]+))/';
-	$replacement = ' @usr';
-	return preg_replace($pattern, $replacement, $str);
+	$pattern = '/(^|\W)(@([0-9a-zA-Z_]+))/';
+	$output = preg_replace($pattern, ' @usr', $str);
+	$output = str_replace("@usr @usr", "@usr", $output);
+	$output = str_replace("@usr @usr", "@usr", $output);
+	$output = str_replace("@usr @usr", "@usr", $output);
+	$output = preg_replace('/@usr$/', '', trim($output));
+	$output = preg_replace('/^@usr/', '', trim($output));
+		
+	return $output;
 }
 
 function replace_url($str) {
-   $pattern = '@(http(s)?://)?(([a-zA-Z])([-\w]+\.)+([^\s\.]+[^\s]*)+[^,.\s])@';
-   return $output = preg_replace($pattern, '@url', $str);
+	$pattern = '"\b(https?://\S+)"';
+	$output = preg_replace($pattern, '@url', $str);
+	$output = str_replace("@url @url", "@url", $output);
+	$output = str_replace("@url @url", "@url", $output);
+	$output = str_replace("@url @url", "@url", $output);
+	$output = preg_replace('/@url$/', '', trim($output));
+	$output = preg_replace('/^@url/', '', trim($output));
+	return $output;
 }
