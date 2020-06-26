@@ -293,37 +293,42 @@ this.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(s
 this.runtimeStyle.backgroundImage = "none")),this.pngSet=true)
    );
  }
-		.tooltip {
-			cursor: help; text-decoration: none;
-			position: relative;
-		}
-		.tooltip span {
-			margin-left: -999em;
-			position: absolute;
-		}
-		.tooltip:hover span {
-			border-radius: 5px 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; 
-			box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1); -webkit-box-shadow: 5px 5px rgba(0, 0, 0, 0.1); -moz-box-shadow: 5px 5px rgba(0, 0, 0, 0.1);
-			font-family: Calibri, Tahoma, Geneva, sans-serif;
-			position: absolute; left: 1em; top: 2em; z-index: 99;
-			margin-left: 0; 
-		}
-		.tooltip:hover img {
-			border: 0; margin: -10px 0 0 -55px;
-			float: left; position: absolute;
-		}
-		.tooltip:hover em {
-			font-family: Candara, Tahoma, Geneva, sans-serif; font-size: 1.2em; font-weight: bold;
-			display: block; padding: 0.2em 0 0.6em 0;
-		}
-		.classic { padding: 0.8em 1em; }
-		.custom { padding: 0.5em 0.8em 0.8em 2em; font-size:0.8em; }
-		* html a:hover { background: transparent; }
-		.classic {background: #FFFFAA; border: 1px solid #FFAD33; }
-		.critical { background: #FFCCAA; border: 1px solid #FF3334;	}
-		.help { background: #9FDAEE; border: 1px solid #2BB0D7;	}
-		.info { background: #9FDAEE; border: 1px solid #2BB0D7;	}
-		.warning { background: #FFFFAA; border: 1px solid #FFAD33; }
+.tooltip {
+	cursor: help; text-decoration: none;
+	position: relative;
+}
+.tooltip span {
+	margin-left: -999em;
+	position: absolute;
+}
+.tooltip:hover span {
+	border-radius: 5px 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; 
+	box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1); -webkit-box-shadow: 5px 5px rgba(0, 0, 0, 0.1); -moz-box-shadow: 5px 5px rgba(0, 0, 0, 0.1);
+	font-family: Calibri, Tahoma, Geneva, sans-serif;
+	position: absolute; left: 1em; top: 2em; z-index: 99;
+	margin-left: 0; 
+}
+.tooltip:hover img {
+	border: 0; margin: -10px 0 0 -55px;
+	float: left; position: absolute;
+}
+.tooltip:hover em {
+	font-family: Candara, Tahoma, Geneva, sans-serif; font-size: 1.2em; font-weight: bold;
+	display: block; padding: 0.2em 0 0.6em 0;
+}
+.classic { padding: 0.8em 1em; }
+.custom { padding: 0.5em 0.8em 0.8em 2em; font-size:0.8em; }
+* html a:hover { background: transparent; }
+.classic {background: #FFFFAA; border: 1px solid #FFAD33; }
+.critical { background: #FFCCAA; border: 1px solid #FF3334;	}
+.help { background: #9FDAEE; border: 1px solid #2BB0D7;	}
+.info { 
+	background: #9FDAEE; 
+	border: 1px solid #2BB0D7;
+	width: 40em;
+    text-align: justify;
+}
+.warning { background: #FFFFAA; border: 1px solid #FFAD33; }
 
 
   .word {
@@ -512,7 +517,71 @@ a.showLink:hover, a.hideLink:hover {
   column-count:         2;
   }
 }
+
+
+.column {
+	float: left;
+}
+
+.left, .middleleft, .middleright {
+	width: 15%;
+	text-align:center;
+}
+
+.left {
+	padding-top: 35px;
+}
+
+.right {
+	width: 55%;
+    text-align: justify;
+	height:90px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+#emo-stat-v{
+	min-height: 100px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.TTS{
+	position: relative;
+	top: -17px;
+}
+
+.audioPlayer{
+	border-radius: 15px;
+	margin:0 auto;
+	padding-bottom:5px;
+}
+
 @media (max-width: 479px) {
+	.TTS{
+		position: relative;
+		top: 0px;
+	}
+	.left{
+		width: 100%;
+		padding-top: 0px;
+	}
+	.middleleft {
+		text-align:center;
+		width: 100%;
+	}
+	.middleright {
+		text-align:center;
+		width: 100%;
+	}
+	.right{
+		font-size:8px;
+		width: 100%;
+	}
 	table {
 		font-size:10px;
 	}
@@ -590,10 +659,4 @@ a.showLink:hover, a.hideLink:hover {
 		padding: 1px 1px 1px 1px;
 		margin-left:0px;
 	}
-}
-.audioPlayer{
-  display: block;
-  border-radius: 15px;
-  margin:0 auto;
-  padding-bottom:5px;
 }

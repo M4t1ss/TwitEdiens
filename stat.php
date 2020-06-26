@@ -140,6 +140,7 @@ while($p=mysqli_fetch_array($g1)){
         ['Neitrāli', <?php echo $nei ?>]]);
       var options = {'title':'Tvītu noskaņojums',
                      'backgroundColor':'transparent',
+					 'colors': ['green', 'red', 'gray'],
                      'is3D':'true'};
       chart = new google.visualization.PieChart(document.getElementById('emo-stat'));
       chart.draw(data, options);
