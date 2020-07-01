@@ -120,7 +120,10 @@ ORDER BY sk DESC
 LIMIT 0 , ".$showing);
 $uu = 1;
 $max = 0;
-$sodienasDatums = date("d");
+
+$today = date("Y-m-d");
+$tod = date_create($today);
+
 while($r=mysqli_fetch_array($vardi)){
 	$topvards = trim($r["vards"]);
 	//dabū katra vārda skaitu pēdējās nedēļas laikā
@@ -131,12 +134,17 @@ while($r=mysqli_fetch_array($vardi)){
 	for($i=0; $i<7; $i++){
 		$rvvv=mysqli_fetch_array($vvv);
 		$dd = substr($rvvv["datums"], -2);
-		if($pirmaisDatums && $dd < $sodienasDatums){
+		
+		$prev = date_create($rvvv["datums"]);
+		$diff = date_diff($prev, $tod);
+		$difference = $diff->format("%a");
+		
+		if($pirmaisDatums && (0 != $difference)){
 			//Laikam šim produktam šodien vēl nav tvītu... jāieliek nullīte
-			for($datu = $sodienasDatums; $datu > $dd; $datu--){
+			for($di=0; $di < $difference; $di++){
 				$dienas[$i][$uu]['vards'] = $topvards;
 				$dienas[$i][$uu]['skaits'] = '0';
-				$dienas[$i][$uu]['datums'] = date("Y-m")."-".($datu<10?"0":"").$datu;
+				$dienas[$i][$uu]['datums'] =   date('Y-m-d',strtotime("-".$di." days"));
 				$i++;
 			}
 			$pirmaisDatums = false;
