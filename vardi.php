@@ -97,8 +97,8 @@ while($r=mysqli_fetch_array($vardi)){
 	$nom = $r["nominativs"];
 	$cloud->addWord(array('word' => $nom, 'url' => 'vards/'.urlencode($nom)));
 }
-$cloud->orderBy('size', 'desc');
-$cloud->setLimit(100);
+$cloud->orderBy('colour', 'desc');
+$cloud->setLimit(500);
 $myCloud = $cloud->showCloud('array');
 foreach ($myCloud as $cloudArray) {
   echo ' &nbsp; <a href="'.$cloudArray['url'].'" class="word size'.$cloudArray['range'].'">'.$cloudArray['word'].'</a> &nbsp;';
