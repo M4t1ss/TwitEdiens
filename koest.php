@@ -4,88 +4,47 @@
 <?php
 $vardi = mysqli_query($connection, "SELECT distinct nominativs FROM words WHERE nominativs != '' AND nominativs != '0' ORDER BY RAND( ) LIMIT 3 ");
 
+function replace($word){
+		$word = str_replace('ē','e',$word);
+		$word = str_replace('ū','u',$word);
+		$word = str_replace('ī','i',$word);
+		$word = str_replace('ā','a',$word);
+		$word = str_replace('š','s',$word);
+		$word = str_replace('ģ','g',$word);
+		$word = str_replace('ķ','k',$word);
+		$word = str_replace('ļ','l',$word);
+		$word = str_replace('ž','z',$word);
+		$word = str_replace('č','c',$word);
+		$word = str_replace('ņ','n',$word);
+		$word = str_replace('ñ','n',$word);
+		$word = str_replace('ä','a',$word);
+		return $word;
+}
+
 echo "Šajā ēdienreizē Tev būs jāēd ";
 $sk=0;
 while($r=mysqli_fetch_array($vardi)){
 	$nominativs = $r["nominativs"];
-	if ($sk==0)	{echo "<b>".$nominativs."</b>, "; $e1=$nominativs;}
-	if ($sk==1)	{echo "<b>".$nominativs."</b> un "; $e2=$nominativs;}
-	if ($sk==2)	{echo "<b>".$nominativs."</b>."; $e3=$nominativs;}
+	if ($sk==0)	{
+		echo "<b>".$nominativs."</b>, "; 
+		$e1=replace($nominativs);
+	}
+	if ($sk==1)	{
+		echo "<b>".$nominativs."</b> un "; 
+		$e2=replace($nominativs);
+	}
+	if ($sk==2)	{
+		echo "<b>".$nominativs."</b>."; 
+		$e3 = replace($nominativs);
+	}
 	$sk++;
 }
+$path='/img/food/';
 ?>
 </div>
-    <script src="https://www.google.com/jsapi?key=ABQIAAAAwNLfFSirmOLKkKGBImYROhR-aFOkHTCPd8GmiU2WFD4CBmb8xhT4K2zPKmh7e3lAi4XgaludyidIAw" type="text/javascript"></script>
-    <script type="text/javascript">
-    google.load('search', '1');
-    function searchComplete(searcher) {
-      if (searcher.results && searcher.results.length > 0) {
-        var contentDiv = document.getElementById('content');
-        contentDiv.innerHTML = '';
-        var results = searcher.results;
-          var result = results[0];
-          var imgContainer = document.createElement('div');
-          var newImg = document.createElement('img');
-          newImg.src = result.tbUrl;
-          imgContainer.appendChild(newImg);
-          contentDiv.appendChild(imgContainer);
-      }
-    }
-	
-	
-    google.load('search', '1');
-    function searchComplete2(searcher) {
-      if (searcher.results && searcher.results.length > 0) {
-        var contentDiv = document.getElementById('content2');
-        contentDiv.innerHTML = '';
-        var results = searcher.results;
-          var result = results[0];
-          var imgContainer = document.createElement('div');
-          var newImg = document.createElement('img');
-          newImg.src = result.tbUrl;
-          imgContainer.appendChild(newImg);
-          contentDiv.appendChild(imgContainer);
-      }
-    }
-	
-	
-    google.load('search', '1');
-    function searchComplete3(searcher) {
-      if (searcher.results && searcher.results.length > 0) {
-        var contentDiv = document.getElementById('content3');
-        contentDiv.innerHTML = '';
-        var results = searcher.results;
-          var result = results[0];
-          var imgContainer = document.createElement('div');
-          var newImg = document.createElement('img');
-          newImg.src = result.tbUrl;
-          imgContainer.appendChild(newImg);
-          contentDiv.appendChild(imgContainer);
-      }
-    }
-    function OnLoad() {
-      var imageSearch = new google.search.ImageSearch();
-      imageSearch.setRestriction(google.search.ImageSearch.RESTRICT_IMAGESIZE,
-                                 google.search.ImageSearch.IMAGESIZE_MEDIUM);
-      imageSearch.setSearchCompleteCallback(this, searchComplete, [imageSearch]);
-      imageSearch.execute("<?php echo $e1;?>");
-	  
-      var imageSearch2 = new google.search.ImageSearch();
-      imageSearch2.setRestriction(google.search.ImageSearch.RESTRICT_IMAGESIZE,
-                                 google.search.ImageSearch.IMAGESIZE_MEDIUM);
-      imageSearch2.setSearchCompleteCallback(this, searchComplete2, [imageSearch2]);
-      imageSearch2.execute("<?php echo $e2;?>");
-	  
-      var imageSearch = new google.search.ImageSearch();
-      imageSearch.setRestriction(google.search.ImageSearch.RESTRICT_IMAGESIZE,
-                                 google.search.ImageSearch.IMAGESIZE_MEDIUM);
-      imageSearch.setSearchCompleteCallback(this, searchComplete3, [imageSearch]);
-      imageSearch.execute("<?php echo $e3;?>");
-    }
-    google.setOnLoadCallback(OnLoad);
-    </script>
-<div style="margin:auto auto; width:440px;">
-	<div style="float:left;padding:5px;" id="content">Ielādē...</div> 
-	<div style="float:left;padding:5px;" id="content2">Ielādē...</div> 
-	<div style="float:left;padding:5px;" id="content3">Ielādē...</div>
+
+<div style="margin:auto auto; width:615px;">
+	<div style="float:left;padding:5px;display:inline;"><img style="max-width:200px" src="<?php echo $path.$e1.'.jpg'; ?>" /></div> 
+	<div style="float:left;padding:5px;display:inline;"><img style="max-width:200px" src="<?php echo $path.$e2.'.jpg'; ?>" /></div> 
+	<div style="float:left;padding:5px;display:inline;"><img style="max-width:200px" src="<?php echo $path.$e3.'.jpg'; ?>" /></div>
 </div>
