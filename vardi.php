@@ -83,7 +83,7 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
 </form>
 </h5>
 <br/>
-<div>
+<div style="text-align:center;">
 <?php
 $vardi = mysqli_query($connection, "SELECT id, tvits, nominativs 
 FROM words, tweets 
@@ -101,7 +101,7 @@ $cloud->orderBy('colour', 'desc');
 $cloud->setLimit(500);
 $myCloud = $cloud->showCloud('array');
 foreach ($myCloud as $cloudArray) {
-  echo ' &nbsp; <a href="'.$cloudArray['url'].'" class="word size'.$cloudArray['range'].'">'.$cloudArray['word'].'</a> &nbsp;';
+  echo ' &nbsp; <div style="display:inline-block;"><a href="'.$cloudArray['url'].'" class="word size'.$cloudArray['range'].'">'.$cloudArray['word'].'</a></div> &nbsp;';
 }
 
 //Cik rādīt?
