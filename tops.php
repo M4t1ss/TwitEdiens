@@ -91,7 +91,14 @@ echo "<tr>
 <th>Lietotājs</th>
 <th>Tvītu skaits</th>
 </tr>";
-$q = mysqli_query($connection, "SELECT screen_name, count( * ) skaits FROM tweets WHERE created_at between '$no' AND '$lidz' GROUP BY screen_name ORDER BY count( * ) DESC LIMIT 0 , 15");
+
+//Sevi un ziņu portālus neslavināsim :)
+$blacklist = array(
+    'laiki', 'epadomi', 'edienbots', 'gardedis_lv', 'LA_lv', 'JaunsLV', 
+    'StilaparksLv', 'ifaktors', 'nralv', 'DelfiLV', 'Twitediens'
+);
+
+$q = mysqli_query($connection, "SELECT screen_name, count( * ) skaits FROM tweets WHERE screen_name NOT IN ('".implode("','",$blacklist)."') AND created_at between '$no' AND '$lidz' GROUP BY screen_name ORDER BY count( * ) DESC LIMIT 0 , 15");
 while($r=mysqli_fetch_array($q)){
 if ($krasa==TRUE) {$kr=" class='even'";}else{$kr="";}
 $vards=$r["screen_name"];
