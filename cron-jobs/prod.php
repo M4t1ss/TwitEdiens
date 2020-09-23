@@ -36,8 +36,12 @@ while($r=mysqli_fetch_array($vardi)){
 	$xxxx = str_replace('ä','a',$xxxx);
 	$nosaukums[] = $xxxx;
 	$tvsk = $r["skaits"];
-	$text.=' #'.$usrn.' ('.$tvsk.'x)';
-	if($q<5){$text.=',';}else{$text.=' www.twitediens.ml';}
+	$text.=' '.$usrn.' ('.$tvsk.'x)';
+	if($q<5){
+		$text.=',';
+	}else{
+		$text.=' www.twitediens.tk/vardi';
+	}
 	$q++;
 }
 

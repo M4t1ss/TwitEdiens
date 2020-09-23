@@ -95,7 +95,7 @@ echo "<tr>
 //Sevi un ziņu portālus neslavināsim :)
 $blacklist = array(
     'laiki', 'epadomi', 'edienbots', 'gardedis_lv', 'LA_lv', 'JaunsLV', 
-    'StilaparksLv', 'ifaktors', 'nralv', 'DelfiLV', 'Twitediens'
+    'StilaparksLv', 'ifaktors', 'nralv', 'DelfiLV', 'Twitediens', 'budzis'
 );
 
 $q = mysqli_query($connection, "SELECT screen_name, count( * ) skaits FROM tweets WHERE screen_name NOT IN ('".implode("','",$blacklist)."') AND created_at between '$no' AND '$lidz' GROUP BY screen_name ORDER BY count( * ) DESC LIMIT 0 , 15");

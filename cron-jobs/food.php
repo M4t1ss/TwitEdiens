@@ -12,8 +12,8 @@ $text = 'Šodienas dižēdāji ir';
 
 //Sevi un ziņu portālus neslavināsim :)
 $blacklist = array(
-    'laiki', 'epadomi', 'edienbots', 'gardedis_lv', 
-    'StilaparksLv', 'ifaktors', 'nralv', 'DelfiLV', 'Twitediens'
+    'laiki', 'epadomi', 'edienbots', 'gardedis_lv', 'LA_lv', 'JaunsLV', 
+    'StilaparksLv', 'ifaktors', 'nralv', 'DelfiLV', 'Twitediens', 'budzis'
 );
 
 //dabū dienas ēdājus
@@ -22,9 +22,16 @@ $vardi = mysqli_query($connection, "SELECT distinct screen_name, count(screen_na
 while($r=mysqli_fetch_array($vardi)){
 	$usrn = $r["screen_name"];
 	$tvsk = $r["skaits"];
-	$text.=' @'.$usrn.' ('.$tvsk.'x)';
+	
+	if($q > 3){
+		$mentionsign = ' ';
+	}else{
+		$mentionsign = ' @';
+	}
+	
+	$text.=$mentionsign.$usrn.' ('.$tvsk.'x)';
 	if($q<5){$text.=',';}else{
-		if(strlen($text)<127) $text.=' www.twitediens.ml';
+		if(strlen($text)<127) $text.=' www.twitediens.tk/tops';
 	}
 	$q++;
 }
