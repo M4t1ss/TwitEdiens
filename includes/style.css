@@ -561,7 +561,40 @@ a.showLink:hover, a.hideLink:hover {
 	padding-bottom:5px;
 }
 
+#toptable{
+	margin:auto auto; 
+	width:550px;
+	text-align:center;
+}
+	#toptable2{
+		width:550px;
+		text-align:center;
+		border-spacing:0px;
+		border:1px solid white;
+	}
+	.tb1{
+		width: 5px;
+	}
+	.tb2{
+		max-width: 30px;
+	}
+	.tb3{
+		width: 15px;
+	}
+	.tb4{
+		width: 15px;
+	}
+	.tb5{
+		width: 15px;
+	}
+
 @media (max-width: 479px) {
+	#toptable{
+		width:100%;
+	}
+	#toptable2{
+		width:300px;
+	}
 	.TTS{
 		position: relative;
 		top: 0px;
@@ -659,4 +692,63 @@ a.showLink:hover, a.hideLink:hover {
 		padding: 1px 1px 1px 1px;
 		margin-left:0px;
 	}
+	.tb1{
+		width: 5px;
+	}
+	.tb2{
+		max-width: 20px;
+	}
+	.tb3{
+		width: 5px;
+	}
+	.tb4{
+		width: 5px;
+	}
+	.tb5{
+		width: 5px;
+	}
+}
+	
+	
+#ico1{
+	height:32px; 
+	position:fixed;
+	top:0px;
+	right:0px;	
+}
+#ico2{
+	height:32px; 
+	position:fixed;
+	top:0px;
+	right:32px;	
+}
+#ico3{
+	height:32px; 
+	position:fixed;
+	top:0px;
+	right:64px;	
+}
+
+
+@media (max-width: 1100px) {
+	
+	#ico1{
+		height:32px; 
+		position:fixed;
+		top:0px;
+		right:0px;	
+	}
+	#ico2{
+		height:32px; 
+		position:fixed;
+		top:32px;
+		right:0px;	
+	}
+	#ico3{
+		height:32px; 
+		position:fixed;
+		top:64px;
+		right:0px;	
+	}
+	
 }

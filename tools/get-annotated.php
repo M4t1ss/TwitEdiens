@@ -8,11 +8,9 @@ include "../includes/init_sql_latest.php";
 
 if($_GET['type'] == 'nei'){
 	$result= mysqli_query($connection, "SELECT id, screen_name, text FROM tweets WHERE emo = 0"); 
-}
-if($_GET['type'] == 'poz'){
+}elseif($_GET['type'] == 'poz'){
 	$result= mysqli_query($connection, "SELECT id, screen_name, text FROM tweets WHERE emo = 1"); 
-}
-if($_GET['type'] == 'neg'){
+}elseif($_GET['type'] == 'neg'){
 	$result= mysqli_query($connection, "SELECT id, screen_name, text FROM tweets WHERE emo = -1"); 
 }else{
 	$result= mysqli_query($connection, "SELECT emo, id, screen_name, text FROM tweets WHERE emo IS NOT NULL"); 
