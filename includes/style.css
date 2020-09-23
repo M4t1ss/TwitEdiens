@@ -660,3 +660,47 @@ a.showLink:hover, a.hideLink:hover {
 		margin-left:0px;
 	}
 }
+	
+	
+#ico1{
+	height:32px; 
+	position:fixed;
+	top:0px;
+	right:0px;	
+}
+#ico2{
+	height:32px; 
+	position:fixed;
+	top:0px;
+	right:32px;	
+}
+#ico3{
+	height:32px; 
+	position:fixed;
+	top:0px;
+	right:64px;	
+}
+
+
+@media (max-width: 1100px) {
+	
+	#ico1{
+		height:32px; 
+		position:fixed;
+		top:0px;
+		right:0px;	
+	}
+	#ico2{
+		height:32px; 
+		position:fixed;
+		top:32px;
+		right:0px;	
+	}
+	#ico3{
+		height:32px; 
+		position:fixed;
+		top:64px;
+		right:0px;	
+	}
+	
+}
