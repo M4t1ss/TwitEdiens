@@ -12,8 +12,8 @@ $text = 'Šodienas dižēdāji ir';
 
 //Sevi un ziņu portālus neslavināsim :)
 $blacklist = array(
-    'laiki', 'epadomi', 'edienbots', 'gardedis_lv', 'LA_lv', 'JaunsLV', 
-    'StilaparksLv', 'ifaktors', 'nralv', 'DelfiLV', 'Twitediens', 'budzis'
+    'laiki', 'epadomi', 'edienbots', 'gardedis_lv', 'LA_lv', 'JaunsLV', 'FOLKKLUBS', 
+    'StilaparksLv', 'ifaktors', 'nralv', 'DelfiLV', 'Twitediens', 'budzis', 'cafeleningrad'
 );
 
 //dabū dienas ēdājus

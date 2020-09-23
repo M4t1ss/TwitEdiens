@@ -94,11 +94,11 @@ echo "<tr>
 
 //Sevi un ziņu portālus neslavināsim :)
 $blacklist = array(
-    'laiki', 'epadomi', 'edienbots', 'gardedis_lv', 'LA_lv', 'JaunsLV', 
-    'StilaparksLv', 'ifaktors', 'nralv', 'DelfiLV', 'Twitediens', 'budzis'
+    'laiki', 'epadomi', 'edienbots', 'gardedis_lv', 'LA_lv', 'JaunsLV', 'FOLKKLUBS', 
+    'StilaparksLv', 'ifaktors', 'nralv', 'DelfiLV', 'Twitediens', 'budzis', 'cafeleningrad'
 );
 
-$q = mysqli_query($connection, "SELECT screen_name, count( * ) skaits FROM tweets WHERE screen_name NOT IN ('".implode("','",$blacklist)."') AND created_at between '$no' AND '$lidz' GROUP BY screen_name ORDER BY count( * ) DESC LIMIT 0 , 15");
+$q = mysqli_query($connection, "SELECT screen_name, count( * ) skaits FROM tweets WHERE screen_name NOT IN ('".implode("','",$blacklist)."') AND created_at between '$no' AND '$lidz' GROUP BY screen_name ORDER BY count( * ) DESC LIMIT 0 , 20");
 while($r=mysqli_fetch_array($q)){
 if ($krasa==TRUE) {$kr=" class='even'";}else{$kr="";}
 $vards=$r["screen_name"];
