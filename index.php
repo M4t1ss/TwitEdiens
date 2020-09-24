@@ -13,14 +13,13 @@ include "includes/init_sql_latest.php";
 <meta name="DC.title" lang="Latvian" content="TwitĒdiens - no Twitter par ēšanu" />
 <meta name="DC.creator" content="Matīss Rikters" />
 <meta name="DC.subject" lang="Latvian" content="TwitĒdiens; TwitEdiens; Twitter; Ēdiens; Food; tvīti; statistika; ēšana; dzeršana; ko ēst; ko dzert; tēja; šokolāde; mandarīni; konfektes; pica; saldējums; zupa; kafija; gaļa; kūka; pankūka; čipsi; siers; salāti; kartupeļi; ēdienu karte; ēdāju tops; ēšanas kalendārs; populārākie ēdieni; @M4t1ss; Matīss; Rikters; Matīss Rikters" />
-<meta name="DC.description" lang="Latvian" content="
-TwitĒdiens ievāc datus no Twitter, kur pieminēta ēšana, dzeršana, ēdienreizes, ēdieni vai dzērieni. Apskatāma detalizēta statistika par šiem datiem." />
+<meta name="DC.description" lang="Latvian" content="TwitĒdiens ievāc datus no Twitter, kur pieminēta ēšana, dzeršana, ēdienreizes, ēdieni vai dzērieni. Apskatāma detalizēta statistika par šiem datiem." />
 <meta name="DC.publisher" content="Keda" />
 <meta name="DC.contributor" content="Matīss Rikters" />
 <meta name="DC.type" scheme="DCTERMS.DCMIType" content="Text" />
 <meta name="DC.format" content="text/html" />
 <meta name="DC.format" content="7635 bytes" />
-<meta name="DC.identifier" scheme="DCTERMS.URI" content="http://twitediens.tk" />
+<meta name="DC.identifier" scheme="DCTERMS.URI" content="<?php echo "http://$_SERVER[HTTP_HOST]"; ?>" />
 <meta name="DC.language" scheme="DCTERMS.URI" content="Latvian" />
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="robots" content="index,follow" />
@@ -29,11 +28,17 @@ TwitĒdiens ievāc datus no Twitter, kur pieminēta ēšana, dzeršana, ēdienre
 tēja, šokolāde, mandarīni, konfektes, pica, saldējums, zupa, kafija, gaļa, kūka, pankūka, čipsi, siers, salāti, kartupeļi, ēdienu karte,
 ēdāju tops, ēšanas kalendārs, populārākie ēdieni, @M4t1ss, Matīss, Rikters, Matīss Rikters"/>
 <meta name="author" content="Matīss Rikters"/>
+<meta property="og:url" content="<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="lv_LV" />
+<meta property="og:title" content="TwitĒdiens - no Twitter par ēšanu" />
+<meta property="og:description" content="TwitĒdiens ievāc datus no Twitter, kur pieminēta ēšana, dzeršana, ēdienreizes, ēdieni vai dzērieni. Apskatāma detalizēta statistika par šiem datiem." />
+<meta property="og:image" content="<?php echo "http://$_SERVER[HTTP_HOST]"; ?>/img/logo.png" />
 <link href="/includes/apple-touch-icon.png" rel="apple-touch-icon" />
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-<script type="text/javascript" src="/includes/sorttable.js"></script>
+<script type="text/javascript" src="/includes/sorttable.min.js"></script>
 <script type="text/javascript" src="/includes/paging.js"></script>
-<link rel="stylesheet" type="text/css" href="/includes/jq/css/custom-theme/jquery-ui-1.8.16.custom.css" />	
+<link rel="stylesheet" type="text/css" href="/includes/jq/css/custom-theme/jquery-ui-1.8.16.custom.min.css" />	
 <link rel="stylesheet" type="text/css" href="/includes/style.css" />
 <link rel="stylesheet" type="text/css" href="/includes/print.css" media="print"/>
 <script type="text/javascript" src="/includes/jq/js/jquery-1.6.2.min.js"></script>

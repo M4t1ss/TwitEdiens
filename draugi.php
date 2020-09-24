@@ -9,14 +9,6 @@ $connectionT->post('friendships/destroy', array('screen_name' => $_GET['unfollow
 echo "<script type=\"text/javascript\">setTimeout(\"window.location = '?'\",250);</script>";
 }
 
-
-//kārtošana
-$ord=$_GET['ord'];
-$sort=$_GET['sort'];
-if($sort=='')$sort='sk';
-if($ord=='')$ord='desc';
-if($ord=='desc'){$ord0='asc';}else if($ord=='asc'){$ord0='desc';}else{$ord0='asc';}
-
 //Ja nav pieslēdzies, pārsūta uz pieslēgšanās lapu
 if (empty($_SESSION['access_token']) || empty($_SESSION['access_token']['oauth_token']) || empty($_SESSION['access_token']['oauth_token_secret'])) {
 ?>
@@ -32,10 +24,10 @@ $access_token = $_SESSION['access_token'];
 $connectionT = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oauth_token'], $access_token['oauth_token_secret']);
 $usr = $connectionT->get('account/verify_credentials');
 $krasa=TRUE;
-echo "<table id='results' style='margin:auto auto;border-spacing:0px;border:1px solid white;'>";
+echo "<table class='sortable' id='results' style='margin:auto auto;border-spacing:0px;border:1px solid white;'>";
 echo "<tr>
-<th><a href='/lapa/draugi&sort=liet&ord=".$ord0."'>Lietotājs</a></th>
-<th><a href='/lapa/draugi&sort=sk&ord=".$ord0."'>Tvīti</a></th>
+<th>Lietotājs</th>
+<th>Tvīti</th>
 <th></th>
 </tr>";
 //dabū draugu Twitter screen name
@@ -52,20 +44,12 @@ while ($nextCursor!=0){
 			$skaits = mysqli_num_rows($q);
 			if($skaits>0){
 				//sametam masīvā un sakārtojam masīvu
-				if($sort=='sk'){
-					$draugi[] = array('skaits' => $skaits, 'niks' => $niks, 'vards' => $vaards);
-				}else if($sort=='liet'){
-					$draugi[] = array('vards' => $vaards, 'niks' => $niks, 'skaits' => $skaits);
-				}
+				$draugi[] = array('skaits' => $skaits, 'niks' => $niks, 'vards' => $vaards);
 			}
 		}
 }
 //pārkārtojam masīvu
-if ($ord=='desc'){
 array_multisort($draugi, SORT_DESC);
-}else if ($ord=='asc'){
-array_multisort($draugi, SORT_ASC);
-}
 for($i=0;$i<sizeof($draugi);$i++){
 	$niks = $draugi[$i]['niks'];
 	$vaards = $draugi[$i]['vards'];
