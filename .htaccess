@@ -1,3 +1,4 @@
+<IfModule mod_rewrite.c>
 RewriteEngine on
 RewriteRule ^login?$ auth/redirect.php [L]
 RewriteRule ^logout?$ auth/clearsessions.php [L]
@@ -12,10 +13,11 @@ RewriteRule ^statistika?$ index.php?id=stat [L]
 RewriteRule ^smaidi?$ index.php?id=emo [L]
 RewriteRule ^draugs/([^/\.]+)/?$ index.php?id=draugs&dra=$1 [L]
 RewriteRule ^vards/([^/\.]+)/?$ index.php?id=vards&vards=$1 [L]
+RewriteRule ^atslegvards/([^/\.]+)/?$ index.php?id=atslegvards&vards=$1 [L]
 RewriteRule ^vieta/([^/\.]+)/?$ index.php?id=vieta&vieta=$1 [L]
 RewriteRule ^grupa/([^/\.]+)/?$ index.php?id=grupa&grupa=$1 [L]
-RewriteCond %{HTTP_HOST} !^twitediens\.tk$ [NC]
-RewriteRule ^(.*)$ http://twitediens.tk/$1 [R=301,L]
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 ExpiresActive On
 ExpiresByType image/jpg "access 1 month"
 ExpiresByType image/jpeg "access 1 month"
@@ -25,3 +27,34 @@ ExpiresByType text/css "access 1 month"
 ExpiresByType text/x-javascript "access 1 month"
 ExpiresByType image/x-icon "access 1 year"
 ExpiresDefault "access 2 days"
+</IfModule>
+<Files 403.shtml>
+order allow,deny
+allow from all
+</Files>
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# This domain inherits the “PHP” package.
+# php -- END cPanel-generated handler, do not edit
+
+# BEGIN cPanel-generated php ini directives, do not edit
+# Manual editing of this file may result in unexpected behavior.
+# To make changes to this file, use the cPanel MultiPHP INI Editor (Home >> Software >> MultiPHP INI Editor)
+# For more information, read our documentation (https://go.cpanel.net/EA4ModifyINI)
+<IfModule php5_module>
+   php_flag asp_tags Off
+   php_flag display_errors On
+   php_value max_execution_time 900
+   php_value max_input_time 900
+   php_value max_input_vars 10000
+   php_value memory_limit 512M
+   php_value session.gc_maxlifetime 1440
+   php_value session.save_path "/var/cpanel/php/sessions/ea-php56"
+   php_value upload_max_filesize 40M
+</IfModule>
+# END cPanel-generated php ini directives, do not edit
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP:X-Forwarded-SSL} !on
+RewriteCond %{HTTP_HOST} ^www\.twitediens\.tk$
+RewriteRule ^/?$ "https\:\/\/twitediens\.tk\/" [R=301,L]
+

@@ -85,7 +85,7 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
 <?php
 $krasa=TRUE;
 $i=1;
-echo "<table id='toptable2'>";
+echo "<table class='sortable' id='toptable2'>";
 echo "<tr>
 <th class='tb1'>Nr.</th>
 <th class='tb2'>Lietotājs</th>
