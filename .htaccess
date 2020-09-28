@@ -1,3 +1,4 @@
+<IfModule mod_rewrite.c>
 RewriteEngine on
 RewriteRule ^login?$ auth/redirect.php [L]
 RewriteRule ^logout?$ auth/clearsessions.php [L]
@@ -15,8 +16,8 @@ RewriteRule ^vards/([^/\.]+)/?$ index.php?id=vards&vards=$1 [L]
 RewriteRule ^atslegvards/([^/\.]+)/?$ index.php?id=atslegvards&vards=$1 [L]
 RewriteRule ^vieta/([^/\.]+)/?$ index.php?id=vieta&vieta=$1 [L]
 RewriteRule ^grupa/([^/\.]+)/?$ index.php?id=grupa&grupa=$1 [L]
-# RewriteCond %{HTTP_HOST} !^twitediens\.tk$ [NC]
-# RewriteRule ^(.*)$ http://twitediens.tk/$1 [R=301,L]
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 ExpiresActive On
 ExpiresByType image/jpg "access 1 month"
 ExpiresByType image/jpeg "access 1 month"
@@ -26,6 +27,7 @@ ExpiresByType text/css "access 1 month"
 ExpiresByType text/x-javascript "access 1 month"
 ExpiresByType image/x-icon "access 1 year"
 ExpiresDefault "access 2 days"
+</IfModule>
 <Files 403.shtml>
 order allow,deny
 allow from all
@@ -51,3 +53,8 @@ allow from all
    php_value upload_max_filesize 40M
 </IfModule>
 # END cPanel-generated php ini directives, do not edit
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP:X-Forwarded-SSL} !on
+RewriteCond %{HTTP_HOST} ^www\.twitediens\.tk$
+RewriteRule ^/?$ "https\:\/\/twitediens\.tk\/" [R=301,L]
+

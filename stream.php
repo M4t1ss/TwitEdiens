@@ -101,7 +101,7 @@ while($p=mysqli_fetch_array($latest)){
 </div>
 <?php
 //dabū 10 jaunākos tvītus
-$latest = mysqli_query($connection, "SELECT distinct media_url, expanded_url, date, text FROM media JOIN tweets ON tweets.id = media.tweet_id GROUP BY media_url ORDER BY date DESC limit 0, 40");
+$latest = mysqli_query($connection, "SELECT distinct media_url, expanded_url, date, text FROM media JOIN tweets ON tweets.id = media.tweet_id GROUP BY media_url ORDER BY date DESC limit 0, 25");
 ?>
 
 <div id="content2">
@@ -117,7 +117,7 @@ $latest = mysqli_query($connection, "SELECT distinct media_url, expanded_url, da
 			?>
 			<div style="<?php if ((time()-StrToTime($ttime))<5){echo"opacity:".((time()-StrToTime($ttime))/5).";";}?> display:inline;" >
 				<a target="_blank" href="<?php echo $expanded_url; ?>">
-					<img alt="<?php echo $ttext;?>" src="<?php echo $media_url; ?>" />
+					<img alt="<?php echo $ttext;?>" src="<?php echo str_replace('http://', 'https://', $media_url); ?>" />
 				</a>
 			</div>
 			<?php
