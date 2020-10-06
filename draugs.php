@@ -35,10 +35,38 @@ $("#tabs").tabs({
 	});
 });
 </script>
+<?php
+require 'includes/tmhOAuth/tmhOAuth.php';
+require_once('auth/config.php');
+$tmhOAuth = new tmhOAuth(array(
+  'consumer_key'    => CONSUMER_KEY,
+  'consumer_secret' => CONSUMER_SECRET,
+  'user_token'      => OAUTH_TOKEN,
+  'user_secret'     => OAUTH_SECRET,
+));
+
+  $code = $tmhOAuth->user_request(array(
+    'method' => 'GET',
+    'url'    => $tmhOAuth->url('1.1/users/show'),
+    'params' => array(
+      'screen_name'    => $draugs,
+    )
+  ));
+if ($code == 200) {
+	$resp = json_decode($tmhOAuth->response['response']);
+	$profpic = $resp->profile_image_url_https;
+	$profpic = str_replace("normal","bigger",$profpic);
+}
+?>
 <h2 style='margin:auto auto; text-align:center;'><a href="https://twitter.com/#!/<?php echo $draugs;?>">@<?php echo $draugs;?></a></h2>
-<h4 style='margin:auto auto; text-align:center;'><?php echo $vaards;?>
+<h4 style='margin:auto auto; text-align:center;'>
+	<?php echo $vaards;?><br/>
+	<img style="max-height:128px;" src="<?php echo $profpic;?>"/>
+</h4>
 <br/>
-<img style="max-height:128px;" src="https://api.twitter.com/1/users/profile_image?screen_name=<?php echo $draugs;?>&size=original"/></h4>
+<pre>
+</pre>
+
 <br/>
 <div id="tabs">
 <ul>
@@ -235,7 +263,7 @@ echo $draugs." vēl nav pieminējis nevienu ēdienu vai dzērienu.";
 <?php
 //Paņem dažādās vietas
 ?>
-		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+		<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
 		<script type="text/javascript">
 		$(window).resize(initialize);
 			function initialize() {
@@ -256,7 +284,7 @@ echo $draugs." vēl nav pieminējis nevienu ēdienu vai dzērienu.";
 					if(mysqli_num_rows($irvieta)==0){
 						//ja nav tādas vietas datu bāzē,
 						//dabū vietas koordinātas
-						$string = file_get_contents("http://maps.googleapis.com/maps/api/geocode/json?address=".str_replace(" ", "%20",$vieta)."&sensor=true");
+						$string = file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?address=".str_replace(" ", "%20",$vieta)."&sensor=true");
 						$json=json_decode($string, true);
 						$lat = $json["results"][0]["geometry"]["location"]["lat"];
 						$lng = $json["results"][0]["geometry"]["location"]["lng"];
