@@ -102,14 +102,12 @@ else
 		$useful		= min($negative, $positive) * 3;
 		
 		# Iekrāsosim pozitīvos un negatīvos vārdus
-		// $pwords = file("/home/baumuin/public_html/twitediens.tk/lv_positive_words_from_pumpurs", FILE_IGNORE_NEW_LINES);
-		// $nwords = file("/home/baumuin/public_html/twitediens.tk/lv_negative_words_from_pumpurs", FILE_IGNORE_NEW_LINES);
-		$filename = "/home/baumuin/public_html/twitediens.tk/lv_positive_words_from_pumpurs";
+		$filename = "classify/lv_positive_words_from_pumpurs";
 		$fp = @fopen($filename, 'r');
 		if ($fp) {
 		   $pwords = explode("\n", fread($fp, filesize($filename)));
 		}
-		$filename = "/home/baumuin/public_html/twitediens.tk/lv_positive_words_from_pumpurs";
+		$filename = "classify/lv_positive_words_from_pumpurs";
 		$fp = @fopen($filename, 'r');
 		if ($fp) {
 		   $nwords = explode("\n", fread($fp, filesize($filename)));

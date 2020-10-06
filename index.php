@@ -111,7 +111,14 @@ function showHide(shID) {
 </div>
 </div>
 <div id="contents" style="display: none;margin-top:5px;margin-bottom:5px;padding:6px;">
-<?php $id = $_GET['id']; if ( !$id || $id == "" ) { include "stream.php"; } else { include($id.".php"); } ?>
+<?php 
+if ( !isset($_GET['id']) || $_GET['id'] == "" ) {
+	include "stream.php"; 
+} else { 
+	$id = $_GET['id']; 
+	include($id.".php"); 
+} 
+?>
 <br class="clear" />
 <br/>
 </div>

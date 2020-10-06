@@ -1,9 +1,9 @@
 <?php
 //pieslēdzamies vietējam SQL serverim
-$db_server = "localhost";
-$db_database = "twitter_alerts";
-$db_user = "root";
-$db_password = "root";
+$db_server = "";
+$db_database = "";
+$db_user = "";
+$db_password = "";
 //pieslēdzamies SQL serverim
 $connection = mysqli_connect($db_server, $db_user, $db_password, $db_database);
 mysqli_set_charset($connection, "utf8mb4");
@@ -27,7 +27,7 @@ mysqli_set_charset($connection, "utf8mb4");
 
    //izdzēš tvītu tabulu, ja tāda ir, un izveido jaunu
    //jeb... pārvieto informāciju uz noliktavas datubāzi
-	$file_content = file("/home/baumuin/public_html/foodbot/inserts.sql");
+	$file_content = file("inserts.sql");
 	// Šis tika noņemts 13.05.2020
 	// hourly.php to dara katru stundu
 	// INSERT INTO baumuin_twitediens.vardiDiena (vards,skaits,datums)

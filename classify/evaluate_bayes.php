@@ -4,8 +4,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 
-require("/home/baumuin/public_html/twitediens.tk/classify/stem.php");
-require("/home/baumuin/public_html/twitediens.tk/classify/Bayes.php");
+require("classify/stem.php");
+require("classify/Bayes.php");
 
 #$text = $_GET["text"];
 
@@ -26,7 +26,7 @@ require("/home/baumuin/public_html/twitediens.tk/classify/Bayes.php");
 function classify($text){
 	//Load model
 	$classifier = new \Niiknow\Bayes();
-	$stateJson = file_get_contents("/home/baumuin/public_html/twitediens.tk/classify/model-nelemm-more-full-nohash.json");
+	$stateJson = file_get_contents("classify/model-nelemm-more-full-nohash.json");
 	$classifier->fromJson($stateJson);
 	
 	$text = strtolower($text);
