@@ -1,5 +1,22 @@
 <?php
-if($_POST['submit']) //ja piespiests parādīt
+	
+//pirms cik dienām bija pirmais tvīts?
+$die = mysqli_query($connection, "SELECT min( created_at ) diena FROM tweets");
+$mdie=mysqli_fetch_array($die);
+$laiks=strtotime($mdie['diena']);
+$laiks=date("U", $laiks);
+$seconds = time() - $laiks;
+$days = ceil($seconds / 60 / 60 / 24);
+
+//pirms cik dienām bija jaunākais tvīts?
+$die = mysqli_query($connection, "SELECT max( created_at ) diena FROM tweets");
+$mdie=mysqli_fetch_array($die);
+$laiks=strtotime($mdie['diena']);
+$laiks=date("U", $laiks);
+$seconds = time() - $laiks;
+$maxdays = floor($seconds / 60 / 60 / 24);
+
+if(isset($_POST['submit'])) //ja piespiests parādīt
 {
 	header('Content-type: text/HTML; charset=utf-8');
    //ievācam visus mainīgos
@@ -28,34 +45,17 @@ if($_POST['submit']) //ja piespiests parādīt
 	$lidz=date("Y-m-d", $lidz);
 
 }else{//ja ne, lai parādās pēdējā mēneša dati...
-	//dabū šodienas datumu
-	$menesiss = $menesis = date("m");
-	$dienasz = $diena = date("d");
-	$gadss = $gads = date("Y");
-	//izrēķina datumu pirms mēneša
-	$menesis--;
-	if($menesis==0){
-		$menesis=12;
-		$gads--;
-	}
-	$no = $gads."-".$menesis."-".$diena;
-	$lidz = $gadss."-".$menesiss."-".$dienasz;
+	$lidz =date("y-m-d", $laiks);
+	$no = date("y-m-d", strtotime("-1 months", $laiks));
 }
 	$nn=strtotime($no);
 	$nn=date("d-m-Y", $nn);
 	$ll=strtotime($lidz);
 	$ll=date("d-m-Y", $ll);
-//pirms cik dienām bija pirmais tvīts?
-$die = mysqli_query($connection, "SELECT min( created_at ) diena FROM tweets");
-$mdie=mysqli_fetch_array($die);
-$laiks=strtotime($mdie['diena']);
-$laiks=date("U", $laiks);
-$seconds = time() - $laiks;
-$days = ceil($seconds / 60 / 60 / 24);
 ?>
 <script type="text/javascript">
 $(function() {
-	$( "#from, #to" ).datepicker({ minDate: -<?php echo $days; ?>, maxDate: "+0D" });
+	$( "#from, #to" ).datepicker({ minDate: -<?php echo $days; ?>, maxDate: -<?php echo $maxdays; ?> });
 	var dates = $( "#from, #to" ).datepicker({
 		defaultDate: "+1w",
 		changeMonth: true,

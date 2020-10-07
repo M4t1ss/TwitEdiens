@@ -1,4 +1,6 @@
-<?php if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) ob_start("ob_gzhandler"); else ob_start();
+<?php 
+error_reporting(E_ERROR);
+if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) ob_start("ob_gzhandler"); else ob_start();
 session_start();
 if (substr($_SERVER['SERVER_NAME'], 0, 4) === 'www.')
 {
