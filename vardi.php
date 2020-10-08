@@ -1,80 +1,7 @@
 <?php
 include 'includes/tag/classes/wordcloud.class.php';
-if($_POST['submit']) //ja piespiests parādīt
-{
-	header('Content-type: text/HTML; charset=utf-8');
-   //ievācam visus mainīgos
-   $no = strip_tags($_POST['from']);
-   $lidz = strip_tags($_POST['to']);
-	if($no==""){
-	$no=date("y-m-d");
-	}
-	if($lidz==""){
-	$lidz=date("y-m-d");
-	}
-	if($no==$lidz) {
-		$no--;
-		$no = date("y-m-d",strtotime($no."-24 hours"));
-	}
-	$ns=strtotime($no);
-	$ls=strtotime($lidz);
-	if($ns>$ls){
-	$x=$no;
-	$no=$lidz;
-	$lidz=$x;
-	}
-	$no=strtotime($no);
-	$no=date("Y-m-d", $no);
-	$lidz=strtotime($lidz);
-	$lidz=date("Y-m-d", $lidz);
-
-}else{//ja ne, lai parādās pēdējā mēneša dati...
-	//dabū šodienas datumu
-	$menesiss = $menesis = date("m");
-	$dienasz = $diena = date("d");
-	$gadss = $gads = date("Y");
-	//izrēķina datumu pirms mēneša
-	$menesis--;
-	if($menesis==0){
-		$menesis=12;
-		$gads--;
-	}
-	$no = $gads."-".$menesis."-".$diena;
-	$lidz = $gadss."-".$menesiss."-".$dienasz;
-}
-	$nn=strtotime($no);
-	$nn=date("d-m-Y", $nn);
-	$ll=strtotime($lidz);
-	$ll=date("d-m-Y", $ll);
-//pirms cik dienām bija pirmais tvīts?
-$die = mysqli_query($connection, "SELECT min( created_at ) diena FROM tweets");
-$mdie=mysqli_fetch_array($die);
-$laiks=strtotime($mdie['diena']);
-$laiks=date("U", $laiks);
-$seconds = time() - $laiks;
-$days = ceil($seconds / 60 / 60 / 24);
+include "includes/laiks.php";
 ?>
-<script type="text/javascript">
-$(function() {
-	$( "#from, #to" ).datepicker({ minDate: -<?php echo $days; ?>, maxDate: "+0D" });
-	var dates = $( "#from, #to" ).datepicker({
-		defaultDate: "+1w",
-		changeMonth: true,
-		onSelect: function( selectedDate ) {
-			var option = this.id == "from" ? "minDate" : "maxDate",
-				instance = $( this ).data( "datepicker" ),
-				date = $.datepicker.parseDate(
-					instance.settings.dateFormat ||
-					$.datepicker._defaults.dateFormat,
-					selectedDate, instance.settings );
-			dates.not( this ).datepicker( "option", option, date );
-		}
-	});
-	$( "#from, #to" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
-	$( "#from, #to" ).datepicker($.datepicker.regional['fr']);
-	$( "#to" ).datepicker({ currentText: 'Today' });
-});
-</script>
 <h2 style='margin:auto auto; text-align:center;'>Populārākie produkti</h2>
 <h5 style='margin:auto auto; text-align:center;'>
 <form method="post" action="?id=vardi">
@@ -114,7 +41,7 @@ $showing = 15;
 //sākumā paņem pēdējo 3 dienu X populārākos vārdus un tad paskatās to vārdu skaitu pa nedēļu...
 $vardi = mysqli_query($connection, "SELECT vards, AVG(skaits) as sk
 FROM `vardiDiena`
-WHERE datums BETWEEN curdate( ) - INTERVAL 144 HOUR AND curdate( )
+WHERE datums BETWEEN curdate( ) - INTERVAL ".(($maxdays*24)+144)." HOUR AND curdate( ) - INTERVAL ".($maxdays*24)." HOUR
 GROUP BY vards
 ORDER BY sk DESC
 LIMIT 0 , ".$showing);
@@ -141,7 +68,7 @@ while($r=mysqli_fetch_array($vardi)){
 		
 		if($pirmaisDatums && (0 != $difference)){
 			//Laikam šim produktam šodien vēl nav tvītu... jāieliek nullīte
-			for($di=0; $di < $difference; $di++){
+			for($di=0+$maxdays; $di < $difference; $di++){
 				$dienas[$i][$uu]['vards'] = $topvards;
 				$dienas[$i][$uu]['skaits'] = '0';
 				$dienas[$i][$uu]['datums'] =   date('Y-m-d',strtotime("-".$di." days"));
@@ -159,7 +86,7 @@ while($r=mysqli_fetch_array($vardi)){
 	$uu++;
 }
 ?>
-<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
   google.load('visualization', '1', {packages: ['corechart']});
 </script>
