@@ -23,13 +23,13 @@ require("classify/Bayes.php");
 
 #echo "</pre>";
 
-function classify($text, $type=false){
+function classify($text, $type = false){
 	//Load model
 	$classifier = new \Niiknow\Bayes();
 	$stateJson = file_get_contents("classify/model-proc2-nohash-smile.json");
 	$classifier->fromJson($stateJson);
 	
-	$text = strtolower($text);
+	// $text = strtolower($text);
 	$text = replace_usr($text);
 	$text = replace_url($text);
 	$text = replace_usr($text);
@@ -45,9 +45,11 @@ function classify($text, $type=false){
 	if(strlen(trim($stemmedLine)) > 0)
 		if(!$type)
 			return $classifier->categorize(trim($stemmedLine));
-		elseif($type=="probs")
+		elseif($type == "probs")
 			return $classifier->getProbs(trim($stemmedLine));
-		elseif($type=="text")
+		elseif($type == "freqs")
+			return $classifier->getFreqs(trim($stemmedLine));
+		elseif($type == "text")
 			return trim($stemmedLine);
 	else
 		return "nei";
