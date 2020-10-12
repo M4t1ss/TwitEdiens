@@ -26,7 +26,7 @@ require("classify/Bayes.php");
 function classify($text, $type = false){
 	//Load model
 	$classifier = new \Niiknow\Bayes();
-	$stateJson = file_get_contents("classify/model-proc2-nohash-smile.json");
+	$stateJson = file_get_contents("classify/model-proc2-nohash-smile-latest.json");
 	$classifier->fromJson($stateJson);
 	
 	// $text = strtolower($text);
