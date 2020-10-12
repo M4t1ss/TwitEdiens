@@ -120,6 +120,33 @@ class Bayes
 
         return $chosenCategory;
     }
+	
+    public function getProbs($text)
+    {
+        $that           = $this;
+        $maxProbability = -INF;
+        $chosenCategory = null;
+
+        if ($that->totalDocuments > 0) {
+            $probabilities = $that->probabilities($text);
+        }
+
+        return $probabilities;
+    }
+	
+    public function getFreqs($text)
+    {
+        $that           = $this;
+        $maxProbability = -INF;
+        $chosenCategory = null;
+		
+        if ($that->totalDocuments > 0) {
+			$tokens         = ($that->tokenizer)($text);
+			$frequencyTable = $that->frequencyTable($tokens);
+        }
+
+        return $frequencyTable;
+    }
 
     /**
      * Build a frequency hashmap where
