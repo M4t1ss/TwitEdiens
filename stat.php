@@ -61,9 +61,9 @@ while($p=mysqli_fetch_array($g1)){
       data.addColumn('string', 'Topping');
       data.addColumn('number', 'Slices');
       data.addRows([
-        ['Pozitīvi', <?php echo $poz ?>],
-        ['Negatīvi', <?php echo $neg ?>],
-        ['Neitrāli', <?php echo $nei ?>]]);
+        ['Pozitīvi', <?php echo $poz; ?>],
+        ['Negatīvi', <?php echo $neg; ?>],
+        ['Neitrāli', <?php echo $nei; ?>]]);
       var options = {'title':'Tvītu noskaņojums',
                      'backgroundColor':'transparent',
 					 'colors': ['green', 'red', 'gray'],
@@ -168,9 +168,9 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
 	<?php
 	//Tvītu kopskaits
 	$kopa = mysqli_query($connection, "
-	select count(text) skaits from tweets, vietas where created_at between '$no' AND '$lidz' and vietas.nosaukums = tweets.geo and vietas.valsts = 'Latvia' union
+	SELECT count(text) skaits from tweets, vietas where created_at between '$no' AND '$lidz' and vietas.nosaukums = tweets.geo and vietas.valsts = 'Latvia' union
 	SELECT count( distinct screen_name ) skaits FROM tweets where created_at between '$no' AND '$lidz' union
-	SELECT count( distinct nominativs ) skaits FROM words union
+	SELECT count( distinct nominativs ) skaits FROM words WHERE datums between '$no' AND '$lidz' union
 	SELECT count( DISTINCT words.tvits ) skaits FROM words, tweets WHERE words.tvits = tweets.id AND tweets.created_at between '$no' AND '$lidz' union
 	SELECT count( * ) skaits FROM tweets where created_at between '$no' AND '$lidz' union
 	SELECT count( geo ) skaits FROM tweets where created_at between '$no' AND '$lidz' and geo!=''
@@ -203,12 +203,13 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
 				break;
 		}
 	}
+	$nlv = $atrviet-$lv;
 	echo "Kopā par ēšanas tēmām ir <b>".$tvkopa."</b> tvītu.<br/>";
 	echo "Kopā ir <b>".$tvparedkopa."</b> tvītu, kuros pieminēts kāds ēdiens vai dzēriens.<br/>";
 	echo "Tos rakstījuši <b>".$scrnme."</b> dažādi lietotāji.<br/>";
 	echo "<b>".$atrviet."</b> no tiem norādīta atrašanās vieta.<br/>";
 	echo "<b>".$lv."</b> no tiem ir rakstīti Latvijā.<br/>";
-	echo "<b>".($atrviet-$lv)."</b> no tiem ir rakstīti ārzemēs.<br/>";
+	echo "<b>".$nlv."</b> no tiem ir rakstīti ārzemēs.<br/>";
 	echo "Kopā ir <b>".$dazvietas."</b> dažādas atrašanās vietas <b>".$dazvalst."</b> dažādās valstīs.<br/>";
 	echo "Kopā ir pieminēti <b>".$vardi."</b> dažādi ēdieni un dzērieni.<br/>";
 	?>
