@@ -98,7 +98,7 @@ function showHide(shID) {
 <?php include_once("includes/analyticstracking.php") ?>
 <a href="http://instagram.com/twitediens/"><img alt="Twitēdiena Instragram konts" id="ico1" src="/img/ins.png"/></a>
 <a href="http://twitter.com/twitediens/"><img alt="Twitēdiena Twitter konts" id="ico2" src="/img/twi.png"/></a>
-<a href="https://translate.tilde.com/en/Translate/Website?url=<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>"><img alt="Translate into English" id="ico3" src="/img/uk.png"/></a>
+<a href="https://webtranslate.tilde.com/en/Translate/Website?url=<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>"><img alt="Translate into English" id="ico3" src="/img/uk.png"/></a>
 <h1 style="padding-top:3px;"><img alt="TwitĒdiens Logo" src="/img/te.png" />TwitĒdiens</h1>
 <div id="top" style="padding:8px;">
 <div id="nav"><a href=""><span style="opacity: 0;">.</span></a>
