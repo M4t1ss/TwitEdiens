@@ -40,7 +40,7 @@ while($r=mysqli_fetch_array($vardi)){
 	if($q<5){
 		$text.=',';
 	}else{
-		$text.=' www.twitediens.tk/vardi';
+		// $text.=' www.twitediens.tk/vardi';
 	}
 	$q++;
 }

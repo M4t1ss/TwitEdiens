@@ -12,8 +12,8 @@ $text = 'Šodienas dižēdāji ir';
 
 //Sevi un ziņu portālus neslavināsim :)
 $blacklist = array(
-    'laiki', 'epadomi', 'edienbots', 'gardedis_lv', 'LA_lv', 'JaunsLV', 'FOLKKLUBS', 
-    'StilaparksLv', 'ifaktors', 'nralv', 'DelfiLV', 'Twitediens', 'budzis', 'cafeleningrad'
+    'laiki', 'epadomi', 'edienbots', 'gardedis_lv', 'LA_lv', 'JaunsLV', 'FOLKKLUBS', 'ltvzinas', 'integreta_bibl', 'receptes_eu', 
+    'StilaparksLv', 'ifaktors', 'nralv', 'DelfiLV', 'Twitediens', 'budzis', 'cafeleningrad', '8Lounge1', 'VidzAugstskola'
 );
 
 //dabū dienas ēdājus
@@ -31,7 +31,7 @@ while($r=mysqli_fetch_array($vardi)){
 	
 	$text.=$mentionsign.$usrn.' ('.$tvsk.'x)';
 	if($q<5){$text.=',';}else{
-		if(strlen($text)<127) $text.=' www.twitediens.tk/tops';
+		// if(strlen($text)<127) $text.=' www.twitediens.tk/tops';
 	}
 	$q++;
 }

@@ -64,10 +64,10 @@ else
 <div id="contents" style="display: none;margin-top:10px;margin-bottom:10px;padding:6px;text-align:center; min-height:200px;">
 	<?php
 		//Pelēkais saraksts ar ziņu u.c. kontiem, kuriem pārsvarā tvīti ir neitrāli
-		$trashy_acc = array('epadomi', 'laiki', 'brevings', 'Twitediens', 'RIGATV24', 'FOLKKLUBS', 'brooklynpubriga', 'ltvzinas'
-			, 'beerhouseNo1', 'EgilsDambis1', 'Skrundas_novads', 'dievietelv', 'flowsnet_com', 'cafeleningrad', 'gardedis_lv', 'CafeOsiris'
-			, 'portals_santa', 'JaunsLV', 'KJ_Sievietem', 'Kalnciemaiela', '1188', 'budzis', 'LV_portals', 'lsmlv', 'LA_lv', 'nralv'
-			, 'SakuraSushiBars', 'visidarbi', 'LifeHackslv', 'irLV', 'LIIA_LV', 'receptes_eu', 'latvijasbizness', 'shmaramagda');
+		$trashy_acc = array('epadomi', 'laiki', 'brevings', 'Twitediens', 'RIGATV24', 'FOLKKLUBS', 'brooklynpubriga', 'ltvzinas', 'RestoransChat'
+			, 'beerhouseNo1', 'EgilsDambis1', 'Skrundas_novads', 'dievietelv', 'flowsnet_com', 'cafeleningrad', 'gardedis_lv', 'CafeOsiris', 'VidzAugstskola'
+			, 'portals_santa', 'JaunsLV', 'KJ_Sievietem', 'Kalnciemaiela', '1188', 'budzis', 'LV_portals', 'lsmlv', 'LA_lv', 'nralv', '8Lounge1'
+			, 'SakuraSushiBars', 'visidarbi', 'LifeHackslv', 'irLV', 'LIIA_LV', 'receptes_eu', 'latvijasbizness', 'shmaramagda', 'integreta_bibl');
 			
 		//Paņem jaunāko vēl nemarķēto tvītu, kura autors nav pelēkajā sarakstā
 		$latest = mysqli_query($connection, "SELECT * FROM tweets WHERE emo IS NULL AND screen_name NOT IN ( '" . implode( "', '" , $trashy_acc ) . "' ) ORDER BY created_at DESC limit 0, 1");
