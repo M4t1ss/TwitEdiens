@@ -1,5 +1,5 @@
-INSERT INTO baumuin_twitediens.tweets (id, text, screen_name, created_at, geo, emo)
-	SELECT id, text, screen_name, created_at, geo, emo FROM baumuin_food.tweets
+INSERT INTO baumuin_twitediens.tweets (id, text, screen_name, created_at, geo, emo, quoted_id)
+	SELECT id, text, screen_name, created_at, geo, emo, quoted_id FROM baumuin_food.tweets
 	WHERE DATE(tweets.created_at) = DATE(NOW() - INTERVAL 1 DAY);
 INSERT INTO baumuin_twitediens.words (vards, nominativs, tvits, irediens, grupa, eng, datums)
 	SELECT  vards, nominativs, tvits, irediens, grupa, eng, datums FROM baumuin_food.words

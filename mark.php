@@ -64,10 +64,10 @@ else
 <div id="contents" style="display: none;margin-top:10px;margin-bottom:10px;padding:6px;text-align:center; min-height:200px;">
 	<?php
 		//Pelēkais saraksts ar ziņu u.c. kontiem, kuriem pārsvarā tvīti ir neitrāli
-		$trashy_acc = array('epadomi', 'laiki', 'brevings', 'Twitediens', 'RIGATV24', 'FOLKKLUBS', 'brooklynpubriga', 'ltvzinas'
-			, 'beerhouseNo1', 'EgilsDambis1', 'Skrundas_novads', 'dievietelv', 'flowsnet_com', 'cafeleningrad', 'gardedis_lv', 'CafeOsiris'
-			, 'portals_santa', 'JaunsLV', 'KJ_Sievietem', 'Kalnciemaiela', '1188', 'budzis', 'LV_portals', 'lsmlv', 'LA_lv', 'nralv'
-			, 'SakuraSushiBars', 'visidarbi', 'LifeHackslv', 'irLV', 'LIIA_LV', 'receptes_eu', 'latvijasbizness', 'shmaramagda');
+		$trashy_acc = array('epadomi', 'laiki', 'brevings', 'Twitediens', 'RIGATV24', 'FOLKKLUBS', 'brooklynpubriga', 'ltvzinas', 'RestoransChat'
+			, 'beerhouseNo1', 'EgilsDambis1', 'Skrundas_novads', 'dievietelv', 'flowsnet_com', 'cafeleningrad', 'gardedis_lv', 'CafeOsiris', 'VidzAugstskola'
+			, 'portals_santa', 'JaunsLV', 'KJ_Sievietem', 'Kalnciemaiela', '1188', 'budzis', 'LV_portals', 'lsmlv', 'LA_lv', 'nralv', '8Lounge1'
+			, 'SakuraSushiBars', 'visidarbi', 'LifeHackslv', 'irLV', 'LIIA_LV', 'receptes_eu', 'latvijasbizness', 'shmaramagda', 'integreta_bibl');
 			
 		//Paņem jaunāko vēl nemarķēto tvītu, kura autors nav pelēkajā sarakstā
 		$latest = mysqli_query($connection, "SELECT * FROM tweets WHERE emo IS NULL AND screen_name NOT IN ( '" . implode( "', '" , $trashy_acc ) . "' ) ORDER BY created_at DESC limit 0, 1");
@@ -77,6 +77,17 @@ else
 		$username = $p["screen_name"];
 		$text = $p["text"];
 		$ttime = $p["created_at"];
+		$quoted_id = $p["quoted_id"];
+		$quoted_text = NULL;
+		
+		if($quoted_id != NULL){
+			$quoted = mysqli_query($connection, "SELECT text, screen_name FROM tweets WHERE id = $quoted_id");
+			$qq=mysqli_fetch_array($quoted);
+			if($qq){
+				$quoted_text = $qq["text"];
+				$quoted_screen_name = $qq["screen_name"];
+			}
+		}
 		
 		$automatic = classify($text);
 		
@@ -102,14 +113,12 @@ else
 		$useful		= min($negative, $positive) * 3;
 		
 		# Iekrāsosim pozitīvos un negatīvos vārdus
-		// $pwords = file("/home/baumuin/public_html/twitediens.tk/lv_positive_words_from_pumpurs", FILE_IGNORE_NEW_LINES);
-		// $nwords = file("/home/baumuin/public_html/twitediens.tk/lv_negative_words_from_pumpurs", FILE_IGNORE_NEW_LINES);
-		$filename = "/home/baumuin/public_html/twitediens.tk/lv_positive_words_from_pumpurs";
+		$filename = "classify/lv_positive_words_from_pumpurs";
 		$fp = @fopen($filename, 'r');
 		if ($fp) {
 		   $pwords = explode("\n", fread($fp, filesize($filename)));
 		}
-		$filename = "/home/baumuin/public_html/twitediens.tk/lv_positive_words_from_pumpurs";
+		$filename = "classify/lv_negative_words_from_pumpurs";
 		$fp = @fopen($filename, 'r');
 		if ($fp) {
 		   $nwords = explode("\n", fread($fp, filesize($filename)));
@@ -156,7 +165,14 @@ else
 	</audio>
 	<div style="max-width:750px; margin:auto auto; text-align:center;<?php if ((time()-StrToTime($ttime))<5){echo"opacity:".((time()-StrToTime($ttime))/5).";";}?>" class="tweet">
 	<div class="lietotajs"><?php echo '<a style="text-decoration:none;color:#658304;" href="/draugs/'.trim($username).'">@'.trim($username).'</a> ';?> ( <?php echo $ttime;?> )</div>
-	<div style="padding-top:10px;"><?php echo $text; ?><br/></div>
+	<div style="padding-top:10px;"><?php 
+		echo $text; 
+		if(isset($quoted_text) && strlen($quoted_text) > 0){
+			echo "<div style='border:1px dotted #000; border-radius:5px; padding:2px;'><small>";
+			echo '<a style="text-decoration:none;color:#658304;" href="/draugs/'.str_replace('@','',trim($quoted_screen_name)).'">@'.trim($quoted_screen_name).'</a>: ';
+			echo $quoted_text."</small></div><br/>";
+		}
+		?><br/></div>
 	<br/>
 		<input type="hidden" value="<?php echo $id;?>" name="id"/>
 		<input TYPE="submit" name="neg" class="senti neg" <?php echo $automatic=="neg"?"style='border:3px dashed #AC00E6'":"style='border:3px solid red'"; ?> type="button" value="Negatīvs" />
