@@ -40,14 +40,14 @@ while($r=mysqli_fetch_array($vardi)){
 	if($q<5){
 		$text.=',';
 	}else{
-		$text.=' www.twitediens.tk/vardi';
+		// $text.=' www.twitediens.tk/vardi';
 	}
 	$q++;
 }
 
 
 //Twitter autentificēšanās
-require '/home/baumuin/public_html/foodbot/tmhOAuth/tmhOAuth2.php';
+require '../includes/tmhOAuth/tmhOAuth.php';
 $tmhOAuth = new tmhOAuth(array(
   'consumer_key'    => CONSUMER_KEY,
   'consumer_secret' => CONSUMER_SECRET,
@@ -55,7 +55,7 @@ $tmhOAuth = new tmhOAuth(array(
   'user_secret'     => OAUTH_SECRET,
 ));
 
-$path='/home/baumuin/public_html/twitediens.tk/img/food/';
+$path='../img/food/';
 
 //after request 
 $media_id=array();

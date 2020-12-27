@@ -2,11 +2,11 @@
 session_start();
 require_once('auth/twitteroauth/twitteroauth.php');
 require_once('auth/config.php');
-if($_GET['unfollow'] && $_GET['unfollow']!=''){
-$access_token = $_SESSION['access_token'];
-$connectionT = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oauth_token'], $access_token['oauth_token_secret']);
-$connectionT->post('friendships/destroy', array('screen_name' => $_GET['unfollow']));
-echo "<script type=\"text/javascript\">setTimeout(\"window.location = '?'\",250);</script>";
+if(isset($_GET['unfollow']) && $_GET['unfollow']!=''){
+	$access_token = $_SESSION['access_token'];
+	$connectionT = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token['oauth_token'], $access_token['oauth_token_secret']);
+	$connectionT->post('friendships/destroy', array('screen_name' => $_GET['unfollow']));
+	echo "<script type=\"text/javascript\">setTimeout(\"window.location = '?'\",250);</script>";
 }
 
 //Ja nav pieslēdzies, pārsūta uz pieslēgšanās lapu

@@ -1,79 +1,8 @@
 <?php
+include "includes/laiks.php";
 // Turn off all error reporting
 error_reporting(0);
-if($_POST['submit']) //ja piespiests parādīt
-{
-	header('Content-type: text/HTML; charset=utf-8');
-   //ievācam visus mainīgos
-   $no = strip_tags($_POST['from']);
-   $lidz = strip_tags($_POST['to']);
-	if($no==""){
-	$no=date("y-m-d");
-	}
-	if($lidz==""){
-	$lidz=date("y-m-d");
-	}
-	if($no==$lidz) {
-		$no--;
-		$no = date("y-m-d",strtotime($no."-24 hours"));
-	}
-	$ns=strtotime($no);
-	$ls=strtotime($lidz);
-	if($ns>$ls){
-	$x=$no;
-	$no=$lidz;
-	$lidz=$x;
-	}
-	$no=strtotime($no);
-	$no=date("Y-m-d", $no);
-	$lidz=strtotime($lidz);
-	$lidz=date("Y-m-d", $lidz);
-
-}else{//ja ne, lai parādās pēdējā mēneša dati...
-	//dabū šodienas datumu
-	$menesiss = $menesis = date("m");
-	$dienasz = $diena = date("d");
-	$gadss = $gads = date("Y");
-	//izrēķina datumu pirms mēneša
-	$menesis--;
-	if($menesis==0){
-		$menesis=12;
-		$gads--;
-	}
-	$no = $gads."-".$menesis."-".$diena;
-	$lidz = $gadss."-".$menesiss."-".$dienasz;
-}
-	$nn=strtotime($no);
-	$nn=date("d-m-Y", $nn);
-	$ll=strtotime($lidz);
-	$ll=date("d-m-Y", $ll);
-//pirms cik dienām bija pirmais tvīts?
-$die = mysqli_query($connection, "SELECT min( created_at ) diena FROM tweets");
-$mdie=mysqli_fetch_array($die);
-$laiks=strtotime($mdie['diena']);
-$laiks=date("U", $laiks);
-$seconds = time() - $laiks;
-$days = ceil($seconds / 60 / 60 / 24);
 ?>
-<script type="text/javascript">
-$(function() {
-	$( "#from, #to" ).datepicker({ minDate: -<?php echo $days; ?>, maxDate: "+0D" });
-	var dates = $( "#from, #to" ).datepicker({
-		defaultDate: "+1w",
-		changeMonth: true,
-		onSelect: function( selectedDate ) {
-			var option = this.id == "from" ? "minDate" : "maxDate",
-				instance = $( this ).data( "datepicker" ),
-				date = $.datepicker.parseDate(
-					instance.settings.dateFormat ||
-					$.datepicker._defaults.dateFormat,
-					selectedDate, instance.settings );
-			dates.not( this ).datepicker( "option", option, date );
-		}
-	});
-	$( "#from, #to" ).datepicker($.datepicker.regional['fr']);
-});
-</script>
 <h2 style='margin:auto auto; text-align:center;'>Twitter gardēžu karte</h2>
 <h5 style='margin:auto auto; text-align:center;font-size:12px;'>
 <form method="post" action="?id=karte">
@@ -106,7 +35,7 @@ $q = mysqli_query($connection, "SELECT distinct geo, count( * ) skaits FROM `twe
 					if(mysqli_num_rows($irvieta)==0){
 						//ja nav tādas vietas datu bāzē,
 						//dabū vietas koordinātas
-						$string = file_get_contents("http://maps.googleapis.com/maps/api/geocode/json?address=".str_replace(" ", "%20",$vieta)."&sensor=true");
+						$string = file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?address=".str_replace(" ", "%20",$vieta)."&sensor=true");
 						$json=json_decode($string, true);
 						$gar = sizeof($json["results"][0]["address_components"]);
 						for ($z = 0; $z < $gar; $z++){
@@ -225,9 +154,7 @@ foreach ($reg_code as $key => $value){
    if ($value['sk']==1) {$tviti=" tvīts";} else {$tviti=" tvīti";}
    if($key != "RIX"){
 	if ($value['sk'] > $maxVal) $maxVal = $value['sk'];
-	?>
-		data.addRows([[ '<?php echo $value['cc']."-".$key;?>',<?php echo $value['sk'];?>,'<?php echo str_replace("'","",$value['ad'])." - ".$value['sk'].$tviti;?>']]);
-	<?
+		echo "data.addRows([[ '".$value['cc']."-".$key."',".$value['sk'].",'".str_replace("'","",$value['ad'])." - ".$value['sk'].$tviti."']]);";
 	}else{
 		$rixcc=$value['cc'];
 		$rixad=$value['ad'];
@@ -250,7 +177,6 @@ foreach ($reg_code as $key => $value){
 
 		
 <!-- new google map chart -->
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
 	google.load('visualization', '1', {'packages': ['geochart']});
 	google.setOnLoadCallback(drawVisualization);
@@ -266,13 +192,11 @@ $maxVal = 0;
 foreach ($country_code as $key => $value){
    if ($value['sk']==1) {$tviti=" tvīts";} else {$tviti=" tvīti";}
    if($key != "LV"){
-	?>
-	data.addRows([[ '<?php echo $key;?>',<?php echo $value;?>,'<?php echo $value.$tviti;?>']]);
-	<?
-	if ($value > $maxVal) $maxVal = $value;
+		echo "data.addRows([[ '".$key."', ".$value.",'".$value.$tviti."']]);";
+		if ($value > $maxVal) $maxVal = $value;
 	}
-}
-?>
+} 
+	?>
 		data.addRows([[ 'LV',<?php echo $maxVal*1.3;?>,'<?php echo "Daudz tvītu";?>']]);
 
         var options = {

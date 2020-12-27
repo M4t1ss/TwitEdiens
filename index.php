@@ -1,4 +1,6 @@
-<?php if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) ob_start("ob_gzhandler"); else ob_start();
+<?php 
+error_reporting(E_ERROR);
+if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) ob_start("ob_gzhandler"); else ob_start();
 session_start();
 if (substr($_SERVER['SERVER_NAME'], 0, 4) === 'www.')
 {
@@ -96,7 +98,7 @@ function showHide(shID) {
 <?php include_once("includes/analyticstracking.php") ?>
 <a href="http://instagram.com/twitediens/"><img alt="Twitēdiena Instragram konts" id="ico1" src="/img/ins.png"/></a>
 <a href="http://twitter.com/twitediens/"><img alt="Twitēdiena Twitter konts" id="ico2" src="/img/twi.png"/></a>
-<a href="https://translate.tilde.com/en/Translate/Website?url=<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>"><img alt="Translate into English" id="ico3" src="/img/uk.png"/></a>
+<a href="https://webtranslate.tilde.com/en/Translate/Website?url=<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>"><img alt="Translate into English" id="ico3" src="/img/uk.png"/></a>
 <h1 style="padding-top:3px;"><img alt="TwitĒdiens Logo" src="/img/te.png" />TwitĒdiens</h1>
 <div id="top" style="padding:8px;">
 <div id="nav"><a href=""><span style="opacity: 0;">.</span></a>
@@ -111,7 +113,14 @@ function showHide(shID) {
 </div>
 </div>
 <div id="contents" style="display: none;margin-top:5px;margin-bottom:5px;padding:6px;">
-<?php $id = $_GET['id']; if ( !$id || $id == "" ) { include "stream.php"; } else { include($id.".php"); } ?>
+<?php 
+if ( !isset($_GET['id']) || $_GET['id'] == "" ) {
+	include "stream.php"; 
+} else { 
+	$id = $_GET['id']; 
+	include($id.".php"); 
+} 
+?>
 <br class="clear" />
 <br/>
 </div>

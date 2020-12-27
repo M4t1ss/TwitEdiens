@@ -1,9 +1,9 @@
 <?php
 //pieslēdzamies vietējam SQL serverim
-$db_server = "localhost";
-$db_database = "baumuin_food";
-$db_user = "baumuin_bauma";
-$db_password = "{GIwlpQ<?3>g";
+$db_server = "";
+$db_database = "";
+$db_user = "";
+$db_password = "";
 //pieslēdzamies SQL serverim
 $connection = mysqli_connect($db_server, $db_user, $db_password, $db_database);
 mysqli_set_charset($connection, "utf8mb4");
@@ -53,7 +53,7 @@ $vardi = mysqli_query($connection, $COPY);
 
 // //izdzēš tvītu tabulu, ja tāda ir, un izveido jaunu
 // //jeb... pārvieto informāciju uz noliktavas datubāzi
-// $file_content = file("/home/baumuin/public_html/foodbot/inserts.sql");
+// $file_content = file("inserts.sql");
 // $query = "";
 // foreach($file_content as $sql_line){
   // if(trim($sql_line) != "" && strpos($sql_line, "--") === false){

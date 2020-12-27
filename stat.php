@@ -1,79 +1,5 @@
 <?php
-if($_POST['submit']) //ja piespiests parādīt
-{
-	header('Content-type: text/HTML; charset=utf-8');
-   //ievācam visus mainīgos
-   $no = strip_tags($_POST['from']);
-   $lidz = strip_tags($_POST['to']);
-	if($no==""){
-	$no=date("y-m-d");
-	}
-	if($lidz==""){
-	$lidz=date("y-m-d");
-	}
-	if($no==$lidz) {
-		$no--;
-		$no = date("y-m-d",strtotime($no."-24 hours"));
-	}
-	$ns=strtotime($no);
-	$ls=strtotime($lidz);
-	if($ns>$ls){
-	$x=$no;
-	$no=$lidz;
-	$lidz=$x;
-	}
-	$no=strtotime($no);
-	$no=date("Y-m-d", $no);
-	$lidz=strtotime($lidz);
-	$lidz=date("Y-m-d", $lidz);
-}else{//ja ne, lai parādās pēdējā mēneša dati...
-	//dabū šodienas datumu
-	$menesiss = $menesis = date("m");
-	$dienasz = $diena = date("d");
-	$gadss = $gads = date("Y");
-	//izrēķina datumu pirms mēneša
-	$menesis--;
-	if($menesis==0){
-		$menesis=12;
-		$gads--;
-	}
-	$no = $gads."-".$menesis."-".$diena;
-	$lidz = $gadss."-".$menesiss."-".$dienasz;
-}
-	$nn=strtotime($no);
-	$nn=date("d-m-Y", $nn);
-	$ll=strtotime($lidz);
-	$ll=date("d-m-Y", $ll);
-//pirms cik dienām bija pirmais tvīts?
-$die = mysqli_query($connection, "SELECT min( created_at ) diena FROM tweets");
-$mdie=mysqli_fetch_array($die);
-$laiks=strtotime($mdie['diena']);
-$laiks=date("U", $laiks);
-$seconds = time() - $laiks;
-$days = ceil($seconds / 60 / 60 / 24);
-?>
-<script type="text/javascript">
-$(function() {
-	$( "#from, #to" ).datepicker({ minDate: -<?php echo $days; ?>, maxDate: "+0D" });
-	var dates = $( "#from, #to" ).datepicker({
-		defaultDate: "+1w",
-		changeMonth: true,
-		onSelect: function( selectedDate ) {
-			var option = this.id == "from" ? "minDate" : "maxDate",
-				instance = $( this ).data( "datepicker" ),
-				date = $.datepicker.parseDate(
-					instance.settings.dateFormat ||
-					$.datepicker._defaults.dateFormat,
-					selectedDate, instance.settings );
-			dates.not( this ).datepicker( "option", option, date );
-		}
-	});
-	$( "#from, #to" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
-	$( "#from, #to" ).datepicker($.datepicker.regional['fr']);
-	$( "#to" ).datepicker({ currentText: 'Today' });
-});
-</script>
-<?php
+include "includes/laiks.php";
 //pozitīvie
 $kopa = mysqli_query($connection, "SELECT distinct emo, count( * ) skaits FROM tweets where created_at between '$no' AND '$lidz' group by emo order by skaits desc");
 while($p=mysqli_fetch_array($kopa)){
@@ -135,9 +61,9 @@ while($p=mysqli_fetch_array($g1)){
       data.addColumn('string', 'Topping');
       data.addColumn('number', 'Slices');
       data.addRows([
-        ['Pozitīvi', <?php echo $poz ?>],
-        ['Negatīvi', <?php echo $neg ?>],
-        ['Neitrāli', <?php echo $nei ?>]]);
+        ['Pozitīvi', <?php echo $poz; ?>],
+        ['Negatīvi', <?php echo $neg; ?>],
+        ['Neitrāli', <?php echo $nei; ?>]]);
       var options = {'title':'Tvītu noskaņojums',
                      'backgroundColor':'transparent',
 					 'colors': ['green', 'red', 'gray'],
@@ -242,9 +168,9 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
 	<?php
 	//Tvītu kopskaits
 	$kopa = mysqli_query($connection, "
-	select count(text) skaits from tweets, vietas where created_at between '$no' AND '$lidz' and vietas.nosaukums = tweets.geo and vietas.valsts = 'Latvia' union
+	SELECT count(text) skaits from tweets, vietas where created_at between '$no' AND '$lidz' and vietas.nosaukums = tweets.geo and vietas.valsts = 'Latvia' union
 	SELECT count( distinct screen_name ) skaits FROM tweets where created_at between '$no' AND '$lidz' union
-	SELECT count( distinct nominativs ) skaits FROM words union
+	SELECT count( distinct nominativs ) skaits FROM words WHERE datums between '$no' AND '$lidz' union
 	SELECT count( DISTINCT words.tvits ) skaits FROM words, tweets WHERE words.tvits = tweets.id AND tweets.created_at between '$no' AND '$lidz' union
 	SELECT count( * ) skaits FROM tweets where created_at between '$no' AND '$lidz' union
 	SELECT count( geo ) skaits FROM tweets where created_at between '$no' AND '$lidz' and geo!=''
@@ -277,12 +203,13 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
 				break;
 		}
 	}
+	$nlv = $atrviet-$lv;
 	echo "Kopā par ēšanas tēmām ir <b>".$tvkopa."</b> tvītu.<br/>";
 	echo "Kopā ir <b>".$tvparedkopa."</b> tvītu, kuros pieminēts kāds ēdiens vai dzēriens.<br/>";
 	echo "Tos rakstījuši <b>".$scrnme."</b> dažādi lietotāji.<br/>";
 	echo "<b>".$atrviet."</b> no tiem norādīta atrašanās vieta.<br/>";
 	echo "<b>".$lv."</b> no tiem ir rakstīti Latvijā.<br/>";
-	echo "<b>".($atrviet-$lv)."</b> no tiem ir rakstīti ārzemēs.<br/>";
+	echo "<b>".$nlv."</b> no tiem ir rakstīti ārzemēs.<br/>";
 	echo "Kopā ir <b>".$dazvietas."</b> dažādas atrašanās vietas <b>".$dazvalst."</b> dažādās valstīs.<br/>";
 	echo "Kopā ir pieminēti <b>".$vardi."</b> dažādi ēdieni un dzērieni.<br/>";
 	?>

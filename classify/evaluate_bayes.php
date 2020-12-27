@@ -4,8 +4,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 
-require("/home/baumuin/public_html/twitediens.tk/classify/stem.php");
-require("/home/baumuin/public_html/twitediens.tk/classify/Bayes.php");
+require("classify/stem.php");
+require("classify/Bayes.php");
 
 #$text = $_GET["text"];
 
@@ -23,13 +23,13 @@ require("/home/baumuin/public_html/twitediens.tk/classify/Bayes.php");
 
 #echo "</pre>";
 
-function classify($text){
+function classify($text, $type = false){
 	//Load model
 	$classifier = new \Niiknow\Bayes();
-	$stateJson = file_get_contents("/home/baumuin/public_html/twitediens.tk/classify/model-nelemm-more-full-nohash.json");
+	$stateJson = file_get_contents("classify/model-proc2-nohash-smile-latest.json");
 	$classifier->fromJson($stateJson);
 	
-	$text = strtolower($text);
+	// $text = strtolower($text);
 	$text = replace_usr($text);
 	$text = replace_url($text);
 	$text = replace_usr($text);
@@ -43,30 +43,30 @@ function classify($text){
 	}
 	
 	if(strlen(trim($stemmedLine)) > 0)
-		return $classifier->categorize(trim($stemmedLine));
+		if(!$type)
+			return $classifier->categorize(trim($stemmedLine));
+		elseif($type == "probs")
+			return $classifier->getProbs(trim($stemmedLine));
+		elseif($type == "freqs")
+			return $classifier->getFreqs(trim($stemmedLine));
+		elseif($type == "text")
+			return trim($stemmedLine);
 	else
 		return "nei";
 }
 
 function tokenize($str){
+	$str = str_replace(" ", " ", $str);
 	$arr = array();
 	// for the character classes
 	// see http://php.net/manual/en/regexp.reference.unicode.php
-	$pat = '/
-	            ([\pZ\pC]*)			# match any separator or other
-	                                # in sequence
-	            (
-	                [^\pP\pZ\pC]+ |	# match a sequence of characters
-	                                # that are not punctuation,
-	                                # separator or other
-	                .				# match punctuations one by one
-	            )
-	            ([\pZ\pC]*)			# match a sequence of separators
-	                                # that follows
-	        /xu';
+	$pat = '~[@]?[0-9a-zA-ZÀ-ỿ]+|\p{P}|\S~u';
 	preg_match_all($pat,$str,$arr);
 	
-	$combo = implode(" ", $arr[2]);
+	foreach($arr[0] as $key => $value)
+		if(strlen(trim($value))==0 || preg_match('/\\d/', $value) > 0)
+			unset($arr[0][$key]); 
+	$combo = implode(" ", $arr[0]);
 	
 	$combo = str_replace("#", "", $combo);
 	$combo = str_replace("  ", " ", $combo);
@@ -75,7 +75,7 @@ function tokenize($str){
 }
 
 function replace_usr($str){
-	$pattern = '/(^|\W)(@([0-9a-zA-Z_]+))/';
+	$pattern = '/(^|\W)(@([0-9a-zA-Z_āčēģīķļņšūžĀČĒĢĪĶĻŅŠŪŽ]+))/';
 	$output = preg_replace($pattern, ' @usr', $str);
 	$output = str_replace("@usr @usr", "@usr", $output);
 	$output = str_replace("@usr @usr", "@usr", $output);
