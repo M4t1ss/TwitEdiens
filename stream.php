@@ -30,20 +30,22 @@ var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Const
     // At least Safari 3+: "[object HTMLElementConstructor]"
 var isChrome = !!window.chrome && !isOpera;              // Chrome 1+
 var isIE = /*@cc_on!@*/false || !!document.documentMode;   // At least IE6
-
+$.ajaxSetup ({
+    // Disable caching of AJAX responses
+    cache: false
+});
 $(document).ready(function(){
 	$("#content").load("tviti.php");
 	$("#photos").load("loader.php");
-	$(function() {
+	
+	setInterval(function() {
+		$("#content").load("tviti.php");
+	}, 2000);
+	if(!isOpera && !isChrome){
 		setInterval(function() {
-			$("#content").load("tviti.php");
-		}, 1500);
-		if(!isOpera && !isChrome){
-			setInterval(function() {
-				$("#photos").load("loader.php");
-			}, 5000);
-		}
-	});
+			$("#photos").load("loader.php");
+		}, 10000);
+	}
 });
 
 </script>

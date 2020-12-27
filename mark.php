@@ -77,6 +77,17 @@ else
 		$username = $p["screen_name"];
 		$text = $p["text"];
 		$ttime = $p["created_at"];
+		$quoted_id = $p["quoted_id"];
+		$quoted_text = NULL;
+		
+		if($quoted_id != NULL){
+			$quoted = mysqli_query($connection, "SELECT text, screen_name FROM tweets WHERE id = $quoted_id");
+			$qq=mysqli_fetch_array($quoted);
+			if($qq){
+				$quoted_text = $qq["text"];
+				$quoted_screen_name = $qq["screen_name"];
+			}
+		}
 		
 		$automatic = classify($text);
 		
@@ -107,7 +118,7 @@ else
 		if ($fp) {
 		   $pwords = explode("\n", fread($fp, filesize($filename)));
 		}
-		$filename = "classify/lv_positive_words_from_pumpurs";
+		$filename = "classify/lv_negative_words_from_pumpurs";
 		$fp = @fopen($filename, 'r');
 		if ($fp) {
 		   $nwords = explode("\n", fread($fp, filesize($filename)));
@@ -154,7 +165,14 @@ else
 	</audio>
 	<div style="max-width:750px; margin:auto auto; text-align:center;<?php if ((time()-StrToTime($ttime))<5){echo"opacity:".((time()-StrToTime($ttime))/5).";";}?>" class="tweet">
 	<div class="lietotajs"><?php echo '<a style="text-decoration:none;color:#658304;" href="/draugs/'.trim($username).'">@'.trim($username).'</a> ';?> ( <?php echo $ttime;?> )</div>
-	<div style="padding-top:10px;"><?php echo $text; ?><br/></div>
+	<div style="padding-top:10px;"><?php 
+		echo $text; 
+		if(isset($quoted_text) && strlen($quoted_text) > 0){
+			echo "<div style='border:1px dotted #000; border-radius:5px; padding:2px;'><small>";
+			echo '<a style="text-decoration:none;color:#658304;" href="/draugs/'.str_replace('@','',trim($quoted_screen_name)).'">@'.trim($quoted_screen_name).'</a>: ';
+			echo $quoted_text."</small></div><br/>";
+		}
+		?><br/></div>
 	<br/>
 		<input type="hidden" value="<?php echo $id;?>" name="id"/>
 		<input TYPE="submit" name="neg" class="senti neg" <?php echo $automatic=="neg"?"style='border:3px dashed #AC00E6'":"style='border:3px solid red'"; ?> type="button" value="Negatīvs" />
