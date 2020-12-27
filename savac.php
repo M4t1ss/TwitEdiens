@@ -71,6 +71,8 @@ function save_tweet($tweet_data, $connection){
 	
 	//attīra
 	$ntext = clean_text($qtext);
+	$tc = trashy_count($qtext);
+	$edieni = 0;
 	
 	if ($ntext!="") {
 		$vardi = explode(" ", $ntext);
@@ -110,25 +112,27 @@ function save_tweet($tweet_data, $connection){
 			}
 		}
 	
-		if($quoted_id == NULL)
-			$ok_r = mysqli_query($connection, "INSERT INTO tweets (id ,text ,screen_name, created_at, geo) VALUES ('$qidd', '$qtext', '$qscreen_name', '$db_date', '$qgeo')");
-		else
-			$ok_r = mysqli_query($connection, "INSERT INTO tweets (id ,text ,screen_name, created_at, geo, quoted_id) VALUES ('$qidd', '$qtext', '$qscreen_name', '$db_date', '$qgeo', '$quoted_id')");
-		
-		// pieminētie lietotāji
-		if (sizeof($quser_mentions)>0) {
-			for ($i = 0; $i < sizeof($quser_mentions); $i++){
-				$mention = $quser_mentions[$i]['screen_name'];
-				$ok_m = mysqli_query($connection, "INSERT INTO mentions (screen_name, tweet_id, mention, date) VALUES ('$qscreen_name', '$qidd', '$mention', '$db_date')");
+		if($edieni > 0 || $qtext[0]==="@" || $tc < 3){
+			if($quoted_id == NULL)
+				$ok_r = mysqli_query($connection, "INSERT INTO tweets (id ,text ,screen_name, created_at, geo) VALUES ('$qidd', '$qtext', '$qscreen_name', '$db_date', '$qgeo')");
+			else
+				$ok_r = mysqli_query($connection, "INSERT INTO tweets (id ,text ,screen_name, created_at, geo, quoted_id) VALUES ('$qidd', '$qtext', '$qscreen_name', '$db_date', '$qgeo', '$quoted_id')");
+			
+			// pieminētie lietotāji
+			if (sizeof($quser_mentions)>0) {
+				for ($i = 0; $i < sizeof($quser_mentions); $i++){
+					$mention = $quser_mentions[$i]['screen_name'];
+					$ok_m = mysqli_query($connection, "INSERT INTO mentions (screen_name, tweet_id, mention, date) VALUES ('$qscreen_name', '$qidd', '$mention', '$db_date')");
+				}
 			}
-		}
-		
-		// bildes
-		if (sizeof($qmedia)>0 && $tweet_data['retweeted']==false) {
-			for ($i = 0; $i < sizeof($qmedia); $i++){
-				$media_url = $qmedia[$i]['media_url'];
-				$expanded_url = $qmedia[$i]['expanded_url'];
-				$ok_m = mysqli_query($connection, "INSERT INTO media (tweet_id, media_url, expanded_url, date) VALUES ('$qidd', '$media_url', '$expanded_url', '$db_date')");
+			
+			// bildes
+			if (sizeof($qmedia)>0 && $tweet_data['retweeted']==false) {
+				for ($i = 0; $i < sizeof($qmedia); $i++){
+					$media_url = $qmedia[$i]['media_url'];
+					$expanded_url = $qmedia[$i]['expanded_url'];
+					$ok_m = mysqli_query($connection, "INSERT INTO media (tweet_id, media_url, expanded_url, date) VALUES ('$qidd', '$media_url', '$expanded_url', '$db_date')");
+				}
 			}
 		}
 	}
@@ -158,6 +162,39 @@ function clean_text($text){
 	return $ntext;
 }
 
+function trashy_count($text){
+	$badChars = [
+		"𝓪","𝞪","ă","å","𝛼","𝐚","à","á","ä","Æ","α","𝗮","𝜶","ａ","𝒂","â","𝘢",
+		"ď","𝗱","𝖣","𝓭","𝒅",
+		"ę","Ę","ȩ","𝐞","𝗲","𝑒","ｅ","ȅ","ҽ","ë","𝙚","𝘦","ě","ê","𝔢",
+		"𝖿","𝒇","𝘧","𝗳","ẝ","𝑓",
+		"ġ","ǧ",
+		"𝐡","𝙝",
+		"Ĩ","Ȉ","İ","Ĭ","Į","𝚤","ꭵ","î","𝖎","ǐ","į","í",
+		"𝙠","𝒌","𝐤","𝗸",
+		"ȯ","ò","ō","ȫ","𝝾","𝗼","𝞸","𝐨","õ","ȭ","ó","ø","ö","Ø","𝙤",
+		"ŀ","𐌠",
+		"ŉ","𝖓","𝐧","𝗻","ñ","ǹ","𝘯","𝗇","ń",
+		"𝐫","𝔯",
+		"𝘁","ŧ","ț",
+		"𝘀","ŝ","𝑠","𝒔","ƽ","ś",
+		"ȗ","ǖ","ǜ","ȕ","ű","𝙪","𝞄","û","ú","ü",
+		"𝒘","𝓦","ѡ","𝘄","Ŵ",
+		"𝔁",
+		"ÿ","ч","𝛾","ȳ",
+		"ß",
+		"ء","،","خ","ا","ف","ث","ً","،","ش","ر","ض","و","م","ق","ع","ز","ة","،","إ","س","ئ","ل","ك","ن","ي","أ","ح","ب","ت","ه",
+	];
+	$trashy = 0;
+	for($i=0; $i<count($badChars); $i++){
+		$position = mb_strpos($text, $badChars[$i]);
+		if($position!==false){
+			$trashy++;
+			echo "'".$badChars[$i]."' @ [".$position."]; ";
+		}
+	}
+	return $trashy;
+}
 
 // Start streaming
 $sc = new FilterTrackConsumer(OAUTH_TOKEN, OAUTH_SECRET, Phirehose::METHOD_FILTER);

@@ -16,8 +16,11 @@ while($p=mysqli_fetch_array($latest)){
 	if($quoted_id != NULL){
 		$quoted = mysqli_query($connection, "SELECT text, screen_name FROM tweets WHERE id = $quoted_id");
 		$qq=mysqli_fetch_array($quoted);
-		$quoted_text = $qq["text"];
-		$quoted_screen_name = $qq["screen_name"];
+
+		if($qq){
+			$quoted_text = $qq["text"];
+			$quoted_screen_name = $qq["screen_name"];
+		}
 	}
 		
 	$automatic = classify($text);
