@@ -16,8 +16,8 @@ $text = 'Šodienas dižēdāji ir';
 
 //Sevi un ziņu portālus neslavināsim :)
 $blacklist = array(
-    'laiki', 'epadomi', 'edienbots', 'gardedis_lv', 'LA_lv', 'JaunsLV', 'FOLKKLUBS', 'ltvzinas', 'integreta_bibl', 'receptes_eu', 
-    'StilaparksLv', 'ifaktors', 'nralv', 'DelfiLV', 'Twitediens', 'budzis', 'cafeleningrad', '8Lounge1', 'VidzAugstskola'
+    'laiki', 'epadomi', 'edienbots', 'gardedis_lv', 'LA_lv', 'JaunsLV', 'FOLKKLUBS', 'ltvzinas', 'integreta_bibl', 'receptes_eu', 'TautaRuna', 'zinicenu', 
+    'StilaparksLv', 'ifaktors', 'nralv', 'DelfiLV', 'Twitediens', 'budzis', 'cafeleningrad', '8Lounge1', 'VidzAugstskola', 'IntaMolodcova', 'GalasServiss'
 );
 //Šie konti ir priduraki - tos noteikti @nepieminēt :)
 $priduraki = array(

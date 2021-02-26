@@ -24,8 +24,8 @@ echo "<tr>
 
 //Sevi un ziņu portālus neslavināsim :)
 $blacklist = array(
-    'laiki', 'epadomi', 'edienbots', 'gardedis_lv', 'LA_lv', 'JaunsLV', 'FOLKKLUBS', 'KJ_Sievietem', '8Lounge1', 'VidzAugstskola', 
-    'StilaparksLv', 'ifaktors', 'nralv', 'DelfiLV', 'Twitediens', 'budzis', 'cafeleningrad', 'RestoransChat', 'integreta_bibl', 'receptes_eu'
+    'laiki', 'epadomi', 'edienbots', 'gardedis_lv', 'LA_lv', 'JaunsLV', 'FOLKKLUBS', 'KJ_Sievietem', '8Lounge1', 'VidzAugstskola', 'IntaMolodcova', 'GalasServiss', 
+    'StilaparksLv', 'ifaktors', 'nralv', 'DelfiLV', 'Twitediens', 'budzis', 'cafeleningrad', 'RestoransChat', 'integreta_bibl', 'receptes_eu', 'TautaRuna', 'zinicenu'
 );
 
 $q = mysqli_query($connection, "SELECT screen_name, count( * ) skaits FROM tweets 

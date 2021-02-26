@@ -10,9 +10,9 @@ $days = ceil($seconds / 60 / 60 / 24);
 //pirms cik dienām bija jaunākais tvīts?
 $die = mysqli_query($connection, "SELECT max( created_at ) diena FROM tweets");
 $mdie=mysqli_fetch_array($die);
-$laiks=strtotime($mdie['diena']);
+$laiks=strtotime($mdie['diena']."+1 day");
 $laiks=date("U", $laiks);
-$seconds = time() - $laiks;
+$seconds = time() - $laiks + 86400;
 $maxdays = floor($seconds / 60 / 60 / 24);
 
 if(isset($_POST['submit'])) //ja piespiests parādīt
