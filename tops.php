@@ -1,5 +1,6 @@
 <?php
 include "includes/laiks.php";
+include "includes/blacklist.php";
 ?>
 <h2 style='margin:auto auto; text-align:center;'>Twitter gardēžu TOPS</h2>
 <h5 style='margin:auto auto; text-align:center;'>
@@ -21,12 +22,6 @@ echo "<tr>
 <th class='tb4'>Ēdieni</th>
 <th class='tb5'>Vietas</th>
 </tr>";
-
-//Sevi un ziņu portālus neslavināsim :)
-$blacklist = array(
-    'laiki', 'epadomi', 'edienbots', 'gardedis_lv', 'LA_lv', 'JaunsLV', 'FOLKKLUBS', 'KJ_Sievietem', '8Lounge1', 'VidzAugstskola', 'IntaMolodcova', 'GalasServiss', 
-    'StilaparksLv', 'ifaktors', 'nralv', 'DelfiLV', 'Twitediens', 'budzis', 'cafeleningrad', 'RestoransChat', 'integreta_bibl', 'receptes_eu', 'TautaRuna', 'zinicenu'
-);
 
 $q = mysqli_query($connection, "SELECT screen_name, count( * ) skaits FROM tweets 
 								WHERE screen_name NOT IN ('".implode("','",$blacklist)."') 

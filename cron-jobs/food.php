@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
 require_once('../config.php');
+require_once('../blacklist.php');
 //Pieslēgums DB
 include "../includes/init_sql.php";
 //Twitter autentificēšanās
@@ -13,16 +14,6 @@ $tmhOAuth = new tmhOAuth(array(
 ));
 
 $text = 'Šodienas dižēdāji ir';
-
-//Sevi un ziņu portālus neslavināsim :)
-$blacklist = array(
-    'laiki', 'epadomi', 'edienbots', 'gardedis_lv', 'LA_lv', 'JaunsLV', 'FOLKKLUBS', 'ltvzinas', 'integreta_bibl', 'receptes_eu', 'TautaRuna', 'zinicenu', 
-    'StilaparksLv', 'ifaktors', 'nralv', 'DelfiLV', 'Twitediens', 'budzis', 'cafeleningrad', '8Lounge1', 'VidzAugstskola', 'IntaMolodcova', 'GalasServiss'
-);
-//Šie konti ir priduraki - tos noteikti @nepieminēt :)
-$priduraki = array(
-    'tvitermaniaks', 'SievieteR', 'cepum_s', 'ZPupola', 'atheist_from_lv', 'sku_dra'
-);
 
 //dabū dienas ēdājus
 $media_id = array();
