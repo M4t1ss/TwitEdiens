@@ -7,6 +7,7 @@ error_reporting(E_ALL);
 //Pieslēgums DB
 include "includes/init_sql_latest.php";
 include "classify/evaluate_bayes.php";
+include "includes/blacklist.php";
 
 if(isset($_POST['nei'])){
 	$id = $_POST['id'];
@@ -62,15 +63,9 @@ else
 <body onload="initialize()">
 <h1 style="padding-top:3px;"><a href="/"><img alt="TwitĒdiens Logo" src="/img/te.png" style="height:40px;" /></a> Sentimenta marķēšana</h1>
 <div id="contents" style="display: none;margin-top:10px;margin-bottom:10px;padding:6px;text-align:center; min-height:200px;">
-	<?php
-		//Pelēkais saraksts ar ziņu u.c. kontiem, kuriem pārsvarā tvīti ir neitrāli
-		$trashy_acc = array('epadomi', 'laiki', 'brevings', 'Twitediens', 'RIGATV24', 'FOLKKLUBS', 'brooklynpubriga', 'ltvzinas', 'RestoransChat'
-			, 'beerhouseNo1', 'EgilsDambis1', 'Skrundas_novads', 'dievietelv', 'flowsnet_com', 'cafeleningrad', 'gardedis_lv', 'CafeOsiris', 'VidzAugstskola'
-			, 'portals_santa', 'JaunsLV', 'KJ_Sievietem', 'Kalnciemaiela', '1188', 'budzis', 'LV_portals', 'lsmlv', 'LA_lv', 'nralv', '8Lounge1', 'zinicenu'
-			, 'SakuraSushiBars', 'visidarbi', 'LifeHackslv', 'irLV', 'LIIA_LV', 'receptes_eu', 'latvijasbizness', 'shmaramagda', 'integreta_bibl');
-			
+	<?php			
 		//Paņem jaunāko vēl nemarķēto tvītu, kura autors nav pelēkajā sarakstā
-		$latest = mysqli_query($connection, "SELECT * FROM tweets WHERE emo IS NULL AND screen_name NOT IN ( '" . implode( "', '" , $trashy_acc ) . "' ) ORDER BY created_at DESC limit 0, 1");
+		$latest = mysqli_query($connection, "SELECT * FROM tweets WHERE emo IS NULL AND screen_name NOT IN ( '" . implode( "', '" , $blacklist ) . "' ) ORDER BY created_at DESC limit 0, 1");
 		$p = mysqli_fetch_array($latest);
 		
 		$id = $p["id"];
