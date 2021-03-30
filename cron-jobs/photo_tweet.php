@@ -32,10 +32,10 @@ while($r=mysqli_fetch_array($vardi)){
 require '../includes/tmhOAuth/tmhOAuth2.php';
 
 $tmhOAuth = new tmhOAuth(array(
-  'consumer_key'    => '0aWvgbtsmAjGhGUG9P9YQPaLv',
-  'consumer_secret' => 'DPQ8JiWgw5qNkTEekUPrTGskMYZ1TMrRAukQCSqmVdacs7QHZF',
-  'user_token'      => '1329968666-Ofu3hht6mod2fabfze5HeTlww9hG4xWOKNaR5nM',
-  'user_secret'     => 't7syGtFiP4SQ0i3FUbJQqbBZTC7pqybhxwIs1rDPr0yRP',
+  'consumer_key'    => CONSUMER_KEY,
+  'consumer_secret' => CONSUMER_SECRET,
+  'user_token'      => OAUTH_TOKEN,
+  'user_secret'     => OAUTH_SECRET,
 ));
 
 $path='../img/food/';
