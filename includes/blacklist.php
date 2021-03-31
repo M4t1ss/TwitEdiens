@@ -13,5 +13,5 @@ $blacklist = array(
 
 //Šie konti ir priduraki - tos noteikti @nepieminēt :)
 $priduraki = array(
-    'tvitermaniaks', 'SievieteR', 'cepum_s', 'ZPupola', 'atheist_from_lv', 'sku_dra'
+    'tvitermaniaks', 'SievieteR', 'cepum_s', 'ZPupola', 'atheist_from_lv', 'sku_dra', 'JanisWizard777'
 );

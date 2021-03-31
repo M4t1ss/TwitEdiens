@@ -6,12 +6,24 @@ require_once('../config.php');
 //Pieslēgums DB
 include "../includes/init_sql.php";
 //pieprasījums
-$vardi = mysqli_query($connection, "SELECT distinct nominativs FROM words WHERE nominativs != '' AND nominativs != '0' ORDER BY RAND( ) LIMIT 4 ");
+// 1. Dārzeņi
+// 2. random no atlikušajiem
+// 3. tauki saldumi
+// 4. dzērieni
+$darze = mysqli_query($connection, "SELECT distinct nominativs FROM words WHERE grupa = 4 AND nominativs != '' AND nominativs != '0' ORDER BY RAND( ) LIMIT 1 ");
+$parej = mysqli_query($connection, "SELECT distinct nominativs FROM words WHERE grupa IN(2,3,5,6) AND nominativs != '' AND nominativs != '0' ORDER BY RAND( ) LIMIT 1 ");
+$saldu = mysqli_query($connection, "SELECT distinct nominativs FROM words WHERE grupa = 1 AND nominativs != '' AND nominativs != '0' ORDER BY RAND( ) LIMIT 1 ");
+$dzeri = mysqli_query($connection, "SELECT distinct nominativs FROM words WHERE grupa IN(7, 8) AND nominativs != '' AND nominativs != '0' ORDER BY RAND( ) LIMIT 1 ");
 
 global $normnos;
-while($r=mysqli_fetch_array($vardi)){
-	$normnos[] = $r["nominativs"];
-	$xxxx = $r["nominativs"];
+$da = mysqli_fetch_array($darze);
+$pa = mysqli_fetch_array($parej);
+$sa = mysqli_fetch_array($saldu);
+$dz = mysqli_fetch_array($dzeri);
+$normnos = array($da["nominativs"], $pa["nominativs"], $sa["nominativs"], $dz["nominativs"]);
+$nosaukums = array(replace($da["nominativs"]), replace($pa["nominativs"]), replace($sa["nominativs"]), replace($dz["nominativs"]));
+
+function replace($xxxx){
 	$xxxx = str_replace('ē','e',$xxxx);
 	$xxxx = str_replace('ū','u',$xxxx);
 	$xxxx = str_replace('ī','i',$xxxx);
@@ -25,9 +37,8 @@ while($r=mysqli_fetch_array($vardi)){
 	$xxxx = str_replace('ņ','n',$xxxx);
 	$xxxx = str_replace('ñ','n',$xxxx);
 	$xxxx = str_replace('ä','a',$xxxx);
-	$nosaukums[] = $xxxx;
+	return $xxxx;
 }
-
 
 require '../includes/tmhOAuth/tmhOAuth2.php';
 
