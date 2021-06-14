@@ -84,7 +84,7 @@ $med_ids = implode(',', $media_id);
     'url'    => $tmhOAuth->url('1.1/statuses/update'),
     'params' => array(
       'media_ids' => $med_ids,
-      'status'    => 'Pusdienās Tev jāēd '.$normnos[0].', '.$normnos[1].', '.$normnos[2].' un '.$normnos[3].'.',
+      'status'    => 'Pusdienās Tev jāēd '.$normnos[0].', '.$normnos[1].', '.$normnos[2].' un jāuzdzer '.$normnos[3].'.',
     )
   ));
 
