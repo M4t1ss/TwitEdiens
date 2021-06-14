@@ -168,11 +168,11 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
 	<?php
 	//Tvītu kopskaits
 	$kopa = mysqli_query($connection, "
-	SELECT count(text) skaits from tweets, vietas where created_at between '$no' AND '$lidz' and vietas.nosaukums = tweets.geo and vietas.valsts = 'Latvia' union
-	SELECT count( distinct screen_name ) skaits FROM tweets where created_at between '$no' AND '$lidz' union
-	SELECT count( distinct nominativs ) skaits FROM words WHERE datums between '$no' AND '$lidz' union
-	SELECT count( DISTINCT words.tvits ) skaits FROM words, tweets WHERE words.tvits = tweets.id AND tweets.created_at between '$no' AND '$lidz' union
-	SELECT count( * ) skaits FROM tweets where created_at between '$no' AND '$lidz' union
+	SELECT count(text) skaits from tweets, vietas where created_at between '$no' AND '$lidz' and vietas.nosaukums = tweets.geo and vietas.valsts = 'Latvia' union all
+	SELECT count( distinct screen_name ) skaits FROM tweets where created_at between '$no' AND '$lidz' union all
+	SELECT count( distinct nominativs ) skaits FROM words WHERE datums between '$no' AND '$lidz' union all
+	SELECT count( DISTINCT words.tvits ) skaits FROM words, tweets WHERE words.tvits = tweets.id AND tweets.created_at between '$no' AND '$lidz' union all
+	SELECT count( * ) skaits FROM tweets where created_at between '$no' AND '$lidz' union all
 	SELECT count( geo ) skaits FROM tweets where created_at between '$no' AND '$lidz' and geo!=''
 	");
 	$geogr = mysqli_query($connection, "SELECT count( nosaukums ) vietas,  count( distinct valsts ) valstis FROM vietas");
