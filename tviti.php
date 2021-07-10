@@ -12,11 +12,12 @@ while($p=mysqli_fetch_array($latest)){
 	$ttime = $p["created_at"];
 	$quoted_id = $p["quoted_id"];
 	$quoted_text = NULL;
+	$laiks = strtotime($ttime);
+	$laiks = date("d.m.Y H:i", $laiks);
 	
 	if($quoted_id != NULL){
 		$quoted = mysqli_query($connection, "SELECT text, screen_name FROM tweets WHERE id = $quoted_id");
 		$qq=mysqli_fetch_array($quoted);
-
 		if($qq){
 			$quoted_text = $qq["text"];
 			$quoted_screen_name = $qq["screen_name"];
@@ -55,7 +56,7 @@ while($p=mysqli_fetch_array($latest)){
 	
 ?>
 <div style="<?php if ((time()-StrToTime($ttime))<5){echo"opacity:".((time()-StrToTime($ttime))/5).";";}?>" class="tweet">
-	<div class="lietotajs" style="border-bottom: 0.18em dashed <?php echo $color; ?>;"><?php echo '<a style="text-decoration:none;color:#658304;" href="/draugs/'.trim($username).'">@'.trim($username).'</a> ';?> ( <?php echo $ttime;?> )</div>
+	<div class="lietotajs" style="border-bottom: 0.18em dashed <?php echo $color; ?>;"><?php echo '<a style="text-decoration:none;color:#658304;" href="/draugs/'.trim($username).'">@'.trim($username).'</a> ';?> ( <?php echo $laiks;?> )</div>
 <?php echo $text."<br/>";
 
 if(isset($quoted_text) && strlen($quoted_text) > 0){

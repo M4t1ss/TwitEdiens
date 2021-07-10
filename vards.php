@@ -101,7 +101,7 @@ echo "<table id='results' style='margin:auto auto;'>";
 echo "<tr>
 <th>Lietotājs</th>
 <th>Tvīts</th>
-<th>Tvītots</th>
+<th>Laiks</th>
 </tr>";
 while($r=mysqli_fetch_array($vardi)){
 	$tvits = $r["tvits"];
@@ -118,8 +118,10 @@ while($r=mysqli_fetch_array($vardi)){
 	}
 	
 	$datums = $r["created_at"];
+	$laiks = strtotime($datums);
+	$laiks = date("d.m.Y H:i", $laiks);
 	if ($krasa==TRUE) {$kr=" class='even'";}else{$kr="";}
-	echo '<tr'.$kr.'><td><b><a style="text-decoration:none;color:#658304;" href="/draugs/'.$niks.'">'.$niks.'</a></b></td><td>'.$teksts.'</td><td class="datu">'.$datums.'</td></tr>';
+	echo '<tr'.$kr.'><td><b><a style="text-decoration:none;color:#658304;" href="/draugs/'.$niks.'">'.$niks.'</a></b></td><td>'.$teksts.'</td><td class="datu">'.$laiks.'</td></tr>';
 	$krasa=!$krasa;
 }
 echo "</table>";

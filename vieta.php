@@ -34,19 +34,24 @@ $vards=urldecode($_GET['vieta']);
 <div >
 <?php
 //Pieslēgums DB
-$tviti = mysqli_query($connection, "SELECT screen_name, text FROM tweets where geo = '$vards'");
+$tviti = mysqli_query($connection, "SELECT screen_name, text, created_at FROM tweets where geo = '$vards' order by created_at desc");
 
 $krasa=TRUE;
 echo "<table id='results' style='margin:auto auto;'>";
 echo "<tr>
 <th>Lietotājs</th>
 <th>Tvīts</th>
+<th>Laiks</th>
 </tr>";
 while($p=mysqli_fetch_array($tviti)){
 	$niks = $p["screen_name"];
 	$teksts = $p["text"];
+	$datums = $p["created_at"];
+	$laiks = strtotime($datums);
+	$laiks = date("d.m.Y H:i", $laiks);
+	
 	if ($krasa==TRUE) {$kr=" class='even'";}else{$kr="";}
-	echo '<tr'.$kr.'><td><b><a style="text-decoration:none;color:#658304;" href="/draugs/'.$niks.'">'.$niks.'</a></b></td><td>'.$teksts.'</td></tr>';
+	echo '<tr'.$kr.'><td><b><a style="text-decoration:none;color:#658304;" href="/draugs/'.$niks.'">'.$niks.'</a></b></td><td>'.$teksts.'</td><td>'.$laiks.'</td></tr>';
 	$krasa=!$krasa;
 }
 echo "</table>";
