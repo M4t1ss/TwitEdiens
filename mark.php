@@ -154,7 +154,7 @@ else
 	<label class="TTS" for="TTS">Izrunāt?</label>
 	<audio class="audioPlayer" controls autoplay>
 		<?php if($TTS){ ?>
-	  <source src="https://runa.tilde.lv/client/say/?text=<?php echo urlencode($forTTS);?>&voice=e2e" type="audio/mpeg">
+	  <source src="https://runa.tilde.lv/client/say/?text=<?php echo urlencode($forTTS);?>&voice=sandra4" type="audio/mpeg">
 	  Your browser does not support the audio element.
 		<?php } ?>
 	</audio>
