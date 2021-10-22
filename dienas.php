@@ -123,7 +123,7 @@ foreach($dmgs as $key => $dmg) {
 
 include "includes/init_sql.php";
 	
-for ($month=date('m')-1;$month>0;$month--){
+for ($month=date('m');$month>0;$month--){
 	$year = (date('Y'));
 	if($month==12) {
 		$next_month = 1;
