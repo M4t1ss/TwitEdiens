@@ -55,7 +55,7 @@ $tmhOAuth = new tmhOAuth(array(
 if ($code == 200) {
 	$resp = json_decode($tmhOAuth->response['response']);
 	$profpic = $resp->profile_image_url_https;
-	$profpic = str_replace("normal","bigger",$profpic);
+	$profpic = str_replace("normal","400x400",$profpic);
 }
 ?>
 <h2 style='margin:auto auto; text-align:center;'><a href="https://twitter.com/#!/<?php echo $draugs;?>">@<?php echo $draugs;?></a></h2>
@@ -95,7 +95,7 @@ echo "<tr>
 				$teksts=$r["text"];
 				$laiks=$r["created_at"];
 				$laiks=strtotime($laiks);
-				$laiks=date("m.d.Y H:i", $laiks);
+				$laiks=date("d.m.Y H:i", $laiks);
 				echo "<tr".$kr."><td>".$teksts."</td><td>";
 				while($r2=mysqli_fetch_array($q2)){echo $r2["nominativs"].", ";};
 				echo "</td><td>".$laiks."</td></tr>";

@@ -114,3 +114,74 @@ foreach($dmgs as $key => $dmg) {
 	}
 </script>
 	<div id="stats-wdays"></div>
+	
+<br/>
+<h3>Kuros mēnešos tvīto visbiežāk</h3>
+	
+
+<?php
+
+include "includes/init_sql.php";
+	
+for ($month=date('m');$month>0;$month--){
+	$year = (date('Y'));
+	if($month==12) {
+		$next_month = 1;
+		$next_year = (date('Y')+1);
+	}else{
+		$next_month = $month+1;
+		$next_year = $year;
+	}
+	
+	if($month < 10) $month = "0".$month;
+	if($next_month < 10) $next_month = "0".$next_month;
+	
+	$query .= "SELECT '".$year.".".$month."' AS 'datums', COUNT(*) AS 'skaits' FROM `tweets` WHERE `created_at` BETWEEN '".$year."-".$month."-01 00:00:00.000000' AND '".$next_year."-".$next_month."-01 00:00:00.000000' UNION ";
+}
+for ($month=12;$month>0;$month--){
+	$year = (date('Y')-1);
+	if($month==12) {
+		$next_month = 1;
+		$next_year = date('Y');
+	}else{
+		$next_month = $month+1;
+		$next_year = $year;
+	}
+	if($month < 10) $month = "0".$month;
+	if($next_month < 10) $next_month = "0".$next_month;
+	
+	$query .= "SELECT '".$year.".".$month."' AS 'datums', COUNT(*) AS 'skaits' FROM `tweets` WHERE `created_at` BETWEEN '".$year."-".$month."-01 00:00:00.000000' AND '".$next_year."-".$next_month."-01 00:00:00.000000' ";
+	if($month > 1) $query .= "UNION ";
+}
+
+$menesi = mysqli_query($connection, $query);
+$menesis = date('m');
+while($p=mysqli_fetch_array($menesi)){
+	$menesi_skaiti[$p["datums"]] = $p["skaits"];
+}
+
+?>
+<script type="text/javascript">
+  google.load("visualization", "1", {packages:["corechart"]});
+  google.setOnLoadCallback(drawChart1);
+  $(window).resize(drawChart1);
+  function drawChart1() {	
+	var data3 = new google.visualization.DataTable();
+	data3.addColumn('string', 'Mēnesis');
+	data3.addColumn('number', 'Tvīti');
+	data3.addRows(<?php echo count($menesi_skaiti);?>);
+<?php
+//izdrukā populārākās stundas
+$i=0;
+foreach($menesi_skaiti as $key => $dmg) {
+	echo "data3.setValue(".$i.", 0, '".$key."');";
+	echo "data3.setValue(".$i.", 1, ".$dmg.");";
+	$i++;
+}
+?>
+	var chart3 = new google.visualization.ColumnChart(document.getElementById('stats-months'));
+	chart3.draw(data3, {'backgroundColor':'transparent', vAxis: {viewWindow: {min: 0} }});
+  }
+</script>
+	<div id="stats-months"></div>
+<br/>
