@@ -13,7 +13,7 @@ include "../includes/init_sql.php";
 $darze = mysqli_query($connection, "SELECT distinct nominativs FROM words WHERE grupa = 4 AND nominativs != '' AND nominativs != '0' ORDER BY RAND( ) LIMIT 1 ");
 $parej = mysqli_query($connection, "SELECT distinct nominativs FROM words WHERE grupa IN(2,3,5,6) AND nominativs != '' AND nominativs != '0' ORDER BY RAND( ) LIMIT 1 ");
 $saldu = mysqli_query($connection, "SELECT distinct nominativs FROM words WHERE grupa = 1 AND nominativs != '' AND nominativs != '0' ORDER BY RAND( ) LIMIT 1 ");
-$dzeri = mysqli_query($connection, "SELECT distinct nominativs FROM words WHERE grupa IN(7, 8) AND nominativs != '' AND nominativs != '0' ORDER BY RAND( ) LIMIT 1 ");
+$dzeri = mysqli_query($connection, "SELECT distinct nominativs FROM words WHERE grupa IN(7, 8) AND nominativs != '' AND nominativs != '0' AND nominativs != 'etiķis' ORDER BY RAND( ) LIMIT 1 ");
 
 global $normnos;
 $da = mysqli_fetch_array($darze);
