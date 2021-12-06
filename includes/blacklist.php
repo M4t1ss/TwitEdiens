@@ -8,10 +8,11 @@ $blacklist = array(
 	'GalasServiss', 'portals_santa','KJ_Sievietem', '1188', 'brevings', 'RIGATV24', 'brooklynpubriga', 
 	'RestoransChat', 'beerhouseNo1', 'EgilsDambis1', 'Skrundas_novads', 'dievietelv', 'flowsnet_com', 
 	'CafeOsiris', 'Kalnciemaiela', 'LV_portals', 'lsmlv', 'SakuraSushiBars', 'visidarbi', 'LifeHackslv', 
-	'irLV', 'LIIA_LV', 'latvijasbizness', 'ofija_'
+	'irLV', 'LIIA_LV', 'latvijasbizness', 'ofija_', 'BesiietekMELI'
 );
 
 //Šie konti ir priduraki - tos noteikti @nepieminēt :)
 $priduraki = array(
-    'tvitermaniaks', 'SievieteR', 'cepum_s', 'ZPupola', 'atheist_from_lv', 'sku_dra', 'JanisWizard777', 'Amazone5959'
+    'tvitermaniaks', 'SievieteR', 'cepum_s', 'ZPupola', 'atheist_from_lv', 'sku_dra', 'JanisWizard777', 
+    'BlackHalt', 'Amazone5959'
 );
