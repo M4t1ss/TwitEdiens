@@ -166,21 +166,21 @@ while($p=mysqli_fetch_array($menesi)){
   google.setOnLoadCallback(drawChart1);
   $(window).resize(drawChart1);
   function drawChart1() {	
-	var data3 = new google.visualization.DataTable();
-	data3.addColumn('string', 'Mēnesis');
-	data3.addColumn('number', 'Tvīti');
-	data3.addRows(<?php echo count($menesi_skaiti);?>);
+	var data4 = new google.visualization.DataTable();
+	data4.addColumn('string', 'Mēnesis');
+	data4.addColumn('number', 'Tvīti');
+	data4.addRows(<?php echo count($menesi_skaiti);?>);
 <?php
 //izdrukā populārākās stundas
 $i=0;
 foreach($menesi_skaiti as $key => $dmg) {
-	echo "data3.setValue(".$i.", 0, '".$key."');";
-	echo "data3.setValue(".$i.", 1, ".$dmg.");";
+	echo "data4.setValue(".$i.", 0, '".$key."');";
+	echo "data4.setValue(".$i.", 1, ".$dmg.");";
 	$i++;
 }
 ?>
-	var chart3 = new google.visualization.ColumnChart(document.getElementById('stats-months'));
-	chart3.draw(data3, {'backgroundColor':'transparent', vAxis: {viewWindow: {min: 0} }});
+	var chart4 = new google.visualization.ColumnChart(document.getElementById('stats-months'));
+	chart4.draw(data4, {'backgroundColor':'transparent', vAxis: {viewWindow: {min: 0, max: 8500} } });
   }
 </script>
 	<div id="stats-months"></div>

@@ -2,6 +2,7 @@
 RewriteEngine on
 RewriteRule ^login?$ auth/redirect.php [L]
 RewriteRule ^logout?$ auth/clearsessions.php [L]
+RewriteRule ^atskats?$ index.php?id=atskats [L]
 RewriteRule ^vardi?$ index.php?id=vardi [L]
 RewriteRule ^par?$ index.php?id=par [L]
 RewriteRule ^draugi?$ index.php?id=draugi [L]
