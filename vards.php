@@ -15,12 +15,16 @@ $eng = $ee["eng"];
 $parser = ARC2::getRDFParser();
 $parser->parse('http://dbpedia.org/data/'.$eng.'.rdf');
 $triples = $parser->getSimpleIndex(0);
+
 foreach($triples as $triple){
 	//dabū anglisku aprakstu
-	for ($xxx=0;$xxx<sizeof($triple['http://dbpedia.org/ontology/abstract']);$xxx++){
-		if ($triple['http://dbpedia.org/ontology/abstract'][$xxx]['lang'] == 'en') {
-				$apraksts = $triple['http://dbpedia.org/ontology/abstract'][$xxx]['value'];
-			}
+	if (array_key_exists('http://dbpedia.org/ontology/abstract', $triple)){
+		
+		for ($xxx=0;$xxx<sizeof($triple['http://dbpedia.org/ontology/abstract']);$xxx++){
+			if ($triple['http://dbpedia.org/ontology/abstract'][$xxx]['lang'] == 'en') {
+					$apraksts = $triple['http://dbpedia.org/ontology/abstract'][$xxx]['value'];
+				}
+		}
 	}
 	//dabū sīkattēlu
 	if (isset($triple['http://dbpedia.org/ontology/thumbnail'][0]['value'])) {
@@ -116,6 +120,7 @@ while($r=mysqli_fetch_array($vardi)){
 			$teksts = str_replace(trim($match), '<a style="text-decoration:none;color:#658304;" href="/draugs/'.str_replace('@','',trim($match)).'">'.trim($match).'</a> ', $teksts);
 		}
 	}
+	$teksts = str_replace($vards, '<span style="font-weight: bold; text-decoration:none;color: red;">'.$vards.'</span>', $teksts);
 	
 	$datums = $r["created_at"];
 	$laiks = strtotime($datums);

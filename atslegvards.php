@@ -53,6 +53,12 @@ while($r=mysqli_fetch_array($vardi)){
 			$teksts = str_replace(trim($match), '<a style="text-decoration:none;color:#658304;" href="/draugs/'.str_replace('@','',trim($match)).'">'.trim($match).'</a> ', $teksts);
 		}
 	}
+	$teksts = str_replace($vards, '<span style="font-weight: bold; text-decoration:none;color: red;">'.$vards.'</span>', $teksts);
+	$teksts = str_replace($tlvards, '<span style="font-weight: bold; text-decoration:none;color: red;">'.$tlvards.'</span>', $teksts);
+	$teksts = str_replace($tl2vards, '<span style="font-weight: bold; text-decoration:none;color: red;">'.$tl2vards.'</span>', $teksts);
+	$teksts = str_replace($svards, '<span style="font-weight: bold; text-decoration:none;color: red;">'.$svards.'</span>', $teksts);
+	$teksts = str_replace($tlsvards, '<span style="font-weight: bold; text-decoration:none;color: red;">'.$tlsvards.'</span>', $teksts);
+	$teksts = str_replace($tl2svards, '<span style="font-weight: bold; text-decoration:none;color: red;">'.$tl2svards.'</span>', $teksts);
 	
 	$datums = $r["created_at"];
 	if ($krasa==TRUE) {$kr=" class='even'";}else{$kr="";}

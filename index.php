@@ -25,14 +25,16 @@ include "includes/init_sql_latest.php";
 <head>
 <title>TwitĒdiens - no Twitter par ēšanu</title>
 <meta name="viewport" content="width=320, initial-scale=1.0" />
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes"> -->
+<!-- <meta name="viewport" content="width=1100"> -->
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
 <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />
 <meta name="DC.title" lang="Latvian" content="TwitĒdiens - no Twitter par ēšanu" />
-<meta name="DC.creator" content="Matīss Rikters" />
-<meta name="DC.subject" lang="Latvian" content="TwitĒdiens; TwitEdiens; Twitter; Ēdiens; Food; tvīti; statistika; ēšana; dzeršana; ko ēst; ko dzert; tēja; šokolāde; mandarīni; konfektes; pica; saldējums; zupa; kafija; gaļa; kūka; pankūka; čipsi; siers; salāti; kartupeļi; ēdienu karte; ēdāju tops; ēšanas kalendārs; populārākie ēdieni; @M4t1ss; Matīss; Rikters; Matīss Rikters" />
+<meta name="DC.creator" content="Matīss" />
+<meta name="DC.subject" lang="Latvian" content="TwitĒdiens; TwitEdiens; Twitter; Ēdiens; Food; tvīti; statistika; ēšana; dzeršana; ko ēst; ko dzert; tēja; šokolāde; mandarīni; konfektes; pica; saldējums; zupa; kafija; gaļa; kūka; pankūka; čipsi; siers; salāti; kartupeļi; ēdienu karte; ēdāju tops; ēšanas kalendārs; populārākie ēdieni; @M4t1ss; Matīss;; Matīss" />
 <meta name="DC.description" lang="Latvian" content="TwitĒdiens ievāc datus no Twitter, kur pieminēta ēšana, dzeršana, ēdienreizes, ēdieni vai dzērieni. Apskatāma detalizēta statistika par šiem datiem." />
 <meta name="DC.publisher" content="Keda" />
-<meta name="DC.contributor" content="Matīss Rikters" />
+<meta name="DC.contributor" content="Matīss" />
 <meta name="DC.type" scheme="DCTERMS.DCMIType" content="Text" />
 <meta name="DC.format" content="text/html" />
 <meta name="DC.format" content="7635 bytes" />
@@ -43,8 +45,8 @@ include "includes/init_sql_latest.php";
 <meta name="description" content="TwitĒdiens ievāc datus no Twitter, kur pieminēta ēšana, dzeršana, ēdienreizes, ēdieni vai dzērieni. Apskatāma detalizēta statistika par šiem datiem."/>
 <meta name="keywords" content="TwitĒdiens, TwitEdiens, Twitter, Ēdiens, Food, tvīti, statistika, ēšana, dzeršana, ko ēst, ko dzert,
 tēja, šokolāde, mandarīni, konfektes, pica, saldējums, zupa, kafija, gaļa, kūka, pankūka, čipsi, siers, salāti, kartupeļi, ēdienu karte,
-ēdāju tops, ēšanas kalendārs, populārākie ēdieni, @M4t1ss, Matīss, Rikters, Matīss Rikters"/>
-<meta name="author" content="Matīss Rikters"/>
+ēdāju tops, ēšanas kalendārs, populārākie ēdieni, @M4t1ss, Matīss"/>
+<meta name="author" content="Matīss"/>
 <meta property="og:url" content="<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="lv_LV" />
@@ -92,6 +94,15 @@ function showHide(shID) {
   },
   "softwareVersion" : "1.0"
 }
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MT1T7251SJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MT1T7251SJ');
 </script>
 </head>
 <body onload="initialize()">
