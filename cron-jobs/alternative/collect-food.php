@@ -32,7 +32,6 @@ $food = array('ēd','ēst','ēdi','garšo','ēda','ēdu','ņam','gaļas','kafija
 	mysqli_set_charset($remote, "utf8mb4");
 		
 	$tweet_id = $tweet["data"]["id"];
-	$tweet_text = $tweet["data"]["text"];
 	
 	$validFood = array('garšot','garšoju','garšošu','garšo','garšoji','garšosi','garšoja','garšos','garšojot','garšotu','jāgaršo','nogaršot',
 					'nogaršoju','nogaršošu','nogaršo','nogaršoji','nogaršosi','nogaršoja','nogaršos','nogaršojam','nogaršojām','nogaršosim',
@@ -100,21 +99,27 @@ $food = array('ēd','ēst','ēdi','garšo','ēda','ēdu','ņam','gaļas','kafija
 	$spammers = array('berelilah_jpg', 'twitediens');
 	
 	if(!in_array($screen_name, $spammers))
-		save_tweet($full_data, $tweet_text, $remote);
+		save_tweet($full_data, $remote, $validFood);
 	
 	
 })->startListening();
 
 
 
-function save_tweet($tweet_data, $tweet_text, $remote){
+function save_tweet($tweet_data, $remote, $validFood){
 
-	$tweet_text = mysqli_real_escape_string($remote, $tweet_text);
 	$tweet_id = mysqli_real_escape_string($remote, $tweet_data->id_str);
 	$qdate = mysqli_real_escape_string($remote, $tweet_data->created_at);
 	$qgeo = isset($tweet_data->place) ? mysqli_real_escape_string($remote, $tweet_data->place->name) : NULL;
 	$qscreen_name = mysqli_real_escape_string($remote, $tweet_data->user->screen_name);
 	$quser_mentions = $tweet_data->entities->user_mentions;
+	
+	if(isset($tweet_data->full_text) && strlen($tweet_data->full_text) > 0){
+		$tweet_text = $tweet_data->full_text;
+	}else{
+		$tweet_text = $tweet_data->text;
+	}
+	$tweet_text = mysqli_real_escape_string($remote, $tweet_text);
 	
 	//Tvīts ar cita tvīta citātu
 	$quoted_id = NULL;
@@ -125,7 +130,7 @@ function save_tweet($tweet_data, $tweet_text, $remote){
 		$qs = mysqli_query($remote, "SELECT id FROM tweets where id = $quoted_id");
 		if(!$qs || mysqli_num_rows($qs)==0){
 			//Ja nav, tad jāpieglabā
-			save_tweet($quoted_data, $quoted_data->text, $remote);
+			save_tweet($quoted_data, $remote, $validFood);
 		}
 	}
 	
@@ -169,7 +174,7 @@ function save_tweet($tweet_data, $tweet_text, $remote){
 				!preg_match("/@/", $vards)
 			){
 				$edienVardi[] = $vards;
-				if(in_array($vards, $validFood)
+				if(in_array($vards, $validFood))
 					$RLYsave = true;
 			}
 		}
@@ -199,7 +204,7 @@ function save_tweet($tweet_data, $tweet_text, $remote){
 			}
 		}
 		
-		$retweet = substr($tweet_data->text, 0, 4) == "RT @";
+		$retweet = substr($tweet_text, 0, 4) == "RT @";
 		
 		if(!$retweet && ($edieni > 0 || $tweet_text[0]==="@" || $tc < 3)){
 			if($quoted_id == NULL)
