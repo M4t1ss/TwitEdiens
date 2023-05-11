@@ -1,7 +1,9 @@
 <?php
 include "includes/laiks.php";
 // Turn off all error reporting
-error_reporting(0);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ERROR);
 ?>
 <h2 style='margin:auto auto; text-align:center;'>Twitter gardēžu karte</h2>
 <h5 style='margin:auto auto; text-align:center;font-size:12px;'>
@@ -35,23 +37,25 @@ $q = mysqli_query($connection, "SELECT distinct geo, count( * ) skaits FROM `twe
 					if(mysqli_num_rows($irvieta)==0){
 						//ja nav tādas vietas datu bāzē,
 						//dabū vietas koordinātas
-						$string = file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?address=".str_replace(" ", "%20",$vieta)."&sensor=true");
+						$string = file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?address=".str_replace(" ", "%20",$vieta)."&sensor=true&key=ADD_API_KEY_HERE");
 						$json=json_decode($string, true);
-						$gar = sizeof($json["results"][0]["address_components"]);
-						for ($z = 0; $z < $gar; $z++){
-							if($json["results"][0]["address_components"][$z]['types'][0] == 'country') $valsts = $json["results"][0]["address_components"][$z]['long_name'];
+						if( isset($json["results"][0]["address_components"])){
+							$gar = sizeof($json["results"][0]["address_components"]);
+							for ($z = 0; $z < $gar; $z++){
+								if($json["results"][0]["address_components"][$z]['types'][0] == 'country') $valsts = $json["results"][0]["address_components"][$z]['long_name'];
+							}
+							$lat = $json["results"][0]["geometry"]["location"]["lat"];
+							$lng = $json["results"][0]["geometry"]["location"]["lng"];
+							if ($lat!=0 && $lng!=0){
+								$ok = mysqli_query($connection, "INSERT INTO vietas (nosaukums, lng, lat, valsts) VALUES ('$vieta', '$lng', '$lat', '$valsts')");
+							}
 						}
-						$lat = $json["results"][0]["geometry"]["location"]["lat"];
-						$lng = $json["results"][0]["geometry"]["location"]["lng"];
-						if ($lat!=0 && $lng!=0){
-							$ok = mysqli_query($connection, "INSERT INTO vietas (nosaukums, lng, lat, valsts) VALUES ('$vieta', '$lng', '$lat', '$valsts')");
-						}
-						}else{
-							$arr=mysqli_fetch_array($irvieta);
-							//ja ir
-							$lat = $arr['lat'];
-							$lng = $arr['lng'];
-						}
+					}else{
+						$arr=mysqli_fetch_array($irvieta);
+						//ja ir
+						$lat = $arr['lat'];
+						$lng = $arr['lng'];
+					}
 					$irvieta = mysqli_query($connection, "SELECT * FROM vietas where nosaukums='$vieta'");
 					if(mysqli_num_rows($irvieta)!=0){
 					?>
@@ -78,6 +82,7 @@ $q = mysqli_query($connection, "SELECT distinct geo, count( * ) skaits FROM `twe
 
 
 $qx = mysqli_query($connection, "SELECT distinct geo, count( * ) skaits FROM `tweets` WHERE geo!='' and created_at between '$no' AND '$lidz' GROUP BY geo ORDER BY count( * ) DESC");
+$reg_code = array();
 while($rx=mysqli_fetch_array($qx)){
    $vieta=$rx["geo"];
    $skaits=$rx["skaits"];
@@ -112,6 +117,8 @@ while($rx=mysqli_fetch_array($qx)){
 			$code = $c_code['code'];
 			$countryCode = $c_code['countryCode'];
 			$adminName1 = $c_code['adminName1'];
+			$reg_code[$code] = array();
+			if(!isset($reg_code[$code]['sk'])) $reg_code[$code]['sk'] = 0;
 			$reg_code[$code]['sk'] = $reg_code[$code]['sk']+$skaits;
 			$reg_code[$code]['cc'] = $countryCode;
 			$reg_code[$code]['ad'] = $adminName1;
