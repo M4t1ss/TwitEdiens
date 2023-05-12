@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 include "includes/init_sql.php";
 include "classify/evaluate_bayes.php";
 
@@ -95,17 +98,15 @@ while($p=mysqli_fetch_array($latest)){
 	#Šo vajadzētu visur...
 	
 	foreach($validFood as $foodItem){
-		if(
-			(
-				preg_match("/(?<=[\W])$foodItem(?=[\W])/", $text) || 
-				preg_match("/(?<=[\W])$foodItem$/", $text) || 
-				preg_match("/^$foodItem(?=[\W])/", $text)
-			) && 
-			!preg_match("/(?<=\>)$foodItem/", $text) &&
-			!preg_match("/$foodItem(?=\<)/", $text)
-			
-			){
-			$text = preg_replace("/(?<=[\W])($foodItem)(?=[\W])/", '<a style="text-decoration:none;color:#0C95CF;" href="/atslegvards/'.$foodItem.'">'.$foodItem.'</a>', $text,1);
+		if(!preg_match("/(?<=\>)$foodItem/", $text) && !preg_match("/$foodItem(?=\<)/", $text)){
+			if(preg_match("/(?<=[\W])$foodItem(?=[\W])/", $text))
+				$text = preg_replace("/(?<=[\W])($foodItem)(?=[\W])/", '<a style="text-decoration:none;color:#0C95CF;" href="/atslegvards/'.$foodItem.'">'.$foodItem.'</a>', $text,1);
+			elseif(preg_match("/(?<=[\W])$foodItem$/", $text))
+				$text = preg_replace("/(?<=[\W])($foodItem)$/", '<a style="text-decoration:none;color:#0C95CF;" href="/atslegvards/'.$foodItem.'">'.$foodItem.'</a>', $text,1);
+			elseif(preg_match("/^$foodItem(?=[\W])/", $text))
+				$text = preg_replace("/^($foodItem)(?=[\W])/", '<a style="text-decoration:none;color:#0C95CF;" href="/atslegvards/'.$foodItem.'">'.$foodItem.'</a>', $text,1);
+		}else{
+			// $text = str_replace($foodItem, '<span style="text-decoration:none;color:#658304;">'.$foodItem.'</span>', $text);
 		}
 	}
 	$matches = array();

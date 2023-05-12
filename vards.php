@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ERROR);
 include_once("includes/arc2/ARC2.php");
 $vards=urldecode($_GET['vards']);
 //Iz DB

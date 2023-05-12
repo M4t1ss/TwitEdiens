@@ -40,6 +40,7 @@ echo "<tr>
 <th>Tvīts</th>
 <th>Tvītots</th>
 </tr>";
+$txtCol = "#229cec";
 while($r=mysqli_fetch_array($vardi)){
 	$tvits = $r["tvits"];
 	$niks = $r["screen_name"];
@@ -51,14 +52,15 @@ while($r=mysqli_fetch_array($vardi)){
 	if (preg_match_all('/@[^[:space:]]+/', $teksts, $matches)) {
 		foreach ($matches[0] as $match){
 			$teksts = str_replace(trim($match), '<a style="text-decoration:none;color:#658304;" href="/draugs/'.str_replace('@','',trim($match)).'">'.trim($match).'</a> ', $teksts);
+			
 		}
 	}
-	$teksts = str_replace($vards, '<span style="font-weight: bold; text-decoration:none;color: red;">'.$vards.'</span>', $teksts);
-	$teksts = str_replace($tlvards, '<span style="font-weight: bold; text-decoration:none;color: red;">'.$tlvards.'</span>', $teksts);
-	$teksts = str_replace($tl2vards, '<span style="font-weight: bold; text-decoration:none;color: red;">'.$tl2vards.'</span>', $teksts);
-	$teksts = str_replace($svards, '<span style="font-weight: bold; text-decoration:none;color: red;">'.$svards.'</span>', $teksts);
-	$teksts = str_replace($tlsvards, '<span style="font-weight: bold; text-decoration:none;color: red;">'.$tlsvards.'</span>', $teksts);
-	$teksts = str_replace($tl2svards, '<span style="font-weight: bold; text-decoration:none;color: red;">'.$tl2svards.'</span>', $teksts);
+	$teksts = str_replace($vards, '<span style="font-weight: bold; text-decoration:none;color: '.$txtCol.';">'.$vards.'</span>', $teksts);
+	$teksts = str_replace($tlvards, '<span style="font-weight: bold; text-decoration:none;color: '.$txtCol.';">'.$tlvards.'</span>', $teksts);
+	$teksts = str_replace($tl2vards, '<span style="font-weight: bold; text-decoration:none;color: '.$txtCol.';">'.$tl2vards.'</span>', $teksts);
+	$teksts = str_replace($svards, '<span style="font-weight: bold; text-decoration:none;color: '.$txtCol.';">'.$svards.'</span>', $teksts);
+	$teksts = str_replace($tlsvards, '<span style="font-weight: bold; text-decoration:none;color: '.$txtCol.';">'.$tlsvards.'</span>', $teksts);
+	$teksts = str_replace($tl2svards, '<span style="font-weight: bold; text-decoration:none;color: '.$txtCol.';">'.$tl2svards.'</span>', $teksts);
 	
 	$datums = $r["created_at"];
 	if ($krasa==TRUE) {$kr=" class='even'";}else{$kr="";}
