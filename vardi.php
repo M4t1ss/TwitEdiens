@@ -24,7 +24,7 @@ while($r=mysqli_fetch_array($vardi)){
 	$nom = $r["nominativs"];
 	$cloud->addWord(array('word' => $nom, 'url' => 'vards/'.urlencode($nom)));
 }
-$cloud->orderBy('colour', 'desc');
+// $cloud->orderBy('colour', 'desc');
 $cloud->setLimit(500);
 $myCloud = $cloud->showCloud('array');
 foreach ($myCloud as $cloudArray) {

@@ -1,11 +1,11 @@
-<?php
+﻿<?php
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 
-require("classify/stem.php");
-require("classify/Bayes.php");
+require("/home/baumuin/public_html/twitediens.tk/classify/stem.php");
+require("/home/baumuin/public_html/twitediens.tk/classify/Bayes.php");
 
 #$text = $_GET["text"];
 
@@ -26,7 +26,7 @@ require("classify/Bayes.php");
 function classify($text, $type = false){
 	//Load model
 	$classifier = new \Niiknow\Bayes();
-	$stateJson = file_get_contents("classify/model-proc2-nohash-smile-latest.json");
+	$stateJson = file_get_contents("/home/baumuin/public_html/twitediens.tk/classify/model-proc2-nohash-smile-latest.json");
 	$classifier->fromJson($stateJson);
 	
 	// $text = strtolower($text);
