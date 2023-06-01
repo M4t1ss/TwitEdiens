@@ -180,7 +180,7 @@ foreach(array_reverse($menesi_skaiti) as $key => $dmg) {
 }
 ?>
 	var chart4 = new google.visualization.ColumnChart(document.getElementById('stats-months'));
-	chart4.draw(data4, {'backgroundColor':'transparent', vAxis: {viewWindow: {min: 0, max: 10000} } });
+	chart4.draw(data4, {'backgroundColor':'transparent', vAxis: {viewWindow: {min: 0, max: 15000} } });
   }
 </script>
 	<div id="stats-months"></div>

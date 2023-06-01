@@ -96,7 +96,7 @@ $food = array('ēd','ēst','ēdi','garšo','ēda','ēdu','ņam','gaļas','kafija
 	
 	$screen_name = mysqli_real_escape_string($remote, $full_data->user->screen_name);
 	
-	$spammers = array('berelilah_jpg', 'twitediens');
+	$spammers = array('berelilah_jpg', 'twitediens', 'dievietelv');
 	
 	if(!in_array($screen_name, $spammers))
 		save_tweet($full_data, $remote, $validFood);
@@ -207,12 +207,15 @@ function save_tweet($tweet_data, $remote, $validFood){
 		$retweet = substr($tweet_text, 0, 4) == "RT @";
 		
 		if(!$retweet && ($edieni > 0 || $tweet_text[0]==="@" || $tc < 3)){
+			
+			$insert_text = remove_mentions($tweet_text);
+			
 			if($quoted_id == NULL)
 				$ok_r = mysqli_query($remote, "INSERT INTO tweets (id ,text ,screen_name, created_at, geo) 
-											VALUES ('$tweet_id', '$tweet_text', '$qscreen_name', '$db_date', '$qgeo')");
+											VALUES ('$tweet_id', '$insert_text', '$qscreen_name', '$db_date', '$qgeo')");
 			else
 				$ok_r = mysqli_query($remote, "INSERT INTO tweets (id ,text ,screen_name, created_at, geo, quoted_id) 
-											VALUES ('$tweet_id', '$tweet_text', '$qscreen_name', '$db_date', '$qgeo', '$quoted_id')");
+											VALUES ('$tweet_id', '$insert_text', '$qscreen_name', '$db_date', '$qgeo', '$quoted_id')");
 			
 			// pieminētie lietotāji
 			if (sizeof($quser_mentions)>0) {
@@ -239,6 +242,17 @@ function save_tweet($tweet_data, $remote, $validFood){
 			}
 		}
 	}
+}
+
+function remove_mentions($text){
+	//Count of all mentions
+	$atcount = substr_count($text, "@");
+	//Position of last mention
+	$position = strrpos($text, "@");
+	//Trim if more than 10 mentions...
+	if($atcount > 10 || strlen($text) > 450)
+		$text = substr($text, $position);
+	return $text;
 }
 
 function clean_text($text){

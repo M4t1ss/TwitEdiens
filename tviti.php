@@ -60,6 +60,11 @@ $validFood = array('pārēdīsimies','pieēdīsimies','tostermaizes','šampinjon
 	'izēd','izēd','neēd','noēd','noēd','paēd','paēd','uzēd','uzēd','ēdis','tēju','kūku','tēja','gaļu','rīsi','rīšu','ēdis','sēņu','ēdām','suši',
 	'laša','olām','cāļa','ogām','zupā','ēdu','ēdi','ēda','ņam','ēst','ēd');
 
+//Load model
+$model = file_get_contents("/home/baumuin/public_html/twitediens.tk/classify/model-proc2-nohash-smile-latest.json");
+$classifier = new \Niiknow\Bayes();
+$classifier->fromJson($model);
+
 while($p=mysqli_fetch_array($latest)){
 	$username = $p["screen_name"];
 	$text = $p["text"];
@@ -78,7 +83,7 @@ while($p=mysqli_fetch_array($latest)){
 		}
 	}
 		
-	$automatic = classify($text);
+	$automatic = classify($text, $classifier);
 	// $automatic = "nei";
 	switch ($automatic){
 		case "pos":
@@ -97,14 +102,15 @@ while($p=mysqli_fetch_array($latest)){
 	#Iekrāso un izveido saiti uz katru pieminēto lietotāju tekstā
 	#Šo vajadzētu visur...
 	
+	$txtCol = "#229cec";
 	foreach($validFood as $foodItem){
 		if(!preg_match("/(?<=\>)$foodItem/", $text) && !preg_match("/$foodItem(?=\<)/", $text)){
 			if(preg_match("/(?<=[\W])$foodItem(?=[\W])/", $text))
-				$text = preg_replace("/(?<=[\W])($foodItem)(?=[\W])/", '<a style="text-decoration:none;color:#0C95CF;" href="/atslegvards/'.$foodItem.'">'.$foodItem.'</a>', $text,1);
+				$text = preg_replace("/(?<=[\W])($foodItem)(?=[\W])/", '<a style="text-decoration:none;color:'.$txtCol.';" href="/atslegvards/'.$foodItem.'">'.$foodItem.'</a>', $text,1);
 			elseif(preg_match("/(?<=[\W])$foodItem$/", $text))
-				$text = preg_replace("/(?<=[\W])($foodItem)$/", '<a style="text-decoration:none;color:#0C95CF;" href="/atslegvards/'.$foodItem.'">'.$foodItem.'</a>', $text,1);
+				$text = preg_replace("/(?<=[\W])($foodItem)$/", '<a style="text-decoration:none;color:'.$txtCol.';" href="/atslegvards/'.$foodItem.'">'.$foodItem.'</a>', $text,1);
 			elseif(preg_match("/^$foodItem(?=[\W])/", $text))
-				$text = preg_replace("/^($foodItem)(?=[\W])/", '<a style="text-decoration:none;color:#0C95CF;" href="/atslegvards/'.$foodItem.'">'.$foodItem.'</a>', $text,1);
+				$text = preg_replace("/^($foodItem)(?=[\W])/", '<a style="text-decoration:none;color:'.$txtCol.';" href="/atslegvards/'.$foodItem.'">'.$foodItem.'</a>', $text,1);
 		}else{
 			// $text = str_replace($foodItem, '<span style="text-decoration:none;color:#658304;">'.$foodItem.'</span>', $text);
 		}
