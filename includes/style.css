@@ -340,27 +340,27 @@ this.runtimeStyle.backgroundImage = "none")),this.pngSet=true)
   }
   .size9 {
   	color: #000;
-  	font-size: 30px;
+  	font-size: 45px;
   }
   .size8 {
   	color: #111;
-  	font-size: 28px;
+  	font-size: 40px;
   }
   .size7 {
   	color: #222;
-  	font-size: 26px;
+  	font-size: 35px;
   }
   .size6 {
   	color: #333;
-  	font-size: 24px;
+  	font-size: 30px;
   }
   .size5 {
   	color: #444;
-  	font-size: 22px;
+  	font-size: 26px;
   }
   .size4 {
   	color: #555;
-  	font-size: 20px;
+  	font-size: 22px;
   }
   .size3 {
   	color: #666;
@@ -565,6 +565,20 @@ a.showLink:hover, a.hideLink:hover {
 	padding-bottom:5px;
 }
 
+.koest{
+	margin:auto auto; 
+	max-width:180px; 
+	border-radius: 5px;
+}
+
+#koest-box{
+	margin:auto auto; 
+	width:615px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+}
+
 #toptable{
 	margin:auto auto; 
 	width:550px;
@@ -593,6 +607,12 @@ a.showLink:hover, a.hideLink:hover {
 	}
 
 @media (max-width: 479px) {
+	.koest{
+		max-width:90px; 
+	}
+	#koest-box{
+		width:300px;
+	}
 	#toptable{
 		width:100%;
 	}
