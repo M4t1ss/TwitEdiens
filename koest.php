@@ -43,8 +43,8 @@ $path='/img/food/';
 ?>
 </div>
 
-<div style="margin:auto auto; width:615px;">
-	<div style="float:left;padding:5px;display:inline;"><img style="max-width:200px" src="<?php echo $path.$e1.'.jpg'; ?>" /></div> 
-	<div style="float:left;padding:5px;display:inline;"><img style="max-width:200px" src="<?php echo $path.$e2.'.jpg'; ?>" /></div> 
-	<div style="float:left;padding:5px;display:inline;"><img style="max-width:200px" src="<?php echo $path.$e3.'.jpg'; ?>" /></div>
+<div id="koest-box">
+	<div style="float:left; padding:5px; display:inline;"><img class="koest" src="<?php echo $path.$e1.'.jpg'; ?>" /></div> 
+	<div style="float:left; padding:5px; display:inline;"><img class="koest" src="<?php echo $path.$e2.'.jpg'; ?>" /></div> 
+	<div style="float:left; padding:5px; display:inline;"><img class="koest" src="<?php echo $path.$e3.'.jpg'; ?>" /></div>
 </div>

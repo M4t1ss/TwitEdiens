@@ -17,7 +17,7 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
 //Paņem dažādās vietas
 $q = mysqli_query($connection, "SELECT distinct geo, count( * ) skaits FROM `tweets` WHERE geo!='' and created_at between '$no' AND '$lidz' GROUP BY geo ORDER BY count( * ) DESC");
 ?>
-		<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+		<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=ADD_API_KEY_HERE&sensor=false"></script>
 		<script type="text/javascript">
 			$(window).resize(initialize);
 			function initialize() {

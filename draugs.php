@@ -2,6 +2,7 @@
 session_start();
 require_once('auth/twitteroauth/twitteroauth.php');
 require_once('auth/config.php');
+include "includes/words.php";
 include 'includes/tag/classes/wordcloud.class.php';
 //ja nav norādīts draugs, ej prom...
 //if (!isset($_GET['dra']))   echo "<script type=\"text/javascript\">setTimeout(\"window.location = './..'\",5);</script>";
@@ -92,7 +93,7 @@ echo "<tr>
 				$tvid = $r["id"];
 				$q2 = mysqli_query($connection, "SELECT distinct nominativs FROM words where tvits='$tvid' and nominativs!='0'");
 				if ($krasa==TRUE) {$kr=" class='even'";}else{$kr="";}
-				$teksts=$r["text"];
+				$teksts = enrich_text($r["text"], "#229cec", $validFood);
 				$laiks=$r["created_at"];
 				$laiks=strtotime($laiks);
 				$laiks=date("d.m.Y H:i", $laiks);
@@ -134,7 +135,7 @@ $timeStamp = StrToTime($theDate);
 for($zb=0;$zb<7;$zb++) {
 $ddd = date('D', $timeStamp); 
 $timeStamp = StrToTime('+1 days', $timeStamp);
-$dienas[$ddd][skaits]=0;
+$dienas[$ddd]['skaits']=0;
 }
 //dabū šodienas datumu
 $menesiss = $menesis = date("m");
@@ -148,21 +149,21 @@ if($menesis==0){
 }
 $max=0;
 $maxd=0;
-for($zb=0;$zb<24;$zb++) $stundas[$zb][skaits]=0;
+for($zb=0;$zb<24;$zb++) $stundas[$zb]['skaits']=0;
 
 while($r=mysqli_fetch_array($q)){
 	$laiks=$r["created_at"];
 	$laiks=strtotime($laiks);
 	$diena=date("D", $laiks);
 	$laiks=date("G", $laiks);
-	$dienas[$diena][skaits]++;
-	$stundas[$laiks][skaits]++;
-	if($stundas[$laiks][skaits]>$max) $max=$stundas[$laiks][skaits];
-	if($dienas[$diena][skaits]>$maxd) $maxd=$dienas[$diena][skaits];
+	$dienas[$diena]['skaits']++;
+	$stundas[$laiks]['skaits']++;
+	if($stundas[$laiks]['skaits']>$max) $max=$stundas[$laiks]['skaits'];
+	if($dienas[$diena]['skaits']>$maxd) $maxd=$dienas[$diena]['skaits'];
 }
 //izdrukā populārākās stundas
 for($zb=0;$zb<24;$zb++) {
-$percent = round($stundas[$zb][skaits]/$max*100);
+$percent = round($stundas[$zb]['skaits']/$max*100);
 if ($percent>0){
 ?>
 <script type="text/javascript">
@@ -190,7 +191,7 @@ $timeStamp = StrToTime($theDate);
 for($zb=0;$zb<7;$zb++) {
 $ddd = date('D', $timeStamp); 
 $timeStamp = StrToTime('+1 days', $timeStamp);
-$percent = round($dienas[$ddd][skaits]/$maxd*100);
+$percent = round($dienas[$ddd]['skaits']/$maxd*100);
 if ($percent>0){
 ?>
 <script type="text/javascript">

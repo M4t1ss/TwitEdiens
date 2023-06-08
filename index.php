@@ -1,4 +1,6 @@
-<?php 
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 error_reporting(E_ERROR);
 if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) ob_start("ob_gzhandler"); else ob_start();
 session_start();
@@ -19,6 +21,8 @@ if (substr($_SERVER['SERVER_NAME'], 0, 4) === 'www.')
 }
 //Pieslēgums DB
 include "includes/init_sql_latest.php";
+$description = "TwitĒdiens ievāc datus no Twitter, kur pieminēta ēšana, dzeršana, ēdienreizes, ēdieni vai dzērieni. Apskatāma detalizēta statistika par šiem datiem.";
+$author = "Matīss";
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="lv" lang="lv">
@@ -30,11 +34,11 @@ include "includes/init_sql_latest.php";
 <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
 <link rel="schema.DCTERMS" href="http://purl.org/dc/terms/" />
 <meta name="DC.title" lang="Latvian" content="TwitĒdiens - no Twitter par ēšanu" />
-<meta name="DC.creator" content="Matīss" />
 <meta name="DC.subject" lang="Latvian" content="TwitĒdiens; TwitEdiens; Twitter; Ēdiens; Food; tvīti; statistika; ēšana; dzeršana; ko ēst; ko dzert; tēja; šokolāde; mandarīni; konfektes; pica; saldējums; zupa; kafija; gaļa; kūka; pankūka; čipsi; siers; salāti; kartupeļi; ēdienu karte; ēdāju tops; ēšanas kalendārs; populārākie ēdieni; @M4t1ss; Matīss;; Matīss" />
-<meta name="DC.description" lang="Latvian" content="TwitĒdiens ievāc datus no Twitter, kur pieminēta ēšana, dzeršana, ēdienreizes, ēdieni vai dzērieni. Apskatāma detalizēta statistika par šiem datiem." />
+<meta name="DC.description" lang="Latvian" content="<?php echo $description;?>" />
 <meta name="DC.publisher" content="Keda" />
-<meta name="DC.contributor" content="Matīss" />
+<meta name="DC.contributor" content="<?php echo $author;?>" />
+<meta name="DC.creator" content="<?php echo $author;?>" />
 <meta name="DC.type" scheme="DCTERMS.DCMIType" content="Text" />
 <meta name="DC.format" content="text/html" />
 <meta name="DC.format" content="7635 bytes" />
@@ -42,27 +46,27 @@ include "includes/init_sql_latest.php";
 <meta name="DC.language" scheme="DCTERMS.URI" content="Latvian" />
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="robots" content="index,follow" />
-<meta name="description" content="TwitĒdiens ievāc datus no Twitter, kur pieminēta ēšana, dzeršana, ēdienreizes, ēdieni vai dzērieni. Apskatāma detalizēta statistika par šiem datiem."/>
+<meta name="description" content="<?php echo $description;?>"/>
 <meta name="keywords" content="TwitĒdiens, TwitEdiens, Twitter, Ēdiens, Food, tvīti, statistika, ēšana, dzeršana, ko ēst, ko dzert,
 tēja, šokolāde, mandarīni, konfektes, pica, saldējums, zupa, kafija, gaļa, kūka, pankūka, čipsi, siers, salāti, kartupeļi, ēdienu karte,
-ēdāju tops, ēšanas kalendārs, populārākie ēdieni, @M4t1ss, Matīss"/>
-<meta name="author" content="Matīss"/>
+ēdāju tops, ēšanas kalendārs, populārākie ēdieni, @twitediens"/>
+<meta name="author" content="<?php echo $author;?>"/>
 <meta property="og:url" content="<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="lv_LV" />
 <meta property="og:title" content="TwitĒdiens - no Twitter par ēšanu" />
-<meta property="og:description" content="TwitĒdiens ievāc datus no Twitter, kur pieminēta ēšana, dzeršana, ēdienreizes, ēdieni vai dzērieni. Apskatāma detalizēta statistika par šiem datiem." />
+<meta property="og:description" content="<?php echo $description;?>" />
 <meta property="og:image" content="<?php echo "http://$_SERVER[HTTP_HOST]"; ?>/img/logo2.png" />
-<link href="/includes/apple-touch-icon.png" rel="apple-touch-icon" />
-<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 <script type="text/javascript" src="/includes/sorttable.min.js"></script>
 <script type="text/javascript" src="/includes/paging.js"></script>
-<link rel="stylesheet" type="text/css" href="/includes/jq/css/custom-theme/jquery-ui-1.8.16.custom.min.css" />	
-<link rel="stylesheet" type="text/css" href="/includes/style.css" />
-<link rel="stylesheet" type="text/css" href="/includes/print.css" media="print"/>
 <script type="text/javascript" src="/includes/jq/js/jquery-1.6.2.min.js"></script>
 <script type="text/javascript" src="/includes/jq/js/jquery-ui-1.8.16.custom.min.js"></script>
 <script type="text/javascript" src="/includes/jq/js/jquery.ui.datepicker-lv.js"></script>
+<link href="/includes/apple-touch-icon.png" rel="apple-touch-icon" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="/includes/jq/css/custom-theme/jquery-ui-1.8.16.custom.min.css" />	
+<link rel="stylesheet" type="text/css" href="/includes/style.css" />
+<link rel="stylesheet" type="text/css" href="/includes/print.css" media="print"/>
 <script type="text/javascript">
 $(document).ready(function () {
 $("#contents").fadeIn(1000);
@@ -109,7 +113,7 @@ function showHide(shID) {
 <?php include_once("includes/analyticstracking.php") ?>
 <a href="http://instagram.com/twitediens/"><img alt="Twitēdiena Instragram konts" id="ico1" src="/img/ins.png"/></a>
 <a href="http://twitter.com/twitediens/"><img alt="Twitēdiena Twitter konts" id="ico2" src="/img/twi.png"/></a>
-<a href="https://webtranslate.tilde.com/en/Translate/Website?url=<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>"><img alt="Translate into English" id="ico3" src="/img/uk.png"/></a>
+<a href="https://translate.tilde.com/webtranslate?url=<?php echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"; ?>"><img alt="Translate into English" id="ico3" src="/img/uk.png"/></a>
 
    <div class="ribbon"><span><a href="/atskats">Gada atskats</a></span></div>
 

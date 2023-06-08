@@ -51,6 +51,28 @@ $max = 0;
 $today = date("Y-m-d");
 $tod = date_create($today);
 
+$maxE = 0;
+$emoDienas = array();
+for ($e = -1; $e < 2; $e++){
+	$QRY = "SELECT count(`emo`) skaits,  DATE_FORMAT(created_at, '%m-%d') datums 
+					FROM `tweets` 
+					WHERE `emo` = $e 
+					AND `created_at` BETWEEN curdate( ) - INTERVAL 336 HOUR AND curdate( )
+					GROUP BY datums";
+	$Qrez = mysqli_query($connection, $QRY);
+	$cnt = 0;
+	while($rez = mysqli_fetch_array($Qrez)){
+		$emoDienas[$cnt]['sum'] += $rez["skaits"];
+		$emoDienas[$cnt][$e+1]['skaits'] = $rez["skaits"];
+		$emoDienas[$cnt][$e+1]['datums'] = $rez["datums"];
+		if($rez["skaits"] > $maxE) $maxE = $rez["skaits"] + 1;
+		$cnt++;
+	}
+
+}
+
+
+
 while($r=mysqli_fetch_array($vardi)){
 	$topvards = trim($r["vards"]);
 	//dabū katra vārda skaitu pēdējās nedēļas laikā
@@ -118,7 +140,47 @@ while($r=mysqli_fetch_array($vardi)){
   }
   google.setOnLoadCallback(drawVisualization);
   $(window).resize(drawVisualization);
-</script><br/><br/>
+
+  function drawVisualizationE() {
+	// Create and populate the data table.
+	var dataE = google.visualization.arrayToDataTable([
+	  ['x', 'Negatīvs %','Neitrāls %', 'Pozitīvs %'],
+	  <?php
+		$MaxEmo = 0;
+		for ($cc = 0; $cc < 14; $cc++){
+			$datums = $emoDienas[$cc][1]['datums'];
+			$skaits_neg = round($emoDienas[$cc][0]['skaits']/$emoDienas[$cc]['sum']*100,2);
+			$skaits_nei = round($emoDienas[$cc][1]['skaits']/$emoDienas[$cc]['sum']*100,2);
+			$skaits_poz = round($emoDienas[$cc][2]['skaits']/$emoDienas[$cc]['sum']*100,2);
+			$MaxEmo = max($MaxEmo,$skaits_neg, $skaits_nei, $skaits_poz);
+			echo "['$datums', $skaits_neg, $skaits_nei, $skaits_poz]".($cc<13?",\n":"\n");
+		}
+	  
+	  ?>
+	]);
+	new google.visualization.LineChart(document.getElementById('emoChart')).
+		draw(dataE, {
+				curveType: "none",
+					'chartArea': {'width': '75%', 'height': '90%'},
+                    'backgroundColor':'transparent',
+				vAxis: {
+				  viewWindowMode:'explicit',
+				  viewWindow:{
+						max:<?php echo $MaxEmo; ?>,
+						min:0
+				  }
+			  },
+    		colors: ['red','grey','green']
+  	});
+  }
+  google.setOnLoadCallback(drawVisualizationE);
+  $(window).resize(drawVisualizationE);
+</script>
+
+<br/><br/>
 <div style="text-align:center;font-weight:bold;">Līderi</div>
 <div id="vardi"></div>
+<br/><br/>
+<div style="text-align:center;font-weight:bold;">Sentiments</div>
+<div id="emoChart" style="height: 400px;"></div>
 </div>
