@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -23,11 +23,11 @@ require("/home/baumuin/public_html/twitediens.tk/classify/Bayes.php");
 
 #echo "</pre>";
 
-function classify($text, $type = false){
+function classify($text, $classifier, $type = false){
 	//Load model
-	$classifier = new \Niiknow\Bayes();
-	$stateJson = file_get_contents("/home/baumuin/public_html/twitediens.tk/classify/model-proc2-nohash-smile-latest.json");
-	$classifier->fromJson($stateJson);
+	// $classifier = new \Niiknow\Bayes();
+	// $stateJson = file_get_contents("/home/baumuin/public_html/twitediens.tk/classify/model-proc2-nohash-smile-latest.json");
+	// $classifier->fromJson($stateJson);
 	
 	// $text = strtolower($text);
 	$text = replace_usr($text);
@@ -44,15 +44,19 @@ function classify($text, $type = false){
 	
 	if(strlen(trim($stemmedLine)) > 0)
 		if(!$type)
-			return $classifier->categorize(trim($stemmedLine));
+			$output = $classifier->categorize(trim($stemmedLine));
 		elseif($type == "probs")
-			return $classifier->getProbs(trim($stemmedLine));
+			$output = $classifier->getProbs(trim($stemmedLine));
 		elseif($type == "freqs")
-			return $classifier->getFreqs(trim($stemmedLine));
+			$output = $classifier->getFreqs(trim($stemmedLine));
 		elseif($type == "text")
-			return trim($stemmedLine);
+			$output = trim($stemmedLine);
 	else
-		return "nei";
+		$output = "nei";
+
+	$stateJson = NULL;
+	$classifier = NULL;
+	return $output;
 }
 
 function tokenize($str){
