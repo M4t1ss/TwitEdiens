@@ -31,6 +31,22 @@ function enrich_text($text, $color, $validFood){
 	return $text;
 }
 
+function enrich_food($text, $color, $validFood){
+
+	foreach($validFood as $foodItem){
+		if(!preg_match("/(?<=\>)$foodItem/", $text) && !preg_match("/$foodItem(?=\<)/", $text)){
+			if(preg_match("/(?<=[\W])$foodItem(?=[\W])/", $text))
+				$text = preg_replace("/(?<=[\W])($foodItem)(?=[\W])/", '<a style="text-decoration:none;color:'.$color.';" href="/atslegvards/'.$foodItem.'">'.$foodItem.'</a>', $text,1);
+			elseif(preg_match("/(?<=[\W])$foodItem$/", $text))
+				$text = preg_replace("/(?<=[\W])($foodItem)$/", '<a style="text-decoration:none;color:'.$color.';" href="/atslegvards/'.$foodItem.'">'.$foodItem.'</a>', $text,1);
+			elseif(preg_match("/^$foodItem(?=[\W])/", $text))
+				$text = preg_replace("/^($foodItem)(?=[\W])/", '<a style="text-decoration:none;color:'.$color.';" href="/atslegvards/'.$foodItem.'">'.$foodItem.'</a>', $text,1);
+		}
+	}
+
+	return $text;
+}
+
 function translit($word){
 	$word = str_replace("ī","i",$word);
 	$word = str_replace("ū","u",$word);

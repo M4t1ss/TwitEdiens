@@ -50,4 +50,4 @@ $validFood = array('pārēdīsimies','pieēdīsimies','tostermaizes','šampinjon
 	'upeņu','āboli','ābols','aliņu','aliņš','ēšana','šņabi','siļķi','speķi','zirņi','tunča','čipsu','siļķe','ķirbi','gardā','ēdams','ķirši',
 	'kūkām','diļļu','ēšanu','čipši','augļi','ēdīs','ēdam','ēdām','ēdat','ēdāt','ēdot','ēstu','jāēd','apēd','apēd','atēd','atēd','ieēd','dzer',
 	'izēd','izēd','neēd','noēd','noēd','paēd','paēd','uzēd','uzēd','ēdis','tēju','kūku','tēja','gaļu','rīsi','rīšu','ēdis','sēņu','ēdām','suši',
-	'laša','olām','cāļa','ogām','zupā','ēdu','ēdi','ēda','ņam','ēst','ēd');
+	'laša','olām','cāļa','ogām','zupā','ēdu','ēdi','ēda','ņam','ēst','ēd','late','latte','lates','lattes','kapučino','kapučīno');

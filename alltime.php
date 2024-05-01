@@ -123,6 +123,37 @@ foreach($visiVardi as $vards){
 	  } 
 	  ?>
 	]);
+	// Create and populate the data table.
+	var data_recent = google.visualization.arrayToDataTable([
+	  ['x', <?php 
+	  $ctr = 1;
+		array_multisort($visiVardi);
+		foreach($visiVardi as $vards){
+		  echo "'".$vards."'";
+		  if($ctr < count($visiVardi)) echo ", ";
+		  $ctr++;
+		} 
+	  ?>],
+	  <?php 
+	  $ctx = 1;
+	  foreach($citiDati as $periods => $value){
+	  	if(substr($periods, 0, 4) > 2015){
+				echo "[";
+				$ctr = 1;
+				echo "'".$periods."',";
+				ksort($value);
+				foreach($value as $vards => $skaits){
+				  echo $skaits;
+				  if($ctr < count($value)) echo ", ";
+				  $ctr++;
+				}
+				echo "]";
+				if($ctx < count($citiDati)) echo ", \n";
+				$ctx++;
+	  	}
+	  } 
+	  ?>
+	]);
 	new google.visualization.LineChart(document.getElementById('visualization')).
 		draw(data, {curveType: "none",
 					width: 1200, height: 800,
@@ -137,8 +168,23 @@ foreach($visiVardi as $vards){
 					}
 			}
 		);
+	new google.visualization.LineChart(document.getElementById('visualization-recent')).
+		draw(data_recent, {curveType: "none",
+					width: 1200, height: 800,
+					'chartArea': {'width': '75%', 'height': '85%'},
+                    'backgroundColor':'transparent',
+					vAxis: {
+					  viewWindowMode:'explicit',
+					  viewWindow:{
+						max:1100,
+						min:0
+					  }
+					}
+			}
+		);
   }
   google.setOnLoadCallback(drawVisualization);
 </script><br/><br/><br/>
 <div style="text-align:center;font-weight:bold;">Ēdieni</div>
 <div id="visualization" style="margin: auto auto; width: 1200px; height: 800px;"></div>
+<div id="visualization-recent" style="margin: auto auto; width: 1200px; height: 800px;"></div>

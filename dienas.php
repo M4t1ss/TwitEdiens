@@ -209,8 +209,8 @@ for ($month=date('m');$month>0;$month--){
 		$next_year = $year;
 	}
 	
-	if($month < 10) $month = "0".$month;
-	if($next_month < 10) $next_month = "0".$next_month;
+	if($month < 10 && $month[0]!="0") $month = "0".$month;
+	if($next_month < 10 && $month[0]!="0") $next_month = "0".$next_month;
 	
 	$query .= "SELECT '".$year.".".$month."' AS 'datums', COUNT(*) AS 'skaits' FROM `tweets` WHERE `created_at` BETWEEN '".$year."-".$month."-01 00:00:00.000000' AND '".$next_year."-".$next_month."-01 00:00:00.000000' UNION ";
 }
