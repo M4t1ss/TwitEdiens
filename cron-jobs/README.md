@@ -1,8 +1,8 @@
 # Ikdienas darbiņi
 
 Šie divi ietvīto dienas aktīvākos ēdientvītotājus un populārākos ēdienus
-- food.php
-- prod.php
+- dizedaji.php
+- dizedieni.php
 
 Šis apkopo iepriekšējās dienas statistiku - jāizsauc katras dienas sākumā 00:01
 - 00.01.php
