@@ -2,7 +2,7 @@
 include 'includes/tag/classes/wordcloud.class.php';
 include "includes/laiks.php";
 ?>
-<h2 style='margin:auto auto; text-align:center;'>Populārākie produkti</h2>
+<h2 style='margin:auto auto; text-align:center;'>Populārākie produkti (<a href="emoji">😆</a>)</h2>
 <h5 style='margin:auto auto; text-align:center;'>
 <form method="post" action="?id=vardi">
 No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="from"/> līdz <input value="<?php echo $ll;?>" readonly size=9 type="text" id="to" name="to"/>
@@ -16,7 +16,8 @@ $vardi = mysqli_query($connection, "SELECT id, tvits, nominativs
 FROM words, tweets 
 where tweets.id = words.tvits and tweets.created_at between '$no' AND '$lidz' 
 and words.nominativs != '0'
-group by nominativs, tvits");
+group by nominativs, tvits
+order by nominativs asc");
 
 $cloud = new wordCloud();
 //jāuztaisa vēl, lai, uzklikojot uz kādu ēdienu, atvērtu visus tvītus, kas to pieminējuši...
@@ -76,11 +77,11 @@ for ($e = -1; $e < 2; $e++){
 while($r=mysqli_fetch_array($vardi)){
 	$topvards = trim($r["vards"]);
 	//dabū katra vārda skaitu pēdējās nedēļas laikā
-	$quer = "select skaits, datums from vardiDiena where vards = '$topvards' order by datums desc limit 7";
+	$quer = "select skaits, datums from vardiDiena where vards = '$topvards' order by datums desc limit 14";
 	$vvv = mysqli_query($connection, $quer);
 	
 	$pirmaisDatums = true;
-	for($i=0; $i<7; $i++){
+	for($i=0; $i<14; $i++){
 		$rvvv=mysqli_fetch_array($vvv);
 		$dd = substr($rvvv["datums"], -2);
 		
@@ -93,7 +94,7 @@ while($r=mysqli_fetch_array($vardi)){
 			for($di=0+$maxdays; $di < $difference; $di++){
 				$dienas[$i][$uu]['vards'] = $topvards;
 				$dienas[$i][$uu]['skaits'] = '0';
-				$dienas[$i][$uu]['datums'] =   date('Y-m-d',strtotime("-".$di." days"));
+				$dienas[$i][$uu]['datums'] =   date('m-d',strtotime("-".$di." days"));
 				$i++;
 			}
 			$pirmaisDatums = false;
@@ -101,12 +102,13 @@ while($r=mysqli_fetch_array($vardi)){
 	
 		$dienas[$i][$uu]['vards'] = $topvards;
 		$dienas[$i][$uu]['skaits'] = ($rvvv["skaits"]==NULL ? '0' : $rvvv["skaits"]);
-		$dienas[$i][$uu]['datums'] = $rvvv["datums"];
+		$dienas[$i][$uu]['datums'] = substr($rvvv["datums"], 5);
 		if($rvvv["skaits"] > $max) $max = $rvvv["skaits"] + 1;
 		$pirmaisDatums = false;
 	}
 	$uu++;
 }
+// var_dump($dienas[7]);
 ?>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
@@ -117,6 +119,13 @@ while($r=mysqli_fetch_array($vardi)){
 	// Create and populate the data table.
 	var data = google.visualization.arrayToDataTable([
 	  ['x', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo "'".$dienas[1][$skai]['vards']."'"; if($skai<$showing) echo ", "; }  ?>],
+	  ['<?php echo $dienas[13][1]['datums'];?>', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo $dienas[13][$skai]['skaits']; if($skai<$showing) echo ", "; }  ?>],
+	  ['<?php echo $dienas[12][1]['datums'];?>', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo $dienas[12][$skai]['skaits']; if($skai<$showing) echo ", "; }  ?>],
+	  ['<?php echo $dienas[11][1]['datums'];?>', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo $dienas[11][$skai]['skaits']; if($skai<$showing) echo ", "; }  ?>],
+	  ['<?php echo $dienas[10][1]['datums'];?>', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo $dienas[10][$skai]['skaits']; if($skai<$showing) echo ", "; }  ?>],
+	  ['<?php echo $dienas[9][1]['datums'];?>', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo $dienas[9][$skai]['skaits']; if($skai<$showing) echo ", "; }  ?>],
+	  ['<?php echo $dienas[8][1]['datums'];?>', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo $dienas[8][$skai]['skaits']; if($skai<$showing) echo ", "; }  ?>],
+	  ['<?php echo $dienas[7][1]['datums'];?>', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo $dienas[7][$skai]['skaits']; if($skai<$showing) echo ", "; }  ?>],
 	  ['<?php echo $dienas[6][1]['datums'];?>', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo $dienas[6][$skai]['skaits']; if($skai<$showing) echo ", "; }  ?>],
 	  ['<?php echo $dienas[5][1]['datums'];?>', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo $dienas[5][$skai]['skaits']; if($skai<$showing) echo ", "; }  ?>],
 	  ['<?php echo $dienas[4][1]['datums'];?>', <?php for ($skai=1;$skai<$showing+1;$skai++) { echo $dienas[4][$skai]['skaits']; if($skai<$showing) echo ", "; }  ?>],
@@ -147,7 +156,9 @@ while($r=mysqli_fetch_array($vardi)){
 	  ['x', 'Negatīvs %','Neitrāls %', 'Pozitīvs %'],
 	  <?php
 		$MaxEmo = 0;
-		for ($cc = 0; $cc < 14; $cc++){
+		$maxPast = count($emoDienas)<14?count($emoDienas):14;
+
+		for ($cc = 0; $cc < $maxPast; $cc++){
 			$datums = $emoDienas[$cc][1]['datums'];
 			$skaits_neg = round($emoDienas[$cc][0]['skaits']/$emoDienas[$cc]['sum']*100,2);
 			$skaits_nei = round($emoDienas[$cc][1]['skaits']/$emoDienas[$cc]['sum']*100,2);

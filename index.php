@@ -21,6 +21,8 @@ if (substr($_SERVER['SERVER_NAME'], 0, 4) === 'www.')
 }
 //Pieslēgums DB
 include "includes/init_sql_latest.php";
+include "includes/words.php";
+include "includes/functions.php";
 $description = "TwitĒdiens ievāc datus no Twitter, kur pieminēta ēšana, dzeršana, ēdienreizes, ēdieni vai dzērieni. Apskatāma detalizēta statistika par šiem datiem.";
 $author = "Matīss";
 ?>
@@ -90,8 +92,8 @@ function showHide(shID) {
   "@context" : "http://schema.org",
   "@type" : "SoftwareApplication",
   "name" : "TwitĒdiens",
-  "image" : "https://twitediens.tk/img/te.png",
-  "url" : "https://twitediens.tk/",
+  "image" : "https://twitediens.lv/img/te.png",
+  "url" : "https://twitediens.lv/",
   "author" : {
     "@type" : "Person",
     "name" : "Matīss"

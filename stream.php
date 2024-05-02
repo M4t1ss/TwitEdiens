@@ -17,11 +17,11 @@ $(document).ready(function(){
 	
 	setInterval(function() {
 		$("#content").load("tviti.php");
-	}, 3000);
+	}, 50000);
 	if(!isOpera && !isChrome){
 		setInterval(function() {
 			$("#photos").load("loader.php");
-		}, 60000);
+		}, 100000);
 	}
 });
 

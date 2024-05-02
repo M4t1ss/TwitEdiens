@@ -83,8 +83,13 @@ else
 				$quoted_screen_name = $qq["screen_name"];
 			}
 		}
+
+		//Load model
+		$model = file_get_contents("/home/baumuin/public_html/twitediens.tk/classify/model-proc2-nohash-smile-latest.json");
+		$classifier = new \Niiknow\Bayes();
+		$classifier->fromJson($model);
 		
-		$automatic = classify($text);
+		$automatic = classify($text, $classifier);
 		
 		$regex = "@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?).*$)@";
 		$forTTS = preg_replace($regex, ' ', $text);

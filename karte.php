@@ -1,5 +1,6 @@
 <?php
 include "includes/laiks.php";
+include "includes/config.php";
 // Turn off all error reporting
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -17,7 +18,7 @@ No <input value="<?php echo $nn;?>" readonly size=9 type="text" id="from" name="
 //Paņem dažādās vietas
 $q = mysqli_query($connection, "SELECT distinct geo, count( * ) skaits FROM `tweets` WHERE geo!='' and created_at between '$no' AND '$lidz' GROUP BY geo ORDER BY count( * ) DESC");
 ?>
-		<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=ADD_API_KEY_HERE&sensor=false"></script>
+		<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=<?php echo GOOGLE_MAP_KEY;?>&sensor=false"></script>
 		<script type="text/javascript">
 			$(window).resize(initialize);
 			function initialize() {
@@ -37,7 +38,7 @@ $q = mysqli_query($connection, "SELECT distinct geo, count( * ) skaits FROM `twe
 					if(mysqli_num_rows($irvieta)==0){
 						//ja nav tādas vietas datu bāzē,
 						//dabū vietas koordinātas
-						$string = file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?address=".str_replace(" ", "%20",$vieta)."&sensor=true&key=ADD_API_KEY_HERE");
+						$string = file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?address=".str_replace(" ", "%20",$vieta)."&sensor=true&key=".GOOGLE_MAP_KEY);
 						$json=json_decode($string, true);
 						if( isset($json["results"][0]["address_components"])){
 							$gar = sizeof($json["results"][0]["address_components"]);
