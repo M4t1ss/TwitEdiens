@@ -4,30 +4,47 @@
 	<div style="margin:30px; background-color:#E7FFFE;background-opacity:0.2;border-radius:15px;padding:15px;">
 		TwitĒdiens ir projekts, kas radies Latvijas Universitātes Datorikas fakultātes 
 		specsemināra <a style="font-weight:bold;" href="http://www.slideshare.net/normundsg/web-sci-2012">Web Science</a>
-		ietvaros. TwitĒdiens ievāc datus no <a style="font-weight:bold;" href="http://twitter.com">Twitter</a> - visus tvītus, kur kaut kas minēts par ēšanu, 
-		dzeršanu, ēdienreizēm vai ēdieniem, dzērieniem. Pēc tam šos datus sakārto, noformē un 
-		analizē dažādos griezumos. Šajā tīmekļa vietnē tiek piedāvāts apskatīt šo analīžu 
-		rezultātus
+		ietvaros. TwitĒdiens ievāc datus no <a style="font-weight:bold;" href="http://twitter.com">Twitter</a> un citiem sociālajiem tīkliem - visus ierakstus, 
+		kur tiek pieminēta ēšana, dzeršana, ēdienreizes vai ēdieni, dzērieni. Pēc tam šos datus sakārto, noformē un analizē dažādos griezumos. 
+		Šajā tīmekļa vietnē tiek piedāvāts apskatīt šo analīžu rezultātus. 
+		<b>Populārākie atslēgvārdi</b>, pēc kuriem tvīti tiek atlasīti, ir: ēst, brokastis, ēdu, pusdienas, kafija, garšo, vakariņas, ēd, tēju, tēja, 
+		šokolādes, gaļas, ēdiens, kartupeļu, pankūkas, tējas, salāti, saldējumu, gaļu, paēdu, ēdam, ābolu, kūku, šokolādi, apēst, saldējums, ņam, šokolāde, ...
 		
 		<br/><br/>
 		<div style="margin:auto auto;font-weight:bold;"><a href="/p/">Neliela prezentācija par TwitĒdienu</a></div>
 		<br/>
+		<h3>Privātuma politika</h3>
+		<p>
+			TwitĒdiens veic datu apstrādi, lai sniegtu informāciju apmeklētājiem un nodrošinātu darbības caurspīdīgumu. 
+			Rūpēties par datu drošību ir prioritāte - ir nozīmīgi, lai apmeklētāji zinātu, kādus datus TwitĒdiens apstrādā, kāpēc un kā tie tiek, 
+			kā arī kādas izvēles un kontroles iespējas ir autoru rīcībā. Dati tiek uzkrāti, izmantojot sociālo tīklu platformu API pieeju, un 
+			TwitĒdiens pakļaujas katra API nodrošinātāja lietošanas noteikumiem.
+		</p>
+		<br/>
 		Pāris ekrānuzņēmumi ar TwitĒdienu darbībā:
 		<div style="padding:15px;margin:auto auto;width:80%;"><img style="width:80%;" src="img/par.jpg"/></div><br/>
+		Plakāts no pirmās publikācijas Baltic HLT 2020:
+		<div style="padding:15px;margin:auto auto;width:80%;"><img style="width:80%;" src="img/poster.jpg"/></div><br/>
 		Jebkādus ieteikumus, kļūdu ziņojumus, atsauksmes vai citas lietas sasitītas ar TwitĒdienu
 		sūtīt uz <a style="font-weight:bold;" href="mailto:TwitEdiens@lielakeda.lv">TwitEdiens@lielakeda.lv</a>.
 		<br style="clear:both;"/>
 
 		<h3>Publikācijas</h3>
 		<ul>
+		 	<li>2025
+			<ul>
+			 	<li>E. Marrese-Taylor, M. Rikters "<a href="#">Classifying the Relation Between Images and Text on Social Media Using Vision-Language Models</a>." <a href="https://www.anlp.jp/nlp2025/index.html">言語処理学会第31回年次大会</a></li>
+			 	<li>M. Rikters, E. Marrese-Taylor "<a href="#">Image-Text Relation Prediction for Multilingual Tweets</a>." <a href="https://nbreal.xyz/">NB-REAL Workshop 2025</a></li>
+			</ul>
 		 	<li>2024
 			<ul>
-			 	<li>M. Rikters, E. Marrese-Taylor, R. Vīksna. "Annotations for Exploring Food Tweets From Multiple Aspects." <a href="https://lrec-coling-2024.org/">LREC-COLING 2024</a></li>
+			 	<li>M. Kāle, M. Rikters. "Tweeting on an Empty Stomach: Unpacking Food Price Hikes and Inflation via Twitter." <a href="https://icaisc.eu/">ICAISC 2024</a></li>
+			 	<li>M. Rikters, E. Marrese-Taylor, R. Vīksna. "<a href="https://aclanthology.org/2024.lrec-main.111/">Annotations for Exploring Food Tweets From Multiple Aspects</a>." <a href="https://lrec-coling-2024.org/">LREC-COLING 2024</a></li>
 			</ul>
 		 	<li>2023
 			<ul>
-			 	<li>M. Rikters, M. Kāle "The Future of Meat: Sentiment Analysis of Food Tweets." <a href="https://sites.google.com/view/socialnlp2023/">SocialNLP 2023</a></li>
-			 	<li>M. Kāle, M. Rikters. "<a href="https://journals.uio.no/dhnbpub/article/view/10666" data-wplink-edit="true">Exploring the Sentiment of Latvian Twitter Food Posts in Various Weather Conditions.</a>" <a href="https://dhnb.eu/conferences/dhnb2023/">DHNB 2023</a></li>
+			 	<li>M. Rikters, M. Kāle "<a href="https://aclanthology.org/2023.socialnlp-1.5/">The Future of Meat: Sentiment Analysis of Food Tweets</a>." <a href="https://sites.google.com/view/socialnlp2023/">SocialNLP 2023</a></li>
+			 	<li>M. Kāle, M. Rikters. "<a href="https://journals.uio.no/dhnbpub/article/view/10666">Exploring the Sentiment of Latvian Twitter Food Posts in Various Weather Conditions</a>." <a href="https://dhnb.eu/conferences/dhnb2023/">DHNB 2023</a></li>
 			 	<li>M. Kāle, M. Rikters. "<a href="https://arxiv.org/abs/2304.05041">What Food Do We Tweet about on a Rainy Day?</a>" <a href="https://www.anlp.jp/nlp2023/index.html">言語処理学会第29回年次大会</a></li>
 			</ul>
 		 	<li>2021

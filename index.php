@@ -147,7 +147,7 @@ if ( !isset($_GET['id']) || $_GET['id'] == "" ) {
 <div id="bottom" style="padding:8px;">
 <div style="text-align:center;">
 	<div style="padding:5px;font-weight:bold;">
-		<a href="index.php?id=pics">Attēli</a> | 
+		<a href="index.php?id=latest-pics">Attēli</a> | 
 		<a href="index.php?id=sarunas">Savstarpējie pļāpas</a> | 
 		<a href="index.php?id=app/app">Mobilā lietotne</a> | 
 		<a href="blog">Blogs</a> | 
@@ -160,7 +160,7 @@ if ( !isset($_GET['id']) || $_GET['id'] == "" ) {
 	<a href="https://twitter.com/LielaKeda">@LielaKeda</a>; 
 	<div class="vcard" style="display:inline;">
 		<span class="fn" style="display:inline;">
-			<a href="http://mattfoto.info/me">Matīss</a>
+			<a href="http://mattfoto.lv/me">Matīss</a>
 		</span>
 		<div class="adr">
 			<span class="locality">Tukums</span>, <span class="region">LV</span> 

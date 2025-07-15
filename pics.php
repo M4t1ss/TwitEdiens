@@ -144,6 +144,15 @@ else
 	
 	$regex = "@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?).*$)@";
 	$forTTS = preg_replace($regex, ' ', $text);
+
+	$bits = explode(' ', $forTTS);
+	$newquery = array();
+	foreach($bits as $bit){
+	    if(strlen($bit) > 0 && $bit[0] != '@') $newquery[] = $bit;
+	}
+	$forTTS = implode(' ', $newquery);
+
+
 	
 	//Marķēšanas statistika
 	$tot = mysqli_query($connection, "SELECT COUNT(DISTINCT tweet_id) sk FROM media WHERE relation IS NULL");
@@ -172,10 +181,10 @@ else
 ?>
 <div id="bottom" style="padding:8px;">
 	<div style="text-align:center;">
-		🖼️ ✅, 📄 ✅: <?php echo $skpapa; ?> 
-		🖼️ ✅, 📄 ❎: <?php echo $skpane; ?><br/>
-		🖼️ ❎, 📄 ✅: <?php echo $sknepa; ?> 
-		🖼️ ❎, 📄 ❎: <?php echo $sknene; ?><br/>
+ 　 🖼️✅📄✅: <?php echo $skpapa; ?>　　
+🖼️✅📄❎: <?php echo $skpane; ?><br/>
+　🖼️❎📄✅: <?php echo $sknepa; ?>　　
+🖼️❎📄❎: <?php echo $sknene; ?><br/>
 		Nemarķēti: <?php echo number_format($total, 0, '.', ',' ); ?><br/>
 		Marķēti: <?php echo $annotated; ?>; Noderīgi: <?php echo $useful; ?><br/>
 	</div>
